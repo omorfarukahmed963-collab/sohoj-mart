@@ -7,102 +7,190 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
+      background-color: #eaeded;
       margin: 0;
-      padding: 10px;
+      padding: 0;
     }
-    .sohoj-banner {
-      width: 100%;
-      height: 180px;
-      background-image: url(''); /* এখানে তোমার ব্যানার ছবির লিংক বা ফাইলের নাম দিতে পারো */
-      background-size: cover;
-      background-position: center;
-      border-radius: 12px;
-      margin-bottom: 15px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      background-color: #ddd;
+    /* অ্যামাজন স্টাইল টপ হেডার */
+    .header {
+      background-color: #131921;
+      color: white;
+      padding: 10px 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
+    .logo {
+      font-size: 20px;
+      font-weight: bold;
+      color: #ff9900;
+    }
+    .cart-info {
+      background: #febd69;
+      color: #111;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    /* সার্চ বার */
     .search-container {
-      margin-bottom: 20px;
+      background-color: #232f3e;
+      padding: 10px;
     }
     .search-box {
       width: 100%;
-      padding: 12px 15px;
-      font-size: 16px;
-      border: 2px solid #ddd;
-      border-radius: 25px;
+      padding: 10px 15px;
+      font-size: 15px;
+      border: none;
+      border-radius: 4px;
       outline: none;
-      transition: 0.3s;
       box-sizing: border-box;
     }
-    .search-box:focus {
-      border-color: #ff9900;
-    }
-    .auth-card {
-      background: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      max-width: 400px;
-      margin: 50px auto;
-    }
-    .auth-btn {
+    /* লাইভ ব্যানার */
+    .sohoj-banner {
       width: 100%;
-      padding: 12px;
-      background: #ff9900;
-      color: white;
-      border: none;
-      border-radius: 5px;
+      height: 160px;
+      background-image: url('https://img.freepik.com/free-vector/flat-design-ecommerce-banner-template_23-2149903964.jpg');
+      background-size: cover;
+      background-position: center;
+    }
+    /* কন্টেইনার */
+    .container {
+      padding: 10px;
+    }
+    .section-title {
       font-size: 16px;
+      font-weight: bold;
+      margin: 10px 0;
+      color: #333;
+    }
+    /* প্রোডাক্ট গ্রিড */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .product-card {
+      background: white;
+      padding: 10px;
+      border-radius: 6px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .product-card img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+    .product-name {
+      font-size: 14px;
+      margin: 8px 0 4px;
+      color: #111;
+    }
+    .product-price {
+      color: #B12704;
+      font-weight: bold;
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+    .buy-btn {
+      width: 100%;
+      background: #ffd814;
+      border: 1px solid #fcd200;
+      padding: 8px;
+      border-radius: 20px;
       cursor: pointer;
       font-weight: bold;
+      font-size: 13px;
     }
-    .auth-btn:hover {
-      background: #e68a00;
+    .buy-btn:hover {
+      background: #f7ca00;
     }
   </style>
 </head>
 <body>
 
-  <!-- ১. ইমেজ ব্যানার -->
-  <div class="sohoj-banner"></div>
+  <!-- ১. হেডার -->
+  <div class="header">
+    <div class="logo">Sohoj Mart 🛒</div>
+    <div class="cart-info" id="cartCount">কার্ট: ০</div>
+  </div>
 
   <!-- ২. সার্চ বার -->
   <div class="search-container">
-    <input type="text" id="searchInput" class="search-box" placeholder="আপনার পছন্দের পণ্য সার্চ করুন..." onkeyup="searchProducts()">
+    <input type="text" id="searchInput" class="search-box" placeholder="অ্যামাজনের মতো পণ্য খুঁজুন..." onkeyup="searchProducts()">
   </div>
 
-  <!-- ৩. লগইন স্ক্রিন -->
-  <div id="auth-screen">
-    <div class="auth-card">
-      <h2>👤 সহজ মার্ট লগইন</h2>
-      <input type="text" id="login-name" class="search-box" placeholder="আপনার নাম দিন" style="margin-bottom: 10px;">
-      <input type="text" id="login-phone" class="search-box" placeholder="আপনার বিকাশ/মোবাইল নাম্বার দিন" style="margin-bottom: 15px;">
-      <button class="auth-btn" onclick="loginApp()">প্রবেশ করুন</button>
+  <!-- ৩. লাইভ ব্যানার -->
+  <div class="sohoj-banner"></div>
+
+  <!-- ৪. পণ্যের তালিকা -->
+  <div class="container">
+    <div class="section-title">🔥 আজকের সেরা অফার</div>
+    
+    <div class="product-grid" id="productGrid">
+      <div class="product-card">
+        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30" alt="ওয়াচ">
+        <div class="product-name">প্রিমিয়াম স্মার্ট ওয়াচ</div>
+        <div class="product-price">১,২৫০ ৳</div>
+        <button class="buy-btn" onclick="orderProduct('প্রিমিয়াম স্মার্ট ওয়াচ', '১,২৫০ ৳')">অর্ডার করুন</button>
+      </div>
+
+      <div class="product-card">
+        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e" alt="হেডফোন">
+        <div class="product-name">ওয়্যারলেস হেডফোন</div>
+        <div class="product-price">২,১০০ ৳</div>
+        <button class="buy-btn" onclick="orderProduct('ওয়্যারলেস হেডফোন', '২,১০০ ৳')">অর্ডার করুন</button>
+      </div>
+
+      <div class="product-card">
+        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff" alt="জুতো">
+        <div class="product-name">স্টাইলিশ স্নিকার্স</div>
+        <div class="product-price">১,৮০০ ৳</div>
+        <button class="buy-btn" onclick="orderProduct('স্টাইলিশ স্নিকার্স', '১,৮০০ ৳')">অর্ডার করুন</button>
+      </div>
+
+      <div class="product-card">
+        <img src="https://images.unsplash.com/photo-1583394838336-acd977736f90" alt="গেম কন্ট্রোলার">
+        <div class="product-name">গেমিং কন্ট্রোলার</div>
+        <div class="product-price">১,৫০০ ৳</div>
+        <button class="buy-btn" onclick="orderProduct('গেমিং কন্ট্রোলার', '১,১৫০০ ৳')">অর্ডার করুন</button>
+      </div>
     </div>
   </div>
 
   <script>
-    // হোয়াটসঅ্যাপ নাম্বার সেট করা হলো
-    const ownerWhatsAppNumber = "8801837197656";
+    let cartItems = 0;
+    const ownerPhone = "8801837197656"; // তোমার নাম্বার
 
     function searchProducts() {
-      let input = document.getElementById('searchInput').value;
-      // এখানে সার্চ লজিক কাজ করবে
+      let query = document.getElementById('searchInput').value.toLowerCase();
+      let cards = document.getElementsByClassName('product-card');
+      
+      for (let i = 0; i < cards.length; i++) {
+        let name = cards[i].getElementsByClassName('product-name')[0].innerText.toLowerCase();
+        if (name.includes(query)) {
+          cards[i].style.display = "block";
+        } else {
+          cards[i].style.display = "none";
+        }
+      }
     }
 
-    function loginApp() {
-      let name = document.getElementById('login-name').value;
-      let phone = document.getElementById('login-phone').value;
+    function orderProduct(productName, price) {
+      cartItems++;
+      document.getElementById('cartCount').innerText = "কার্ট: " + cartItems;
       
-      if(name === "" || phone === "") {
-        alert("দয়া করে নাম এবং মোবাইল নাম্বার দিন!");
-      } else {
-        alert("স্বাগতম " + name + "! সফলভাবে লগইন হয়েছে।");
-        // পরবর্তীতে মূল অ্যাপ স্ক্রিনে পাঠানোর কোড এখানে যুক্ত করা যাবে
+      let message = `আসসালামু আলাইকুম, আমি এই পণ্যটি অর্ডার করতে চাই:\nপণ্য: ${productName}\nদাম: ${price}`;
+      let whatsappUrl = `https://wa.me/${ownerPhone}?text=` + encodeURIComponent(message);
+      
+      if(confirm(`"${productName}" কার্টে যোগ হয়েছে! আপনি কি সরাসরি হোয়াটসঅ্যাপে অর্ডার কনফার্ম করতে চান?`)) {
+        window.open(whatsappUrl, '_blank');
       }
     }
   </script>
 
 </body>
-</html>
+          </html>
