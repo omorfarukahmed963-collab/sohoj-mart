@@ -182,6 +182,7 @@
       color: #666;
       text-decoration: none;
       cursor: pointer;
+      flex-grow: 1;
     }
     .nav-item.active {
       color: #f85606;
@@ -231,7 +232,7 @@
     <!-- ফ্লাশ সেল প্রোডাক্টস -->
     <div class="section-header">⚡ আজকের ফ্লাশ সেল</div>
     <div class="flash-grid" id="productGrid">
-      <!-- নতুন পণ্যগুলো এখানে ডায়নামিক্যালি যোগ হবে -->
+      <!-- পণ্যগুলো এখানে আসবে -->
     </div>
   </div>
 
@@ -239,10 +240,10 @@
   <div id="category-page" class="page-content">
     <h2>📂 পণ্যের ক্যাটাগরি সমূহ</h2>
     <div style="background: white; padding: 15px; border-radius: 6px;">
-      <p onclick="switchTab('home-page'); filterCategory('ওয়াচ')" style="cursor:pointer; padding:8px; border-bottom:1px solid #eee;">⌚ স্মার্ট ওয়াচ ও গ্যাজেট</p>
-      <p onclick="switchTab('home-page'); filterCategory('হেডফোন')" style="cursor:pointer; padding:8px; border-bottom:1px solid #eee;">🎧 অডিও ও হেডফোন</p>
-      <p onclick="switchTab('home-page'); filterCategory('স্নিকার্স')" style="cursor:pointer; padding:8px; border-bottom:1px solid #eee;">👟 ফ্যাশন ও জুতো</p>
-      <p onclick="switchTab('home-page'); filterCategory('গেমিং')" style="cursor:pointer; padding:8px; border-bottom:1px solid #eee;">🎮 গেমিং এক্সেসরিজ</p>
+      <p onclick="switchTab('home-page', document.getElementById('nav-home')); filterCategory('ওয়াচ')" style="cursor:pointer; padding:8px; border-bottom:1px solid #eee;">⌚ স্মার্ট ওয়াচ ও গ্যাজেট</p>
+      <p onclick="switchTab('home-page', document.getElementById('nav-home')); filterCategory('হেডফোন')" style="cursor:pointer; padding:8px; border-bottom:1px solid #eee;">🎧 অডিও ও হেডফোন</p>
+      <p onclick="switchTab('home-page', document.getElementById('nav-home')); filterCategory('স্নিকার্স')" style="cursor:pointer; padding:8px; border-bottom:1px solid #eee;">👟 ফ্যাশন ও জুতো</p>
+      <p onclick="switchTab('home-page', document.getElementById('nav-home')); filterCategory('গেমিং')" style="cursor:pointer; padding:8px; border-bottom:1px solid #eee;">🎮 গেমিং এক্সেসরিজ</p>
     </div>
   </div>
 
@@ -260,33 +261,33 @@
   <div id="account-page" class="page-content">
     <div class="admin-card">
       <h2>🛠️ নতুন পণ্য যোগ করুন (অ্যাডমিন)</h2>
-      <input type="text" id="newTitle" class="admin-input" placeholder="পণ্যের নাম দিন (যেমন: নতুন শার্ট)">
-      <input type="number" id="newPrice" class="admin-input" placeholder="দাম লিখুন (টাকায়, যেমন: ৫০০)">
-      <input type="text" id="newImage" class="admin-input" placeholder="ছবির লিংক দিন (যেকোনো লিংক)">
-      <input type="text" id="newCat" class="admin-input" placeholder="ক্যাটাগরি দিন (যেমন: ওয়াচ, হেডফোন, স্নিকার্স)">
+      <input type="text" id="newTitle" class="admin-input" placeholder="পণ্যের নাম দিন">
+      <input type="number" id="newPrice" class="admin-input" placeholder="দাম লিখুন (টাকায়)">
+      <input type="text" id="newImage" class="admin-input" placeholder="ছবির লিংক দিন">
+      <input type="text" id="newCat" class="admin-input" placeholder="ক্যাটাগরি দিন">
       <button class="add-product-btn" onclick="addNewProduct()">পণ্য লাইভ করুন</button>
     </div>
 
     <div style="background: #fff; padding: 15px; border-radius: 8px; text-align: center;">
       <h3>👤 আমার একাউন্ট</h3>
       <p><b>নাম:</b> শামিম হোসেন</p>
-      <p><b>মোবাইল:</b> ০১৮৩৭১৯৭৬৫৬</p>
+      <p><b>মোবাইল:</b> ০১৮জ৭১৯৭৬৫৬</p>
       <p style="color: green; font-weight: bold;">স্ট্যাটাস: অ্যাডমিন ও বিক্রেতা</p>
     </div>
   </div>
 
   <!-- বটম নেভিগেশন বার -->
   <div class="bottom-nav">
-    <div class="nav-item active" onclick="switchTab('home-page', this)">
+    <div id="nav-home" class="nav-item active" onclick="switchTab('home-page', this)">
       <div>🏠</div>হোম
     </div>
-    <div class="nav-item" onclick="switchTab('category-page', this)">
+    <div id="nav-cat" class="nav-item" onclick="switchTab('category-page', this)">
       <div>📂</div>ক্যাটাগরি
     </div>
-    <div class="nav-item" onclick="switchTab('cart-page', this)">
+    <div id="nav-cart" class="nav-item" onclick="switchTab('cart-page', this)">
       <div>🛒</div>কার্ট (<span id="cartCount">০</span>)
     </div>
-    <div class="nav-item" onclick="switchTab('account-page', this)">
+    <div id="nav-acc" class="nav-item" onclick="switchTab('account-page', this)">
       <div>👤</div>একাউন্ট
     </div>
   </div>
@@ -307,7 +308,7 @@
       let html = "";
       for (let i = 0; i < list.length; i++) {
         html += `<div class="flash-card" data-cat="${list[i].category}">
-                  <img src="${list[i].image}" alt="Image" onerror="this.src='https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f'">
+                  <img src="${list[i].image}" alt="Image">
                   <div class="p-title">${list[i].title}</div>
                   <div class="p-price">৳ ${list[i].price}</div>
                   <button class="order-btn" onclick="addToCart('${list[i].title}', ${list[i].price})">কার্ডে যোগ করুন</button>
@@ -327,11 +328,6 @@
         return;
       }
 
-      // অটো-ফিক্স: যদি ব্যবহারকারী ibb.co লিংক দেয়, তবে সেটাকে ইমেজ লিংকে কনভার্ট করার চেষ্টা করবে
-      if(image.includes("ibb.co/") && !image.endsWith(".jpg") && !image.endsWith(".png")) {
-        image = image.replace("ibb.co/", "i.ibb.co/") + ".jpg";
-      }
-
       products.push({ title: title, price: price, image: image, category: category });
       renderProducts(products);
       alert("অভিনন্দন! নতুন পণ্য সফলভাবে যুক্ত হয়েছে।");
@@ -341,7 +337,7 @@
       document.getElementById('newImage').value = "";
       document.getElementById('newCat').value = "";
       
-      switchTab('home-page', document.getElementsByClassName('nav-item')[0]);
+      switchTab('home-page', document.getElementById('nav-home'));
     }
 
     function switchTab(pageId, element) {
@@ -394,11 +390,11 @@
       let message = "আসসালামু আলাইকুম, সহজ মার্ট থেকে নিচের পণ্যগুলো অর্ডার করতে চাই:\n\n";
       let total = 0;
       for (let i = 0; i < cart.length; i++) {
-        message += `${i+1}. `${cart[i].name} - ৳ ${cart[i].price}\n`;
+        message += (i + 1) + ". " + cart[i].name + " - ৳ " + cart[i].price + "\n";
         total += cart[i].price;
       }
-      message += `\nমোট বিল: ৳ ${total}`;
-      let url = `https://wa.me/88${ownerPhone}?text=` + encodeURIComponent(message);
+      message += "\nমোট বিল: ৳ " + total;
+      let url = "https://wa.me/88" + ownerPhone + "?text=" + encodeURIComponent(message);
       window.open(url, '_blank');
     }
 
@@ -417,4 +413,4 @@
   </script>
 
 </body>
-  </html>
+        </html>
