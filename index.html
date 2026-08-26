@@ -116,7 +116,6 @@
       cursor: pointer;
       font-weight: bold;
     }
-    /* অ্যাডমিন প্যানেল ফর্ম স্টাইল */
     .admin-card {
       background: #fff;
       padding: 15px;
@@ -263,9 +262,9 @@
       <h2>🛠️ নতুন পণ্য যোগ করুন (অ্যাডমিন)</h2>
       <input type="text" id="newTitle" class="admin-input" placeholder="পণ্যের নাম দিন (যেমন: নতুন শার্ট)">
       <input type="number" id="newPrice" class="admin-input" placeholder="দাম লিখুন (টাকায়, যেমন: ৫০০)">
-      <input type="text" id="newImage" class="admin-input" placeholder="ছবির লিংক (URL) দিন">
+      <input type="text" id="newImage" class="admin-input" placeholder="ছবির লিংক দিন (যেকোনো লিংক)">
       <input type="text" id="newCat" class="admin-input" placeholder="ক্যাটাগরি দিন (যেমন: ওয়াচ, হেডফোন, স্নিকার্স)">
-      <button class="add-product-btn" onclick="addNewProduct()">পণ্য লাই브 করুন</button>
+      <button class="add-product-btn" onclick="addNewProduct()">পণ্য লাইভ করুন</button>
     </div>
 
     <div style="background: #fff; padding: 15px; border-radius: 8px; text-align: center;">
@@ -296,7 +295,6 @@
     const ownerPhone = "8801837197656";
     let cart = [];
 
-    // ডিফল্ট কিছু পণ্য
     let products = [
       { title: "স্মার্ট ওয়াচ", price: 1250, image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30", category: "ওয়াচ" },
       { title: "ওয়্যারলেস হেডফোন", price: 2100, image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e", category: "হেডফোন" },
@@ -309,7 +307,7 @@
       let html = "";
       for (let i = 0; i < list.length; i++) {
         html += `<div class="flash-card" data-cat="${list[i].category}">
-                  <img src="${list[i].image}" alt="">
+                  <img src="${list[i].image}" alt="Image" onerror="this.src='https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f'">
                   <div class="p-title">${list[i].title}</div>
                   <div class="p-price">৳ ${list[i].price}</div>
                   <button class="order-btn" onclick="addToCart('${list[i].title}', ${list[i].price})">কার্ডে যোগ করুন</button>
@@ -318,7 +316,6 @@
       grid.innerHTML = html;
     }
 
-    // নতুন পণ্য যোগ করার ফাংশন
     function addNewProduct() {
       let title = document.getElementById('newTitle').value;
       let price = Number(document.getElementById('newPrice').value);
@@ -330,11 +327,15 @@
         return;
       }
 
+      // অটো-ফিক্স: যদি ব্যবহারকারী ibb.co লিংক দেয়, তবে সেটাকে ইমেজ লিংকে কনভার্ট করার চেষ্টা করবে
+      if(image.includes("ibb.co/") && !image.endsWith(".jpg") && !image.endsWith(".png")) {
+        image = image.replace("ibb.co/", "i.ibb.co/") + ".jpg";
+      }
+
       products.push({ title: title, price: price, image: image, category: category });
       renderProducts(products);
-      alert("অভিনন্দন! নতুন পণ্য সফলভাবে যুক্ত হয়েছে। হোম পেজে দেখতে পাবেন।");
+      alert("অভিনন্দন! নতুন পণ্য সফলভাবে যুক্ত হয়েছে।");
       
-      // ফর্ম ফাকা করা
       document.getElementById('newTitle').value = "";
       document.getElementById('newPrice').value = "";
       document.getElementById('newImage').value = "";
@@ -393,7 +394,7 @@
       let message = "আসসালামু আলাইকুম, সহজ মার্ট থেকে নিচের পণ্যগুলো অর্ডার করতে চাই:\n\n";
       let total = 0;
       for (let i = 0; i < cart.length; i++) {
-        message += `${i+1}. ${cart[i].name} - ৳ ${cart[i].price}\n`;
+        message += `${i+1}. `${cart[i].name} - ৳ ${cart[i].price}\n`;
         total += cart[i].price;
       }
       message += `\nমোট বিল: ৳ ${total}`;
@@ -412,9 +413,8 @@
       renderProducts(filtered);
     }
 
-    // প্রথমবার পেজ লোড হলে পণ্যগুলো দেখাবে
     renderProducts(products);
   </script>
 
 </body>
-                      </html>
+  </html>
