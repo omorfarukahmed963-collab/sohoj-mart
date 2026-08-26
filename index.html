@@ -199,6 +199,42 @@
             color: #333;
             border-radius: 5px;
         }
+        /* Movie Box Grid Style */
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            padding: 10px;
+        }
+        .movie-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding-bottom: 10px;
+        }
+        .movie-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        .movie-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            margin: 8px 5px;
+        }
+        .btn-watch {
+            background: #e50914; /* Netflix Red vibe */
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        }
         .cart-item-card {
             background: white;
             display: flex;
@@ -298,7 +334,7 @@
     </div>
 
     <div class="search-box-container">
-        <input type="text" class="search-box" placeholder="🔍 সহজ মার্ট-এ পণ্য, গেম বা বই খুঁজুন...">
+        <input type="text" class="search-box" placeholder="🔍 পণ্য, গেম, বই বা মুভি খুঁজুন...">
     </div>
 
     <!-- HOME PAGE -->
@@ -308,19 +344,15 @@
                 <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30" class="cat-img" alt="Watch">
                 <p>ওয়াচ</p>
             </div>
-            <div class="cat-circle-item" onclick="switchPage('shop', document.querySelectorAll('.nav-item')[0])">
-                <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e" class="cat-img" alt="Headphone">
-                <p>হেডফোন</p>
-            </div>
-            <div class="cat-circle-item" onclick="switchPage('shop', document.querySelectorAll('.nav-item')[0])">
-                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff" class="cat-img" alt="Shoes">
-                <p>জুতো</p>
+            <div class="cat-circle-item" onclick="switchPage('movies', document.querySelectorAll('.nav-item')[2])">
+                <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba" class="cat-img" alt="Movies">
+                <p>মুভি বক্স</p>
             </div>
             <div class="cat-circle-item" onclick="switchPage('games', document.querySelectorAll('.nav-item')[1])">
                 <img src="https://images.unsplash.com/photo-1612287233002-b1d3ba70b553" class="cat-img" alt="Gaming">
                 <p>গেমিং</p>
             </div>
-            <div class="cat-circle-item" onclick="switchPage('books', document.querySelectorAll('.nav-item')[2])">
+            <div class="cat-circle-item" onclick="switchPage('books', document.querySelectorAll('.nav-item')[3])">
                 <img src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6" class="cat-img" alt="Books">
                 <p>ই-বুক</p>
             </div>
@@ -360,38 +392,43 @@
         </div>
     </div>
 
+    <!-- MOVIES PAGE (Movie Box) -->
+    <div id="page-movies" class="page-section">
+        <div class="section-title">🎬 মুভি বক্স (অনলাইন মুভি জোন)</div>
+        
+        <div id="movie-list-view" class="movie-grid">
+            <div class="movie-card">
+                <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1" alt="Movie">
+                <div class="movie-title">অ্যাকশন থ্রিলার মুভি</div>
+                <button class="btn-watch" onclick="openMovie('https://www.youtube.com/embed/dQw4w9WgXcQ', 'অ্যাকশন থ্রিলার মুভি')">▶ মুভি দেখুন</button>
+            </div>
+            <div class="movie-card">
+                <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728" alt="Movie">
+                <div class="movie-title">সায়েন্স ফিকশন অ্যাডভেঞ্চার</div>
+                <button class="btn-watch" onclick="openMovie('https://www.youtube.com/embed/dQw4w9WgXcQ', 'সায়েন্স ফিকশন অ্যাডভেঞ্চার')">▶ মুভি দেখুন</button>
+            </div>
+        </div>
+
+        <!-- Movie Player Screen -->
+        <div id="movie-player-screen" class="play-screen" style="display: none;">
+            <button class="back-btn" onclick="closeMovie()">⬅ মুভি তালিকা</button>
+            <h3 id="movie-player-title" style="margin-top: 40px; color: #ff6600;">মুভির নাম</h3>
+            <div style="position: relative; width: 100%; height: 220px; background: black; border-radius: 5px; overflow: hidden; margin-top: 10px;">
+                <iframe id="movie-iframe" src="" style="width: 100%; height: 100%; border: none;" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
     <!-- GAMES PAGE -->
     <div id="page-games" class="page-section">
-        <div class="section-title">🎮 গেম জোন (অনেকগুলো গেম)</div>
-        
+        <div class="section-title">🎮 গেম জোন</div>
         <div id="game-list-view">
             <div class="sub-card">
                 <div class="sub-card-info">
-                    <h4>১. টিক-ট্যাক-টো (লড়াই গেম)</h4>
+                    <h4>টিক-ট্যাক-টো (লড়াই গেম)</h4>
                     <p>অ্যাপের ভেতরেই সরাসরি খেলুন</p>
                 </div>
                 <button class="btn-play-read" onclick="openGame()">খেলুন</button>
-            </div>
-            <div class="sub-card">
-                <div class="sub-card-info">
-                    <h4>২. মেমোরি পাজল গেম</h4>
-                    <p>বুদ্ধি ও মেমোরি বাড়ানোর দারুণ গেম</p>
-                </div>
-                <button class="btn-play-read" onclick="alert('এই গেমটি খুব শীঘ্রই যুক্ত হচ্ছে!')">খেলুন</button>
-            </div>
-            <div class="sub-card">
-                <div class="sub-card-info">
-                    <h4>৩. নাম্বার গেসিং গেম</h4>
-                    <p>লুকানো সংখ্যা খোঁজার দারুণ এক চ্যালেঞ্জ</p>
-                </div>
-                <button class="btn-play-read" onclick="alert('এই গেমটি খুব শীঘ্রই যুক্ত হচ্ছে!')">খেলুন</button>
-            </div>
-            <div class="sub-card">
-                <div class="sub-card-info">
-                    <h4>৪. স্পিড কার রেসিং</h4>
-                    <p>রোমাঞ্চকর ড্রাইভিং অভিজ্ঞতা</p>
-                </div>
-                <button class="btn-play-read" onclick="alert('এই গেমটি খুব শীঘ্রই যুক্ত হচ্ছে!')">খেলুন</button>
             </div>
         </div>
 
@@ -417,47 +454,23 @@
 
     <!-- BOOKS PAGE -->
     <div id="page-books" class="page-section">
-        <div class="section-title">📚 ই-বুক লাইব্রেরি (অনেকগুলো বই)</div>
-        
+        <div class="section-title">📚 ই-বুক লাইব্রেরি</div>
         <div id="book-list-view">
             <div class="sub-card">
                 <div class="sub-card-info">
-                    <h4>১. রহস্যময় পৃথিবী ও মহাবিশ্ব</h4>
+                    <h4>রহস্যময় পৃথিবী ও মহাবিশ্ব</h4>
                     <p>অ্যাপের ভেতরেই সরাসরি পড়ুন</p>
                 </div>
                 <button class="btn-play-read" onclick="openBook()">পড়ুন</button>
             </div>
-            <div class="sub-card">
-                <div class="sub-card-info">
-                    <h4>২. ইসলামিক ইতিহাস ও ঐতিহ্য</h4>
-                    <p>ইসলামের সোনালী যুগের গল্প ও ইতিহাস</p>
-                </div>
-                <button class="btn-play-read" onclick="alert('বইটি দ্রুত আসছে!')">পড়ুন</button>
-            </div>
-            <div class="sub-card">
-                <div class="sub-card-info">
-                    <h4>৩. বিজ্ঞান ও প্রযুক্তি আবিষ্কার</h4>
-                    <p>বিজ্ঞানের অদ্ভুত সব আবিষ্কারের কাহিনী</p>
-                </div>
-                <button class="btn-play-read" onclick="alert('বইটি দ্রুত আসছে!')">পড়ুন</button>
-            </div>
-            <div class="sub-card">
-                <div class="sub-card-info">
-                    <h4>৪. সফল কৃষকের ডায়রি</h4>
-                    <p>আধুনিক কৃষি ও ফসলের পরিচর্যা</p>
-                </div>
-                <button class="btn-play-read" onclick="alert('বইটি দ্রুত আসছে!')">পড়ুন</button>
-            </div>
         </div>
 
-        <div id="book-reader-screen" class="play-screen" style="text-align: left;">
+        <div id="book-reader-screen" class="play-screen" style="text-align: left; display: none;">
             <button class="back-btn" onclick="closeBook()">⬅ বই তালিকা</button>
             <h3 style="margin-top: 40px; color: #ff6600; text-align: center;">রহস্যময় পৃথিবী ও মহাবিশ্ব</h3>
             <div style="font-size: 14px; line-height: 1.6; color: #333; padding: 10px; background: #fafafa; border-radius: 5px; max-height: 350px; overflow-y: auto;">
                 <p><b>অধ্যায় ১: মহাবিশ্বের অজানা রহস্য</b></p>
-                <p>আমাদের এই বিশাল মহাবিশ্বে কোটি কোটি গ্যালাক্সি রয়েছে। বিজ্ঞানীরা এখনো এর সমস্ত রহস্য উদঘাটন করতে পারেননি। পৃথিবী থেকে হাজার হাজার আলোকবর্ষ দূরে এমন অনেক গ্রহ রয়েছে...</p>
-                <p><b>অধ্যায় ২: প্রকৃতির বিস্ময়</b></p>
-                <p>প্রকৃতি তার বুকে নানা ধরনের রহস্য লুকিয়ে রেখেছে। গভীর সমুদ্রের তলদেশ থেকে শুরু করে মহাকাশের ব্ল্যাক হোল—সবকিছুই মানুষের ভাবনার খোরাক জোগায়।</p>
+                <p>আমাদের এই বিশাল মহাবিশ্বে কোটি কোটি গ্যালাক্সি রয়েছে। বিজ্ঞানীরা এখনো এর সমস্ত রহস্য উদঘাটন করতে পারেননি...</p>
             </div>
         </div>
     </div>
@@ -483,6 +496,9 @@
     <div class="bottom-nav">
         <div class="nav-item active" onclick="switchPage('home', this)">
             <span>🏠</span>হোম
+        </div>
+        <div class="nav-item" onclick="switchPage('movies', this)">
+            <span>🎬</span>মুভি বক্স
         </div>
         <div class="nav-item" onclick="switchPage('games', this)">
             <span>🎮</span>গেমস
@@ -543,6 +559,20 @@
             
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
             if(element) element.classList.add('active');
+        }
+
+        // Movie Player Logic
+        function openMovie(videoUrl, title) {
+            document.getElementById('movie-list-view').style.display = 'none';
+            document.getElementById('movie-player-screen').style.display = 'block';
+            document.getElementById('movie-player-title').innerText = title;
+            document.getElementById('movie-iframe').src = videoUrl;
+        }
+
+        function closeMovie() {
+            document.getElementById('movie-iframe').src = ""; // Stop video playback
+            document.getElementById('movie-player-screen').style.display = 'none';
+            document.getElementById('movie-list-view').style.display = 'grid';
         }
 
         // Game Logic
@@ -611,4 +641,4 @@
         updateCartUI();
     </script>
 </body>
-                </html>
+</html>
