@@ -39,8 +39,10 @@
         .shortcut-icon { font-size: 22px; display: block; margin-bottom: 4px; }
         .shortcut-item span { font-size: 10px; color: #444; display: block; line-height: 1.2; font-weight: 500; }
 
-        .promo-banner { width: 100%; border-radius: 4px; overflow: hidden; margin-bottom: 10px; background: #e0e0e0; min-height: 140px; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
-        .promo-banner img { width: 100%; display: block; max-height: 200px; object-fit: cover; }
+        /* একাধিক ব্যানার স্লাইডার স্টাইল */
+        .promo-slider { width: 100%; border-radius: 4px; overflow: hidden; margin-bottom: 10px; background: #e0e0e0; height: 150px; position: relative; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .slider-images { display: flex; width: 100%; height: 100%; transition: transform 0.5s ease-in-out; }
+        .slider-images img { width: 100%; height: 100%; object-fit: cover; flex-shrink: 0; }
 
         .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
         .daraz-card { background: white; border-radius: 4px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: space-between; }
@@ -116,16 +118,18 @@
             </div>
         </div>
 
-        <div class="promo-banner" id="home-banner-container">
-            <img src="1000012860.png" alt="Sohoj Mart Banner">
+        <!-- একাধিক ব্যানার স্লাইডার সেকশন -->
+        <div class="promo-slider">
+            <div class="slider-images" id="slider-images-container">
+                <img src="1000012860.png" alt="Default Banner">
+            </div>
         </div>
 
-        <div style="display: flex; justify-content: space-between; align-items: center; margin: 8px 0;">
-            <div style="font-size: 13px; font-weight: bold; color: #333;">🔥 Just For You (আপনার লাইভ পণ্য ও অ্যাড)</div>
-            <button onclick="loadProducts()" style="background: #f57224; color: white; border: none; padding: 3px 8px; font-size: 10px; border-radius: 3px; cursor: pointer;">🔄 রিফ্রেশ</button>
-        </div>
+        <div style="font-size: 13px; font-weight: bold; color: #333; margin: 8px 0;">🔥 Just For You (আপনার লাইভ পণ্য ও অ্যাড)</div>
         
-        <div class="product-grid" id="product-grid"></div>
+        <div class="product-grid" id="product-grid">
+            <p style="grid-column: span 2; text-align:center; color:#777; padding:20px; font-size:12px;">লোড হচ্ছে...</p>
+        </div>
     </div>
 
     <!-- ২. ক্যাটাগরি সেকশন -->
@@ -167,9 +171,10 @@
         </div>
 
         <div class="box" id="dashboard-box" style="display:none;">
-            <h3>🎯 হোম পেজ অ্যাড ব্যানার পরিবর্তন</h3>
+            <h3>🎯 একাধিক ব্যানার যুক্ত করুন</h3>
+            <label style="font-size: 12px; color: #666;">নতুন ব্যানার ছবি:</label>
             <input type="file" id="bannerImageFile" accept="image/*" style="margin-top: 5px;">
-            <button class="btn-orange" onclick="updateBanner()" style="margin-bottom: 15px;">ব্যানার আপডেট করুন</button>
+            <button class="btn-orange" onclick="addBannerItem()" style="margin-bottom: 15px;">ব্যানার যোগ করুন</button>
 
             <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
 
@@ -241,6 +246,8 @@
 
         let cart = [];
         let currentSelectedCat = 'mens';
+        let currentSlide = 0;
+        let totalSlides = 1;
 
         function switchTab(tabName) {
             document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
@@ -249,7 +256,6 @@
             if(tabName === 'home') {
                 document.getElementById('home-section').classList.add('active');
                 document.getElementById('nav-home').classList.add('active');
-                loadProducts(); // হোম ট্যাবে আসলে প্রোডাক্ট রিলোড হবে
             } else if(tabName === 'category') {
                 document.getElementById('category-section').classList.add('active');
                 document.getElementById('nav-category').classList.add('active');
@@ -357,7 +363,8 @@
             document.getElementById('adminPin').value = '';
         }
 
-        function updateBanner() {
+        // একাধিক ব্যানার যোগ করার ফাংশন
+        function addBannerItem() {
             const bannerFile = document.getElementById('bannerImageFile');
             if(bannerFile.files.length === 0) {
                 alert("দয়া করে ব্যানার হিসেবে একটি ছবি সিলেক্ট করুন!");
@@ -367,10 +374,12 @@
             const reader = new FileReader();
             reader.readAsDataURL(bannerFile.files[0]);
             reader.onload = function () {
-                db.ref('banner/image').set(reader.result, (error) => {
+                db.ref('banners').push({
+                    image: reader.result
+                }, (error) => {
                     if(error) alert("ব্যানার আপডেটে সমস্যা হয়েছে!");
                     else {
-                        alert("সফলভাবে নতুন ব্যানার সেট হয়েছে!");
+                        alert("সফলভাবে নতুন ব্যানার যোগ হয়েছে!");
                         bannerFile.value = '';
                     }
                 });
@@ -391,7 +400,6 @@
             const reader = new FileReader();
             reader.readAsDataURL(fileInput.files[0]);
             reader.onload = function () {
-                // সরাসরি পুশ করার সাথে সাথে রিফ্রেশ কল করা হলো
                 db.ref('products').push({
                     name: name,
                     price: price,
@@ -406,43 +414,10 @@
                         document.getElementById('itemPrice').value = '';
                         document.getElementById('itemDesc').value = '';
                         fileInput.value = '';
-                        switchTab('home'); // হোমে গিয়ে সরাসরি দেখাবে
+                        switchTab('home');
                     }
                 });
             };
-        }
-
-        // নিখুঁত পণ্য লোডার ফাংশন
-        function loadProducts() {
-            const grid = document.getElementById('product-grid');
-            grid.innerHTML = '<p style="grid-column: span 2; text-align:center; color:#777; padding:20px; font-size:12px;">লোড হচ্ছে...</p>';
-            
-            db.ref('products').once('value').then((snapshot) => {
-                grid.innerHTML = '';
-                if(snapshot.exists()) {
-                    snapshot.forEach((child) => {
-                        const item = child.val();
-                        const card = document.createElement('div');
-                        card.className = 'daraz-card';
-                        card.innerHTML = `
-                            <div>
-                                <img src="${item.image}">
-                                <div class="daraz-card-body">
-                                    <div class="daraz-title">${item.name}</div>
-                                    <div class="daraz-price">${item.price}</div>
-                                    <div class="daraz-rating">${item.rating}</div>
-                                </div>
-                            </div>
-                            <div style="padding: 0 6px 6px 6px;">
-                                <button class="btn-cart-add" onclick="addToCardFix('${item.name.replace(/'/g, "")}', '${item.price}', '${item.image}')">🛒 কার্টে যুক্ত করুন</button>
-                            </div>
-                        `;
-                        grid.appendChild(card);
-                    });
-                } else {
-                    grid.innerHTML = '<p style="grid-column: span 2; text-align:center; color:#777; padding:20px; font-size:12px;">কোনো পণ্য বা লাইভ অ্যাড নেই। আপলোড অপশন থেকে যোগ করুন।</p>';
-                }
-            });
         }
 
         function addToCart(name, price, image) {
@@ -503,23 +478,63 @@
             window.open(`https://wa.me/8801837197656?text=${msg}`, '_blank');
         }
 
-        // ব্যানার লিসেনার
-        db.ref('banner/image').on('value', (snapshot) => {
-            const bannerContainer = document.getElementById('home-banner-container');
-            if(snapshot.exists() && snapshot.val()) {
-                bannerContainer.innerHTML = `<img src="${snapshot.val()}" alt="Banner">`;
+        // একাধিক ব্যানার লাইভ লোড এবং অটো স্লাইডার লজিক
+        db.ref('banners').on('value', (snapshot) => {
+            const sliderContainer = document.getElementById('slider-images-container');
+            sliderContainer.innerHTML = '';
+            if(snapshot.exists()) {
+                let banners = [];
+                snapshot.forEach((child) => {
+                    banners.push(child.val().image);
+                });
+                totalSlides = banners.length;
+                banners.forEach((imgUrl) => {
+                    sliderContainer.innerHTML += `<img src="${imgUrl}" alt="Banner">`;
+                });
             } else {
-                bannerContainer.innerHTML = `<img src="1000012860.png" alt="Banner">`;
+                totalSlides = 1;
+                sliderContainer.innerHTML = `<img src="1000012860.png" alt="Default Banner">`;
             }
         });
 
-        // লাইভ ডেটাবেজ লিসেনার ও অটো-সিঙ্ক
-        db.ref('products').on('value', (snapshot) => {
-            loadProducts();
-        });
+        // অটো স্লাইড পরিবর্তন (প্রতি ৩ সেকেন্ড পর পর)
+        setInterval(() => {
+            if(totalSlides > 1) {
+                currentSlide = (currentSlide + 1) % totalSlides;
+                const sliderContainer = document.getElementById('slider-images-container');
+                sliderContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+            }
+        }, 3000);
 
-        // প্রথমবার পেজ লোড হলে পণ্যগুলো দেখানোর জন্য
-        loadProducts();
+        // ফায়ারবেজ থেকে পণ্যের ডেটা রিয়েল-টাইমে লোড করার নিখুঁত লিসেনার
+        db.ref('products').on('value', (snapshot) => {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = '';
+            
+            if(snapshot.exists()) {
+                snapshot.forEach((child) => {
+                    const item = child.val();
+                    const card = document.createElement('div');
+                    card.className = 'daraz-card';
+                    card.innerHTML = `
+                        <div>
+                            <img src="${item.image}">
+                            <div class="daraz-card-body">
+                                <div class="daraz-title">${item.name}</div>
+                                <div class="daraz-price">${item.price}</div>
+                                <div class="daraz-rating">${item.rating}</div>
+                            </div>
+                        </div>
+                        <div style="padding: 0 6px 6px 6px;">
+                            <button class="btn-cart-add" onclick="addToCardFix('${item.name.replace(/'/g, "")}', '${item.price}', '${item.image}')">🛒 কার্টে যুক্ত করুন</button>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            } else {
+                grid.innerHTML = '<p style="grid-column: span 2; text-align:center; color:#777; padding:20px; font-size:12px;">কোনো পণ্য বা লাইভ অ্যাড নেই। আপলোড অপশন থেকে যোগ করুন।</p>';
+            }
+        });
 
         function addToCardFix(name, price, image) {
             addToCart(name, price, image);
