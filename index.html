@@ -14,18 +14,14 @@
         .top-header {
             background-color: #1e1e1e;
             color: white;
-            padding: 15px;
+            padding: 12px 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         .top-header h1 {
             margin: 0;
-            font-size: 20px;
-        }
-        .star-icon {
-            color: #4CAF50;
-            font-size: 24px;
+            font-size: 18px;
         }
         .whatsapp-top-btn {
             background-color: #25D366;
@@ -35,9 +31,6 @@
             text-decoration: none;
             font-size: 13px;
             font-weight: bold;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
         }
         .search-box-container {
             background-color: #ff6600;
@@ -51,77 +44,49 @@
             font-size: 14px;
             box-sizing: border-box;
         }
-        /* Categories */
-        .categories {
+        .category-circles {
             display: flex;
             overflow-x: auto;
-            padding: 10px;
+            gap: 12px;
+            padding: 10px 15px;
             background: white;
-            gap: 15px;
             white-space: nowrap;
         }
-        .categories::-webkit-scrollbar {
-            display: none;
-        }
-        .cat-item {
+        .cat-circle-item {
             text-align: center;
             cursor: pointer;
+            flex: 0 0 auto;
         }
-        .cat-circle {
-            width: 60px;
-            height: 60px;
+        .cat-img {
+            width: 55px;
+            height: 55px;
             border-radius: 50%;
-            background: #ddd;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            margin: 0 auto 5px auto;
-        }
-        .cat-circle img {
-            width: 100%;
-            height: 100%;
             object-fit: cover;
+            border: 2px solid #ff6600;
+            background: #eee;
         }
-        .cat-item span {
+        .cat-circle-item p {
+            margin: 4px 0 0 0;
             font-size: 12px;
             color: #333;
+            font-weight: bold;
         }
-        /* Banner Ad Slider */
         .banner-container {
+            padding: 10px;
+            background: white;
+            margin-bottom: 5px;
+        }
+        .banner-container img {
             width: 100%;
-            height: 160px;
-            margin: 10px 0;
-            overflow-x: auto;
-            display: flex;
-            gap: 10px;
-            padding: 0 10px;
-            box-sizing: border-box;
-        }
-        .banner-container::-webkit-scrollbar {
-            display: none;
-        }
-        .banner-slide {
-            min-width: 100%;
-            height: 100%;
             border-radius: 8px;
-            overflow: hidden;
-            background: #ddd;
-            flex-shrink: 0;
+            display: block;
         }
-        .banner-slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        /* Section Title */
         .section-title {
             padding: 10px 15px;
             font-size: 16px;
             font-weight: bold;
             color: #ff6600;
         }
-        /* Product Grid */
         .product-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -164,74 +129,76 @@
             font-size: 13px;
             font-weight: bold;
         }
-        /* Form & Panel */
-        .form-container {
+        .sub-card {
             background: white;
-            padding: 15px;
+            padding: 12px 15px;
             margin: 10px;
             border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
-        .form-container h3 {
-            margin-top: 0;
-            color: #333;
+        .sub-card-info h4 {
+            margin: 0 0 4px 0;
             font-size: 15px;
+            color: #333;
         }
-        .form-control {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-            font-size: 14px;
+        .sub-card-info p {
+            margin: 0;
+            font-size: 12px;
+            color: #666;
         }
-        .file-label {
-            display: block;
-            background: #f0f0f0;
-            padding: 10px;
-            text-align: center;
-            border: 1px dashed #ff6600;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-bottom: 10px;
-            color: #555;
-            font-size: 13px;
-        }
-        .btn-submit {
+        .btn-play-read {
             background: #28a745;
             color: white;
             border: none;
-            padding: 12px;
-            width: 100%;
+            padding: 6px 14px;
             border-radius: 5px;
-            font-size: 15px;
-            font-weight: bold;
             cursor: pointer;
-        }
-        .btn-banner {
-            background: #007bff;
-        }
-        /* Account Section */
-        .account-box {
-            background: white;
-            padding: 15px;
-            margin: 10px;
-            border-radius: 8px;
-            text-align: center;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-        .whatsapp-link-btn {
-            display: block;
-            background-color: #25D366;
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            text-decoration: none;
+            font-size: 13px;
             font-weight: bold;
-            margin-top: 10px;
         }
-        /* Cart Page Style */
+        .play-screen {
+            background: white;
+            margin: 10px;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: none;
+            text-align: center;
+        }
+        .back-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            float: left;
+            margin-bottom: 10px;
+        }
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 80px);
+            gap: 5px;
+            justify-content: center;
+            margin: 20px auto;
+        }
+        .cell {
+            width: 80px;
+            height: 80px;
+            background: #eee;
+            font-size: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+            color: #333;
+            border-radius: 5px;
+        }
         .cart-item-card {
             background: white;
             display: flex;
@@ -271,7 +238,24 @@
             cursor: pointer;
             font-size: 12px;
         }
-        /* Bottom Navigation */
+        .account-box {
+            background: white;
+            padding: 15px;
+            margin: 10px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .whatsapp-link-btn {
+            display: block;
+            background-color: #25D366;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 10px;
+        }
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -314,68 +298,174 @@
     </div>
 
     <div class="search-box-container">
-        <input type="text" class="search-box" placeholder="🔍 সহজ মার্ট-এ পণ্য খুঁজুন...">
+        <input type="text" class="search-box" placeholder="🔍 সহজ মার্ট-এ পণ্য, গেম বা বই খুঁজুন...">
     </div>
 
     <!-- HOME PAGE -->
     <div id="page-home" class="page-section active">
-        <!-- Categories -->
-        <div class="categories">
-            <div class="cat-item"><div class="cat-circle"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30" alt=""></div><span>ওয়াচ</span></div>
-            <div class="cat-item"><div class="cat-circle"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e" alt=""></div><span>হেডফোন</span></div>
-            <div class="cat-item"><div class="cat-circle"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff" alt=""></div><span>জুতো</span></div>
-            <div class="cat-item"><div class="cat-circle"><img src="https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf" alt=""></div><span>গেমিং</span></div>
-            <div class="cat-item"><div class="cat-circle"><img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f" alt=""></div><span>সবগুলি</span></div>
+        <div class="category-circles">
+            <div class="cat-circle-item" onclick="switchPage('shop', document.querySelectorAll('.nav-item')[0])">
+                <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30" class="cat-img" alt="Watch">
+                <p>ওয়াচ</p>
+            </div>
+            <div class="cat-circle-item" onclick="switchPage('shop', document.querySelectorAll('.nav-item')[0])">
+                <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e" class="cat-img" alt="Headphone">
+                <p>হেডফোন</p>
+            </div>
+            <div class="cat-circle-item" onclick="switchPage('shop', document.querySelectorAll('.nav-item')[0])">
+                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff" class="cat-img" alt="Shoes">
+                <p>জুতো</p>
+            </div>
+            <div class="cat-circle-item" onclick="switchPage('games', document.querySelectorAll('.nav-item')[1])">
+                <img src="https://images.unsplash.com/photo-1612287233002-b1d3ba70b553" class="cat-img" alt="Gaming">
+                <p>গেমিং</p>
+            </div>
+            <div class="cat-circle-item" onclick="switchPage('books', document.querySelectorAll('.nav-item')[2])">
+                <img src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6" class="cat-img" alt="Books">
+                <p>ই-বুক</p>
+            </div>
         </div>
 
-        <!-- Dynamic Banner Ad Slider -->
-        <div id="banner-slider" class="banner-container">
-            <!-- Dynamic banners will load here -->
+        <div class="banner-container">
+            <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da" alt="Banner">
         </div>
 
         <div class="section-title">⚡ লাইভ মার্কেটপ্লেস পণ্যসমূহ</div>
-
         <div id="product-list" class="product-grid">
-            <!-- Products will load here -->
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1583394838336-acd977736f90" alt="Product">
+                <div class="product-title">Finger gloves</div>
+                <div class="product-price">৳ ১৫০</div>
+                <button class="btn-cart" onclick="addToCart('Finger gloves', '১৫০', 'https://images.unsplash.com/photo-1583394838336-acd977736f90')">কার্ডে যোগ করুন</button>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30" alt="Product">
+                <div class="product-title">প্রিমিয়াম ওয়াচ</div>
+                <div class="product-price">৳ ৮৫০</div>
+                <button class="btn-cart" onclick="addToCart('প্রিমিয়াম ওয়াচ', '৮৫০', 'https://images.unsplash.com/photo-1523275335684-37898b6baf30')">কার্ডে যোগ করুন</button>
+            </div>
         </div>
     </div>
 
-    <!-- VENDOR / UPLOAD PAGE -->
-    <div id="page-vendor" class="page-section">
-        <!-- Product Upload Form -->
-        <div class="form-container">
-            <h3>🛠️ নতুন পণ্য যোগ করুন</h3>
-            <input type="text" id="p-name" class="form-control" placeholder="পণ্যের নাম দিন">
-            <input type="number" id="p-price" class="form-control" placeholder="দাম লিখুন (টাকায়)">
+    <!-- SHOP PAGE -->
+    <div id="page-shop" class="page-section">
+        <div class="section-title">🛍️ সকল শপিং পণ্য</div>
+        <div class="product-grid">
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff" alt="Product">
+                <div class="product-title">স্টাইলিশ জুতো</div>
+                <div class="product-price">৳ ১২০০</div>
+                <button class="btn-cart" onclick="addToCart('স্টাইলিশ জুতো', '১২০০', 'https://images.unsplash.com/photo-1542291026-7eec264c27ff')">কার্ডে যোগ করুন</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- GAMES PAGE -->
+    <div id="page-games" class="page-section">
+        <div class="section-title">🎮 গেম জোন (অনেকগুলো গেম)</div>
+        
+        <div id="game-list-view">
+            <div class="sub-card">
+                <div class="sub-card-info">
+                    <h4>১. টিক-ট্যাক-টো (লড়াই গেম)</h4>
+                    <p>অ্যাপের ভেতরেই সরাসরি খেলুন</p>
+                </div>
+                <button class="btn-play-read" onclick="openGame()">খেলুন</button>
+            </div>
+            <div class="sub-card">
+                <div class="sub-card-info">
+                    <h4>২. মেমোরি পাজল গেম</h4>
+                    <p>বুদ্ধি ও মেমোরি বাড়ানোর দারুণ গেম</p>
+                </div>
+                <button class="btn-play-read" onclick="alert('এই গেমটি খুব শীঘ্রই যুক্ত হচ্ছে!')">খেলুন</button>
+            </div>
+            <div class="sub-card">
+                <div class="sub-card-info">
+                    <h4>৩. নাম্বার গেসিং গেম</h4>
+                    <p>লুকানো সংখ্যা খোঁজার দারুণ এক চ্যালেঞ্জ</p>
+                </div>
+                <button class="btn-play-read" onclick="alert('এই গেমটি খুব শীঘ্রই যুক্ত হচ্ছে!')">খেলুন</button>
+            </div>
+            <div class="sub-card">
+                <div class="sub-card-info">
+                    <h4>৪. স্পিড কার রেসিং</h4>
+                    <p>রোমাঞ্চকর ড্রাইভিং অভিজ্ঞতা</p>
+                </div>
+                <button class="btn-play-read" onclick="alert('এই গেমটি খুব শীঘ্রই যুক্ত হচ্ছে!')">খেলুন</button>
+            </div>
+        </div>
+
+        <div id="game-player-screen" class="play-screen">
+            <button class="back-btn" onclick="closeGame()">⬅ গেম তালিকা</button>
+            <h3 style="margin-top: 40px; color: #ff6600;">টিক-ট্যাক-টো</h3>
+            <p id="game-status" style="font-size: 14px; font-weight: bold; color: #333;">প্লেয়ার X এর পালা</p>
             
-            <label for="p-image-file" class="file-label" id="file-label-text">📁 পণ্যের ছবি (গ্যালারি থেকে)</label>
-            <input type="file" id="p-image-file" accept="image/*" style="display: none;" onchange="compressAndConvert(event, 'product')">
+            <div class="board">
+                <div class="cell" onclick="makeMove(0)"></div>
+                <div class="cell" onclick="makeMove(1)"></div>
+                <div class="cell" onclick="makeMove(2)"></div>
+                <div class="cell" onclick="makeMove(3)"></div>
+                <div class="cell" onclick="makeMove(4)"></div>
+                <div class="cell" onclick="makeMove(5)"></div>
+                <div class="cell" onclick="makeMove(6)"></div>
+                <div class="cell" onclick="makeMove(7)"></div>
+                <div class="cell" onclick="makeMove(8)"></div>
+            </div>
+            <button class="btn-cart" style="margin-top: 15px; width: auto; padding: 8px 20px;" onclick="resetGame()">রিসেট গেম</button>
+        </div>
+    </div>
 
-            <input type="text" id="p-category" class="form-control" placeholder="ক্যাটাগরি দিন (যেমন: ওয়াচ, হেডফোন)">
-            <button class="btn-submit" onclick="uploadProduct()">পণ্য লাইভ করুন</button>
+    <!-- BOOKS PAGE -->
+    <div id="page-books" class="page-section">
+        <div class="section-title">📚 ই-বুক লাইব্রেরি (অনেকগুলো বই)</div>
+        
+        <div id="book-list-view">
+            <div class="sub-card">
+                <div class="sub-card-info">
+                    <h4>১. রহস্যময় পৃথিবী ও মহাবিশ্ব</h4>
+                    <p>অ্যাপের ভেতরেই সরাসরি পড়ুন</p>
+                </div>
+                <button class="btn-play-read" onclick="openBook()">পড়ুন</button>
+            </div>
+            <div class="sub-card">
+                <div class="sub-card-info">
+                    <h4>২. ইসলামিক ইতিহাস ও ঐতিহ্য</h4>
+                    <p>ইসলামের সোনালী যুগের গল্প ও ইতিহাস</p>
+                </div>
+                <button class="btn-play-read" onclick="alert('বইটি দ্রুত আসছে!')">পড়ুন</button>
+            </div>
+            <div class="sub-card">
+                <div class="sub-card-info">
+                    <h4>৩. বিজ্ঞান ও প্রযুক্তি আবিষ্কার</h4>
+                    <p>বিজ্ঞানের অদ্ভুত সব আবিষ্কারের কাহিনী</p>
+                </div>
+                <button class="btn-play-read" onclick="alert('বইটি দ্রুত আসছে!')">পড়ুন</button>
+            </div>
+            <div class="sub-card">
+                <div class="sub-card-info">
+                    <h4>৪. সফল কৃষকের ডায়রি</h4>
+                    <p>আধুনিক কৃষি ও ফসলের পরিচর্যা</p>
+                </div>
+                <button class="btn-play-read" onclick="alert('বইটি দ্রুত আসছে!')">পড়ুন</button>
+            </div>
         </div>
 
-        <!-- Banner Upload Form -->
-        <div class="form-container">
-            <h3>📢 নতুন বিজ্ঞাপন/ব্যানার যোগ করুন</h3>
-            <label for="b-image-file" class="file-label" id="banner-label-text">🖼️ ব্যানার ছবি (গ্যালারি থেকে)</label>
-            <input type="file" id="b-image-file" accept="image/*" style="display: none;" onchange="compressAndConvert(event, 'banner')">
-            <button class="btn-submit btn-banner" onclick="uploadBanner()">ব্যানার লাইভ করুন</button>
-        </div>
-
-        <div class="account-box">
-            <h3>👤 আমার অ্যাকাউন্ট</h3>
-            <p><b>নাম:</b> শামিম হোসেন</p>
-            <p><b>স্ট্যাটাস:</b> ভেন্ডর ও ডেভেলপার</p>
+        <div id="book-reader-screen" class="play-screen" style="text-align: left;">
+            <button class="back-btn" onclick="closeBook()">⬅ বই তালিকা</button>
+            <h3 style="margin-top: 40px; color: #ff6600; text-align: center;">রহস্যময় পৃথিবী ও মহাবিশ্ব</h3>
+            <div style="font-size: 14px; line-height: 1.6; color: #333; padding: 10px; background: #fafafa; border-radius: 5px; max-height: 350px; overflow-y: auto;">
+                <p><b>অধ্যায় ১: মহাবিশ্বের অজানা রহস্য</b></p>
+                <p>আমাদের এই বিশাল মহাবিশ্বে কোটি কোটি গ্যালাক্সি রয়েছে। বিজ্ঞানীরা এখনো এর সমস্ত রহস্য উদঘাটন করতে পারেননি। পৃথিবী থেকে হাজার হাজার আলোকবর্ষ দূরে এমন অনেক গ্রহ রয়েছে...</p>
+                <p><b>অধ্যায় ২: প্রকৃতির বিস্ময়</b></p>
+                <p>প্রকৃতি তার বুকে নানা ধরনের রহস্য লুকিয়ে রেখেছে। গভীর সমুদ্রের তলদেশ থেকে শুরু করে মহাকাশের ব্ল্যাক হোল—সবকিছুই মানুষের ভাবনার খোরাক জোগায়।</p>
+            </div>
         </div>
     </div>
 
     <!-- CART PAGE -->
     <div id="page-cart" class="page-section">
         <div class="section-title">🛒 আপনার কার্ট তালিকা</div>
-        <div id="cart-items-container">
-            <!-- Cart items will load here -->
-        </div>
+        <div id="cart-items-container"></div>
     </div>
 
     <!-- ACCOUNT PAGE -->
@@ -394,8 +484,11 @@
         <div class="nav-item active" onclick="switchPage('home', this)">
             <span>🏠</span>হোম
         </div>
-        <div class="nav-item" onclick="switchPage('vendor', this)">
-            <span>➕</span>ক্যাটাগরি/আপলোড
+        <div class="nav-item" onclick="switchPage('games', this)">
+            <span>🎮</span>গেমস
+        </div>
+        <div class="nav-item" onclick="switchPage('books', this)">
+            <span>📚</span>বই
         </div>
         <div class="nav-item" onclick="switchPage('cart', this)" id="cart-nav-btn">
             <span>🛒</span><span id="cart-count-text">কার্ট (0)</span>
@@ -405,25 +498,7 @@
         </div>
     </div>
 
-    <!-- Firebase SDKs -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyD...",
-            authDomain: "sohoj-mart.firebaseapp.com",
-            projectId: "sohoj-mart",
-            storageBucket: "sohoj-mart.appspot.com",
-            messagingSenderId: "...",
-            appId: "..."
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        let productBase64 = "";
-        let bannerBase64 = "";
+    <script>
         let cart = JSON.parse(localStorage.getItem('sohoj_cart')) || [];
 
         function updateCartUI() {
@@ -462,138 +537,78 @@
             updateCartUI();
         }
 
-        window.compressAndConvert = function(event, type) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = new Image();
-                img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 500;
-                    const MAX_HEIGHT = 500;
-                    let width = img.width;
-                    let height = img.height;
-
-                    if (width > height) {
-                        if (width > MAX_WIDTH) {
-                            height *= MAX_WIDTH / width;
-                            width = MAX_WIDTH;
-                        }
-                    } else {
-                        if (height > MAX_HEIGHT) {
-                            width *= MAX_HEIGHT / height;
-                            height = MAX_HEIGHT;
-                        }
-                    }
-
-                    canvas.width = width;
-                    canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-
-                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.6);
-
-                    if (type === 'product') {
-                        productBase64 = compressedDataUrl;
-                        document.getElementById('file-label-text').innerText = "✅ পণ্যের ছবি রেডি হয়েছে!";
-                    } else if (type === 'banner') {
-                        bannerBase64 = compressedDataUrl;
-                        document.getElementById('banner-label-text').innerText = "✅ ব্যানার ছবি রেডি হয়েছে!";
-                    }
-                }
-                img.src = e.target.result;
-            }
-            reader.readAsDataURL(file);
-        };
-
-        window.uploadProduct = async function() {
-            const name = document.getElementById('p-name').value;
-            const price = document.getElementById('p-price').value;
-            const category = document.getElementById('p-category').value;
-
-            if(!name || !price || !productBase64) {
-                alert("দয়া করে পণ্যের নাম, দাম এবং ছবি দিন!");
-                return;
-            }
-
-            try {
-                await addDoc(collection(db, "products"), {
-                    name, price, image: productBase64, category, time: serverTimestamp()
-                });
-                alert("পণ্য সফলভাবে লাইভ হয়েছে!");
-                document.getElementById('p-name').value = '';
-                document.getElementById('p-price').value = '';
-                document.getElementById('p-category').value = '';
-                document.getElementById('file-label-text').innerText = "📁 পণ্যের ছবি (গ্যালারি থেকে)";
-                productBase64 = "";
-                switchPage('home', document.querySelector('.bottom-nav .nav-item'));
-            } catch (e) {
-                alert("ত্রুটি: " + e.message);
-            }
-        };
-
-        window.uploadBanner = async function() {
-            if(!bannerBase64) {
-                alert("দয়া করে গ্যালারি থেকে একটি ব্যানার ছবি সিলেক্ট করুন!");
-                return;
-            }
-
-            try {
-                await addDoc(collection(db, "banners"), {
-                    image: bannerBase64, time: serverTimestamp()
-                });
-                alert("বিজ্ঞাপন ব্যানার সফলভাবে লাইভ হয়েছে!");
-                document.getElementById('banner-label-text').innerText = "🖼️ ব্যানার ছবি (গ্যালারি থেকে)";
-                bannerBase64 = "";
-                switchPage('home', document.querySelector('.bottom-nav .nav-item'));
-            } catch (e) {
-                alert("ত্রুটি: " + e.message);
-            }
-        };
-
-        onSnapshot(collection(db, "products"), (snapshot) => {
-            const productList = document.getElementById('product-list');
-            productList.innerHTML = "";
-            snapshot.forEach((doc) => {
-                const p = doc.data();
-                const safeName = p.name.replace(/'/g, "\\'");
-                productList.innerHTML += `
-                    <div class="product-card">
-                        <img src="${p.image}" alt="Product">
-                        <div class="product-title">${p.name}</div>
-                        <div class="product-price">৳ ${p.price}</div>
-                        <button class="btn-cart" onclick="addToCart('${safeName}', '${p.price}', '${p.image}')">কার্ডে যোগ করুন</button>
-                    </div>
-                `;
-            });
-        });
-
-        onSnapshot(collection(db, "banners"), (snapshot) => {
-            const bannerSlider = document.getElementById('banner-slider');
-            bannerSlider.innerHTML = "";
-            snapshot.forEach((doc) => {
-                const b = doc.data();
-                bannerSlider.innerHTML += `
-                    <div class="banner-slide">
-                        <img src="${b.image}" alt="Banner Ad">
-                    </div>
-                `;
-            });
-        });
-
-        updateCartUI();
-    </script>
-
-    <script>
         function switchPage(pageId, element) {
             document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
             document.getElementById('page-' + pageId).classList.add('active');
             
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            element.classList.add('active');
+            if(element) element.classList.add('active');
         }
+
+        // Game Logic
+        let board = ["", "", "", "", "", "", "", "", ""];
+        let currentPlayer = "X";
+        let isGameActive = true;
+
+        function openGame() {
+            document.getElementById('game-list-view').style.display = 'none';
+            document.getElementById('game-player-screen').style.display = 'block';
+            resetGame();
+        }
+
+        function closeGame() {
+            document.getElementById('game-player-screen').style.display = 'none';
+            document.getElementById('game-list-view').style.display = 'block';
+        }
+
+        window.makeMove = function(index) {
+            if (board[index] === "" && isGameActive) {
+                board[index] = currentPlayer;
+                document.getElementsByClassName('cell')[index].innerText = currentPlayer;
+                checkWinner();
+                if (isGameActive) {
+                    currentPlayer = currentPlayer === "X" ? "O" : "X";
+                    document.getElementById('game-status').innerText = `প্লেয়ার ${currentPlayer} এর পালা`;
+                }
+            }
+        }
+
+        function checkWinner() {
+            const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+            let won = false;
+            for (let c of wins) {
+                if (board[c[0]] && board[c[0]] === board[c[1]] && board[c[0]] === board[c[2]]) {
+                    won = true; break;
+                }
+            }
+            if (won) {
+                document.getElementById('game-status').innerText = `🎉 অভিনন্দন! প্লেয়ার ${currentPlayer} জিতেছে!`;
+                isGameActive = false;
+            } else if (!board.includes("")) {
+                document.getElementById('game-status').innerText = `🤝 ড্র হয়েছে!`;
+                isGameActive = false;
+            }
+        }
+
+        window.resetGame = function() {
+            board = ["", "", "", "", "", "", "", "", ""];
+            currentPlayer = "X";
+            isGameActive = true;
+            document.getElementById('game-status').innerText = `প্লেয়ার X এর পালা`;
+            for (let c of document.getElementsByClassName('cell')) c.innerText = "";
+        }
+
+        // Book Reader Logic
+        function openBook() {
+            document.getElementById('book-list-view').style.display = 'none';
+            document.getElementById('book-reader-screen').style.display = 'block';
+        }
+        function closeBook() {
+            document.getElementById('book-reader-screen').style.display = 'none';
+            document.getElementById('book-list-view').style.display = 'block';
+        }
+
+        updateCartUI();
     </script>
 </body>
-    </html>
+                </html>
