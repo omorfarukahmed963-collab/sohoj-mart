@@ -120,26 +120,14 @@
         <!-- ব্যানার স্লাইডার -->
         <div class="promo-slider">
             <div class="slider-images" id="slider-images-container">
-                <img src="1000012860.png" alt="Sohoj Mart Banner">
+                <!-- ডিফল্ট ব্যানার যাতে টেক্সট না দেখায় -->
             </div>
         </div>
 
         <div style="font-size: 13px; font-weight: bold; color: #333; margin: 8px 0;">🔥 Just For You (আপনার লাইভ পণ্য ও অ্যাড)</div>
         
         <div class="product-grid" id="product-grid">
-            <div class="daraz-card">
-                <div>
-                    <img src="1000012860.png" alt="Product">
-                    <div class="daraz-card-body">
-                        <div class="daraz-title">সহজ মার্ট স্পেশাল অফার প্রোডাক্ট</div>
-                        <div class="daraz-price">৳৩৫০</div>
-                        <div class="daraz-rating">⭐ 4.8</div>
-                    </div>
-                </div>
-                <div style="padding: 0 6px 6px 6px;">
-                    <button class="btn-cart-add" onclick="addToCardFix('সহজ মার্ট স্পেশাল অফার প্রোডাক্ট', '৳৩৫০', '1000012860.png')">🛒 কার্টে যুক্ত করুন</button>
-                </div>
-            </div>
+            <!-- ফায়ারবেজ থেকে ডাইনামিক প্রোডাক্ট লোড হবে -->
         </div>
     </div>
 
@@ -317,25 +305,19 @@
                         let item = child.val();
                         html += `
                             <div class="cat-sub-item">
-                                <img src="${item.image}" alt="Img">
+                                <img src="${item.image}" alt="Img" onerror="this.style.display='none'">
                                 <span>${item.title}</span>
                             </div>
                         `;
                     });
                 } else {
-                    html += `
-                        <div class="cat-sub-item">
-                            <img src="1000012860.png" alt="Img">
-                            <span>স্যাম্পল শার্ট</span>
-                        </div>
-                    `;
+                    html += `<p style="text-align:center; color:#777; grid-column:span 2; padding:20px;">কোনো আইটেম পাওয়া যায়নি</p>`;
                 }
                 html += '</div>';
                 area.innerHTML = html;
             });
         }
 
-        // ছবি অটো রিসাইজ এবং কম্প্রেস করার দারুণ ফাংশন (Resolution & Size automatically reduces)
         function compressImage(file, maxWidth, maxHeight, quality, callback) {
             const reader = new FileReader();
             reader.readAsDataURL(file);
@@ -362,7 +344,6 @@
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
 
-                    // কম্প্রেস করে ছোট সাইজের Base64 কোড রিটার্ন করবে
                     const dataUrl = canvas.toDataURL('image/jpeg', quality);
                     callback(dataUrl);
                 };
@@ -379,7 +360,6 @@
                 return;
             }
 
-            // সর্বোচ্চ ৮০০ পিক্সেল সাইজ এবং ৭০% কোয়ালিটি করে ইমেজ ছোট করে নেওয়া হবে
             compressImage(fileInput.files[0], 800, 800, 0.7, function(compressedDataUrl) {
                 db.ref('categories/' + catName).push({
                     title: title,
@@ -417,7 +397,6 @@
                 return;
             }
 
-            // ব্যানার বড় থাকে তাই ১২০০ পিক্সেল মেইনটেইন করে অটো সাইজ ছোট করা হবে
             compressImage(bannerFile.files[0], 1200, 600, 0.7, function(compressedDataUrl) {
                 db.ref('banners').push({
                     image: compressedDataUrl
@@ -442,7 +421,6 @@
                 return;
             }
 
-            // পণ্যের ছবি ৮০০ পিক্সেল সাইজে অটো কম্প্রেস হবে
             compressImage(fileInput.files[0], 800, 800, 0.7, function(compressedDataUrl) {
                 db.ref('products').push({
                     name: name,
@@ -492,7 +470,7 @@
                 div.className = 'cart-item';
                 div.innerHTML = `
                     <div style="display:flex; align-items:center; gap:8px;">
-                        <img src="${item.image}">
+                        <img src="${item.image}" onerror="this.style.display='none'">
                         <div>
                             <h4 style="font-size: 12px;">${item.name}</h4>
                             <p style="font-size: 11px; color: #f57224; font-weight: bold;">${item.price}</p>
@@ -533,8 +511,10 @@
                 });
                 totalSlides = banners.length;
                 banners.forEach((imgUrl) => {
-                    sliderContainer.innerHTML += `<img src="${imgUrl}" alt="Banner">`;
+                    sliderContainer.innerHTML += `<img src="${imgUrl}" alt="Banner" onerror="this.style.display='none'">`;
                 });
+            } else {
+                sliderContainer.innerHTML = `<div style="padding:50px; text-align:center; color:#777; width:100%;">কোনো ব্যানার নেই</div>`;
             }
         });
 
@@ -557,7 +537,7 @@
                     card.className = 'daraz-card';
                     card.innerHTML = `
                         <div>
-                            <img src="${item.image}">
+                            <img src="${item.image}" onerror="this.style.display='none'">
                             <div class="daraz-card-body">
                                 <div class="daraz-title">${item.name}</div>
                                 <div class="daraz-price">${item.price}</div>
@@ -570,6 +550,8 @@
                     `;
                     grid.appendChild(card);
                 });
+            } else {
+                grid.innerHTML = `<p style="grid-column: span 2; text-align: center; color: #777; padding: 20px;">কোনো পণ্য পাওয়া যায়নি</p>`;
             }
         });
 
