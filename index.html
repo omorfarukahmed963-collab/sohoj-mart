@@ -1,450 +1,475 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sohoj Mart - সহজ মার্ট</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      margin: 0;
-      padding-bottom: 70px;
-    }
-    .top-search-bar {
-      background-color: #f85606;
-      padding: 10px;
-    }
-    .search-input {
-      width: 100%;
-      padding: 10px 15px;
-      font-size: 15px;
-      border: none;
-      border-radius: 4px;
-      outline: none;
-      box-sizing: border-box;
-    }
-    .page-content {
-      display: none;
-      padding: 10px;
-    }
-    .page-content.active {
-      display: block;
-    }
-    .category-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 8px;
-      padding: 10px;
-      background: #fff;
-      margin-bottom: 10px;
-      text-align: center;
-    }
-    .cat-item {
-      cursor: pointer;
-    }
-    .cat-item img {
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      background: #eee;
-      object-fit: cover;
-    }
-    .cat-item span {
-      font-size: 11px;
-      color: #333;
-      display: block;
-      margin-top: 4px;
-    }
-    .banner {
-      width: 100%;
-      height: 140px;
-      background-image: url('https://img.freepik.com/free-vector/flat-design-sale-banner_23-2149318856.jpg');
-      background-size: cover;
-      background-position: center;
-      margin-bottom: 10px;
-    }
-    .section-header {
-      background: #fff;
-      padding: 10px 15px;
-      font-weight: bold;
-      font-size: 15px;
-      color: #f85606;
-      border-bottom: 1px solid #eee;
-    }
-    .flash-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      padding: 10px;
-      background: #fff;
-      margin-bottom: 10px;
-    }
-    .flash-card {
-      background: #fff;
-      border: 1px solid #eee;
-      border-radius: 6px;
-      padding: 10px;
-      text-align: center;
-    }
-    .flash-card img {
-      width: 100%;
-      height: 110px;
-      object-fit: cover;
-      border-radius: 4px;
-    }
-    .p-title {
-      font-size: 13px;
-      color: #333;
-      margin: 6px 0;
-      font-weight: bold;
-    }
-    .p-price {
-      color: #f85606;
-      font-weight: bold;
-      font-size: 14px;
-      margin-bottom: 8px;
-    }
-    .order-btn {
-      width: 100%;
-      background: #f85606;
-      color: white;
-      border: none;
-      padding: 8px;
-      border-radius: 4px;
-      font-size: 12px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    .admin-card {
-      background: #fff;
-      padding: 15px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      margin-bottom: 15px;
-    }
-    .admin-input {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 10px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      box-sizing: border-box;
-      font-size: 14px;
-    }
-    .add-product-btn {
-      width: 100%;
-      background: #28a745;
-      color: white;
-      border: none;
-      padding: 10px;
-      border-radius: 4px;
-      font-weight: bold;
-      font-size: 15px;
-      cursor: pointer;
-    }
-    .cart-item-card {
-      background: #fff;
-      padding: 10px;
-      margin-bottom: 8px;
-      border-radius: 5px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .checkout-btn {
-      width: 100%;
-      background: #28a745;
-      color: white;
-      border: none;
-      padding: 12px;
-      border-radius: 5px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 15px;
-    }
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: #fff;
-      border-top: 1px solid #ddd;
-      display: flex;
-      justify-content: space-around;
-      padding: 8px 0;
-      z-index: 1000;
-    }
-    .nav-item {
-      text-align: center;
-      font-size: 11px;
-      color: #666;
-      text-decoration: none;
-      cursor: pointer;
-      flex-grow: 1;
-    }
-    .nav-item.active {
-      color: #f85606;
-      font-weight: bold;
-    }
-    .nav-item div {
-      font-size: 18px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sohoj Mart - সহজ মার্ট</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding-bottom: 70px;
+        }
+        .top-header {
+            background-color: #1e1e1e;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .top-header h1 {
+            margin: 0;
+            font-size: 20px;
+        }
+        .star-icon {
+            color: #4CAF50;
+            font-size: 24px;
+        }
+        .search-box-container {
+            background-color: #ff6600;
+            padding: 10px 15px;
+        }
+        .search-box {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        /* Categories */
+        .categories {
+            display: flex;
+            overflow-x: auto;
+            padding: 10px;
+            background: white;
+            gap: 15px;
+            white-space: nowrap;
+        }
+        .categories::-webkit-scrollbar {
+            display: none;
+        }
+        .cat-item {
+            text-align: center;
+            cursor: pointer;
+        }
+        .cat-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin: 0 auto 5px auto;
+        }
+        .cat-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .cat-item span {
+            font-size: 12px;
+            color: #333;
+        }
+        /* Banner Ad Slider */
+        .banner-container {
+            width: 100%;
+            height: 160px;
+            margin: 10px 0;
+            overflow-x: auto;
+            display: flex;
+            gap: 10px;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+        .banner-container::-webkit-scrollbar {
+            display: none;
+        }
+        .banner-slide {
+            min-width: 100%;
+            height: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #ddd;
+            flex-shrink: 0;
+        }
+        .banner-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        /* Section Title */
+        .section-title {
+            padding: 10px 15px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #ff6600;
+        }
+        /* Product Grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            padding: 10px;
+        }
+        .product-card {
+            background: white;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .product-card img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        .product-title {
+            font-size: 14px;
+            margin: 8px 0 4px 0;
+            color: #333;
+            font-weight: bold;
+        }
+        .product-price {
+            color: #ff6600;
+            font-weight: bold;
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+        .btn-cart {
+            background: #ff6600;
+            color: white;
+            border: none;
+            padding: 8px;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+        }
+        /* Form & Panel */
+        .form-container {
+            background: white;
+            padding: 15px;
+            margin: 10px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .form-container h3 {
+            margin-top: 0;
+            color: #333;
+            font-size: 15px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        .file-label {
+            display: block;
+            background: #f0f0f0;
+            padding: 10px;
+            text-align: center;
+            border: 1px dashed #ff6600;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            color: #555;
+            font-size: 13px;
+        }
+        .btn-submit {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 5px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .btn-banner {
+            background: #007bff;
+        }
+        /* Account Section */
+        .account-box {
+            background: white;
+            padding: 15px;
+            margin: 10px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+        .nav-item {
+            text-align: center;
+            cursor: pointer;
+            color: #666;
+            font-size: 12px;
+            text-decoration: none;
+        }
+        .nav-item.active {
+            color: #ff6600;
+        }
+        .nav-item span {
+            display: block;
+            font-size: 18px;
+        }
+        .page-section {
+            display: none;
+        }
+        .page-section.active {
+            display: block;
+        }
+    </style>
 </head>
 <body>
 
-  <!-- সার্চ বার -->
-  <div class="top-search-bar">
-    <input type="text" id="searchInput" class="search-input" placeholder="🔍 সহজ মার্ট-এ পণ্য খুঁজুন..." onkeyup="searchProducts()">
-  </div>
-
-  <!-- হোম পেজ -->
-  <div id="home-page" class="page-content active">
-    <div class="category-grid">
-      <div class="cat-item" onclick="filterCategory('ওয়াচ')">
-        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30" alt="">
-        <span>ওয়াচ</span>
-      </div>
-      <div class="cat-item" onclick="filterCategory('হেডফোন')">
-        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e" alt="">
-        <span>হেডফোন</span>
-      </div>
-      <div class="cat-item" onclick="filterCategory('স্নিকার্স')">
-        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff" alt="">
-        <span>জুতো</span>
-      </div>
-      <div class="cat-item" onclick="filterCategory('গেমিং')">
-        <img src="https://images.unsplash.com/photo-1583394838336-acd977736f90" alt="">
-        <span>গেমিং</span>
-      </div>
-      <div class="cat-item" onclick="filterCategory('সব')">
-        <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f" alt="">
-        <span>সবগুলি</span>
-      </div>
+    <div class="top-header">
+        <h1>Sohoj Mart</h1>
+        <div class="star-icon">⭐</div>
     </div>
 
-    <div class="banner"></div>
-
-    <div class="section-header">⚡ লাইভ মার্কেটপ্লেস পণ্যসমূহ</div>
-    <div class="flash-grid" id="productGrid">
-      <!-- ফায়ারবেস থেকে রিয়েল-টাইম পণ্যগুলো এখানে লোড হবে -->
-    </div>
-  </div>
-
-  <!-- ক্যাটাগরি পেজ -->
-  <div id="category-page" class="page-content">
-    <h2>📂 পণ্যের ক্যাটাগরি সমূহ</h2>
-    <div style="background: white; padding: 15px; border-radius: 6px;">
-      <p onclick="switchTab('home-page', document.getElementById('nav-home')); filterCategory('ওয়াচ')" style="cursor:pointer; padding:8px; border-bottom:1px solid #eee;">⌚ স্মার্ট ওয়াচ ও গ্যাজেট</p>
-      <p onclick="switchTab('home-page', document.getElementById('nav-home')); filterCategory('হেডফোন')" style="cursor:pointer; padding:8px; border-bottom:1px solid #eee;">🎧 অডিও ও হেডফোন</p>
-      <p onclick="switchTab('home-page', document.getElementById('nav-home')); filterCategory('স্নিকার্স')" style="cursor:pointer; padding:8px; border-bottom:1px solid #eee;">👟 ফ্যাশন ও জুতো</p>
-      <p onclick="switchTab('home-page', document.getElementById('nav-home')); filterCategory('গেমিং')" style="cursor:pointer; padding:8px; border-bottom:1px solid #eee;">🎮 গেমিং এক্সেসরিজ</p>
-    </div>
-  </div>
-
-  <!-- কার্ট পেজ -->
-  <div id="cart-page" class="page-content">
-    <h2>🛒 আপনার শপিং কার্ট</h2>
-    <div id="cartItemsList">
-      <p>আপনার কার্টটি বর্তমানে খালি!</p>
-    </div>
-    <div id="cartTotal" style="font-weight: bold; font-size: 16px; margin-top: 15px;"></div>
-    <button class="checkout-btn" id="checkoutBtn" style="display:none;" onclick="sendWhatsAppOrder()">📲 হোয়াটসঅ্যাপে অর্ডার কনফার্ম করুন</button>
-  </div>
-
-  <!-- একাউন্ট ও পণ্য আপলোড প্যানেল -->
-  <div id="account-page" class="page-content">
-    <div class="admin-card">
-      <h2>🛠️ নতুন পণ্য যোগ করুন (বিক্রেতা প্যানেল)</h2>
-      <input type="text" id="newTitle" class="admin-input" placeholder="পণ্যের নাম দিন">
-      <input type="number" id="newPrice" class="admin-input" placeholder="দাম লিখুন (টাকায়)">
-      <input type="text" id="newImage" class="admin-input" placeholder="ছবির লিংক দিন">
-      <input type="text" id="newCat" class="admin-input" placeholder="ক্যাটাগরি দিন (যেমন: ওয়াচ, হেডফোন)">
-      <button class="add-product-btn" onclick="addNewProductToFirebase()">পণ্য লাইভ করুন</button>
+    <div class="search-box-container">
+        <input type="text" class="search-box" placeholder="🔍 সহজ মার্ট-এ পণ্য খুঁজুন...">
     </div>
 
-    <div style="background: #fff; padding: 15px; border-radius: 8px; text-align: center;">
-      <h3>👤 আমার একাউন্ট</h3>
-      <p><b>নাম:</b> শামিম হোসেন</p>
-      <p><b>স্ট্যাটাস:</b> ভেন্ডর ও ডেভেলপার</p>
+    <!-- HOME PAGE -->
+    <div id="page-home" class="page-section active">
+        <!-- Categories -->
+        <div class="categories">
+            <div class="cat-item"><div class="cat-circle"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30" alt=""></div><span>ওয়াচ</span></div>
+            <div class="cat-item"><div class="cat-circle"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e" alt=""></div><span>হেডফোন</span></div>
+            <div class="cat-item"><div class="cat-circle"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff" alt=""></div><span>জুতো</span></div>
+            <div class="cat-item"><div class="cat-circle"><img src="https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf" alt=""></div><span>গেমিং</span></div>
+            <div class="cat-item"><div class="cat-circle"><img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f" alt=""></div><span>সবগুলি</span></div>
+        </div>
+
+        <!-- Dynamic Banner Ad Slider -->
+        <div id="banner-slider" class="banner-container">
+            <!-- Dynamic banners will load here -->
+        </div>
+
+        <div class="section-title">⚡ লাইভ মার্কেটপ্লেস পণ্যসমূহ</div>
+
+        <div id="product-list" class="product-grid">
+            <!-- Products will load here -->
+        </div>
     </div>
-  </div>
 
-  <!-- বটম নেভিগেশন বার -->
-  <div class="bottom-nav">
-    <div id="nav-home" class="nav-item active" onclick="switchTab('home-page', this)">
-      <div>🏠</div>হোম
+    <!-- VENDOR / UPLOAD PAGE -->
+    <div id="page-vendor" class="page-section">
+        <!-- Product Upload Form -->
+        <div class="form-container">
+            <h3>🛠️ নতুন পণ্য যোগ করুন</h3>
+            <input type="text" id="p-name" class="form-control" placeholder="পণ্যের নাম দিন">
+            <input type="number" id="p-price" class="form-control" placeholder="দাম লিখুন (টাকায়)">
+            
+            <label for="p-image-file" class="file-label" id="file-label-text">📁 পণ্যের ছবি (গ্যালারি থেকে)</label>
+            <input type="file" id="p-image-file" accept="image/*" style="display: none;" onchange="previewProductImage(event)">
+
+            <input type="text" id="p-category" class="form-control" placeholder="ক্যাটাগরি দিন (যেমন: ওয়াচ, হেডফোন)">
+            <button class="btn-submit" onclick="uploadProduct()">পণ্য লাইভ করুন</button>
+        </div>
+
+        <!-- Banner Upload Form -->
+        <div class="form-container">
+            <h3>📢 নতুন বিজ্ঞাপন/ব্যানার যোগ করুন</h3>
+            <label for="b-image-file" class="file-label" id="banner-label-text">🖼️ ব্যানার ছবি (গ্যালারি থেকে)</label>
+            <input type="file" id="b-image-file" accept="image/*" style="display: none;" onchange="previewBannerImage(event)">
+            <button class="btn-submit btn-banner" onclick="uploadBanner()">ব্যানার লাইভ করুন</button>
+        </div>
+
+        <div class="account-box">
+            <h3>👤 আমার অ্যাকাউন্ট</h3>
+            <p><b>নাম:</b> শামিম হোসেন</p>
+            <p><b>স্ট্যাটাস:</b> ভেন্ডর ও ডেভেলপার</p>
+        </div>
     </div>
-    <div id="nav-cat" class="nav-item" onclick="switchTab('category-page', this)">
-      <div>📂</div>ক্যাটাগরি
+
+    <!-- CART PAGE -->
+    <div id="page-cart" class="page-section">
+        <div style="text-align: center; padding: 50px; color: #666;">
+            <h3>আপনার কার্ট খালি আছে</h3>
+        </div>
     </div>
-    <div id="nav-cart" class="nav-item" onclick="switchTab('cart-page', this)">
-      <div>🛒</div>কার্ট (<span id="cartCount">০</span>)
+
+    <!-- ACCOUNT PAGE -->
+    <div id="page-account" class="page-section">
+        <div class="account-box">
+            <h3>👤 প্রোফাইল তথ্য</h3>
+            <p><b>নাম:</b> শামিম হোসেন</p>
+            <p><b>ঠিকানা:</b> শাহজাদপুর, সিরাজগঞ্জ</p>
+            <p><b>স্ট্যাটাস:</b> সক্রিয় বিক্রেতা</p>
+        </div>
     </div>
-    <div id="nav-acc" class="nav-item" onclick="switchTab('account-page', this)">
-      <div>👤</div>একাউন্ট
+
+    <!-- BOTTOM NAVIGATION -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchPage('home', this)">
+            <span>🏠</span>হোম
+        </div>
+        <div class="nav-item" onclick="switchPage('vendor', this)">
+            <span>➕</span>ক্যাটাগরি/আপলোড
+        </div>
+        <div class="nav-item" onclick="switchPage('cart', this)">
+            <span>🛒</span>কার্ট (0)
+        </div>
+        <div class="nav-item" onclick="switchPage('account', this)">
+            <span>👤</span>অ্যাকাউন্ট
+        </div>
     </div>
-  </div>
 
-  <!-- ফায়ারবেস স্ক্রিপ্ট এবং লজিক -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, onSnapshot } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyA9nOum8jHw3iztHF82KRyYpSRqhiFfwHg",
-      authDomain: "sohoj-mart.firebaseapp.com",
-      projectId: "sohoj-mart",
-      storageBucket: "sohoj-mart.firebasestorage.app",
-      messagingSenderId: "1057254534445",
-      appId: "1:1057254534445:web:450ba46a33980fae1db7a4",
-      measurementId: "G-XBSCHB8MVW"
-    };
+        const firebaseConfig = {
+            apiKey: "AIzaSyD...",
+            authDomain: "sohoj-mart.firebaseapp.com",
+            projectId: "sohoj-mart",
+            storageBucket: "sohoj-mart.appspot.com",
+            messagingSenderId: "...",
+            appId: "..."
+        };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
-    let cart = [];
-    let products = [];
+        let productBase64 = "";
+        let bannerBase64 = "";
 
-    // রিয়েল-টাইম প্রোডাক্ট ফেচ করা (যে কেউ প্রোডাক্ট দিলে সাথে সাথে দেখাবে)
-    function loadProductsRealtime() {
-      onSnapshot(collection(db, "products"), (snapshot) => {
-        products = [];
-        snapshot.forEach((doc) => {
-          products.push(doc.data());
+        // Product image select
+        window.previewProductImage = function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                document.getElementById('file-label-text').innerText = "✅ ছবি সিলেক্ট হয়েছে: " + file.name;
+                const reader = new FileReader();
+                reader.onload = function(e) { productBase64 = e.target.result; };
+                reader.readAsDataURL(file);
+            }
+        };
+
+        // Banner image select
+        window.previewBannerImage = function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                document.getElementById('banner-label-text').innerText = "✅ ব্যানার সিলেক্ট হয়েছে: " + file.name;
+                const reader = new FileReader();
+                reader.onload = function(e) { bannerBase64 = e.target.result; };
+                reader.readAsDataURL(file);
+            }
+        };
+
+        // Upload Product
+        window.uploadProduct = async function() {
+            const name = document.getElementById('p-name').value;
+            const price = document.getElementById('p-price').value;
+            const category = document.getElementById('p-category').value;
+
+            if(!name || !price || !productBase64) {
+                alert("দয়া করে পণ্যের নাম, দাম এবং ছবি দিন!");
+                return;
+            }
+
+            try {
+                await addDoc(collection(db, "products"), {
+                    name, price, image: productBase64, category, time: serverTimestamp()
+                });
+                alert("পণ্য সফলভাবে লাইভ হয়েছে!");
+                document.getElementById('p-name').value = '';
+                document.getElementById('p-price').value = '';
+                document.getElementById('p-category').value = '';
+                document.getElementById('file-label-text').innerText = "📁 পণ্যের ছবি (গ্যালারি থেকে)";
+                productBase64 = "";
+                switchPage('home', document.querySelector('.bottom-nav .nav-item'));
+            } catch (e) {
+                alert("ত্রুটি: " + e.message);
+            }
+        };
+
+        // Upload Banner Ad
+        window.uploadBanner = async function() {
+            if(!bannerBase64) {
+                alert("দয়া করে গ্যালারি থেকে একটি ব্যানার ছবি সিলেক্ট করুন!");
+                return;
+            }
+
+            try {
+                await addDoc(collection(db, "banners"), {
+                    image: bannerBase64, time: serverTimestamp()
+                });
+                alert("বিজ্ঞাপন ব্যানার সফলভাবে লাইভ হয়েছে!");
+                document.getElementById('banner-label-text').innerText = "🖼️ ব্যানার ছবি (গ্যালারি থেকে)";
+                bannerBase64 = "";
+                switchPage('home', document.querySelector('.bottom-nav .nav-item'));
+            } catch (e) {
+                alert("ত্রুটি: " + e.message);
+            }
+        };
+
+        // Real-time Products Load
+        onSnapshot(collection(db, "products"), (snapshot) => {
+            const productList = document.getElementById('product-list');
+            productList.innerHTML = "";
+            snapshot.forEach((doc) => {
+                const p = doc.data();
+                productList.innerHTML += `
+                    <div class="product-card">
+                        <img src="${p.image}" alt="Product">
+                        <div class="product-title">${p.name}</div>
+                        <div class="product-price">৳ ${p.price}</div>
+                        <button class="btn-cart">কার্ডে যোগ করুন</button>
+                    </div>
+                `;
+            });
         });
-        renderProducts(products);
-      });
-    }
 
-    // নতুন পণ্য ফায়ারবেসে সেভ করা
-    window.addNewProductToFirebase = async function() {
-      let title = document.getElementById('newTitle').value;
-      let price = Number(document.getElementById('newPrice').value);
-      let image = document.getElementById('newImage').value;
-      let category = document.getElementById('newCat').value;
-
-      if(title === "" || !price || image === "" || category === "") {
-        alert("দয়া করে সবগুলো ঘর সঠিকভাবে পূরণ করুন!");
-        return;
-      }
-
-      try {
-        await addDoc(collection(db, "products"), {
-          title: title,
-          price: price,
-          image: image,
-          category: category
+        // Real-time Banners Load
+        onSnapshot(collection(db, "banners"), (snapshot) => {
+            const bannerSlider = document.getElementById('banner-slider');
+            bannerSlider.innerHTML = "";
+            snapshot.forEach((doc) => {
+                const b = doc.data();
+                bannerSlider.innerHTML += `
+                    <div class="banner-slide">
+                        <img src="${b.image}" alt="Banner Ad">
+                    </div>
+                `;
+            });
         });
-        alert("অভিনন্দন! আপনার পণ্য সফলভাবে লাইভ হয়েছে এবং সবাই এখন এটি দেখতে পাবে।");
-        
-        document.getElementById('newTitle').value = "";
-        document.getElementById('newPrice').value = "";
-        document.getElementById('newImage').value = "";
-        document.getElementById('newCat').value = "";
-        
-        switchTab('home-page', document.getElementById('nav-home'));
-      } catch (error) {
-        alert("পণ্য আপলোড করতে সমস্যা হয়েছে: " + error.message);
-      }
-    };
+    </script>
 
-    // প্রোডাক্ট স্ক্রিনে রেন্ডার করার ফাংশন
-    function renderProducts(list) {
-      let grid = document.getElementById('productGrid');
-      if (list.length === 0) {
-        grid.innerHTML = "<p style='grid-column: span 2; text-align:center; padding:20px;'>কোনো পণ্য পাওয়া যায়নি। নতুন পণ্য যোগ করুন!</p>";
-        return;
-      }
-      let html = "";
-      for (let i = 0; i < list.length; i++) {
-        html += `<div class="flash-card">
-                  <img src="${list[i].image}" alt="Image">
-                  <div class="p-title">${list[i].title}</div>
-                  <div class="p-price">৳ ${list[i].price}</div>
-                  <button class="order-btn" onclick="addToCart('${list[i].title}', ${list[i].price})">কার্ডে যোগ করুন</button>
-                 </div>`;
-      }
-      grid.innerHTML = html;
-    }
-
-    // গ্লোবাল স্কোপে ফাংশনগুলো যুক্ত করা যাতে HTML থেকে কল করা যায়
-    window.addToCart = function(name, price) {
-      cart.push({ name: name, price: price });
-      document.getElementById('cartCount').innerText = cart.length;
-      alert(`"${name}" কার্টে সফলভাবে যোগ করা হয়েছে!`);
-      updateCartDisplay();
-    };
-
-    window.switchTab = function(pageId, element) {
-      let pages = document.getElementsByClassName('page-content');
-      for (let p of pages) { p.classList.remove('active'); }
-      document.getElementById(pageId).classList.add('active');
-
-      if(element) {
-        let navs = document.getElementsByClassName('nav-item');
-        for (let n of navs) { n.classList.remove('active'); }
-        element.classList.add('active');
-      }
-    };
-
-    window.updateCartDisplay = function() {
-      let listDiv = document.getElementById('cartItemsList');
-      let totalDiv = document.getElementById('cartTotal');
-      let checkoutBtn = document.getElementById('checkoutBtn');
-
-      if (cart.length === 0) {
-        listDiv.innerHTML = "<p>আপনার কার্টটি বর্তমানে খালি!</p>";
-        totalDiv.innerText = "";
-        checkoutBtn.style.display = "none";
-        return;
-      }
-
-      let html = "";
-      let total = 0;
-      for (let i = 0; i < cart.length; i++) {
-        total += cart[i].price;
-        html += `<div class="cart-item-card">
-                  <span>${cart[i].name}</span>
-                  <span style="color: #f85606; font-weight: bold;">৳ ${cart[i].price}</span>
-                 </div>`;
-      }
-      listDiv.innerHTML = html;
-      totalDiv.innerText = `মোট বিল: ৳ ${total}`;
-      checkoutBtn.style.display = "block";
-    };
-
-    window.sendWhatsAppOrder = function() {
-      if (cart.length === 0) return;
-      let ownerPhone = "8801837197656";
-      let message = "আসসালামু আলাইকুম, সহজ মার্ট থেকে নিচের পণ্যগুলো অর্ডার করতে চাই:\n\n";
-      let total = 0;
-      for (let i = 0; i < cart.length; i++) {
-        message += (i + 1) + ". " + cart[i].name + " - ৳ " + cart[i].price + "\n";
-        total += cart[i].price;
-      }
-      message += "\nমোট বিল: ৳ " + total;
-      let url = "https://wa.me/" + ownerPhone + "?text=" + encodeURIComponent(message);
-      window.open(url, '_blank');
-    };
-
-    window.filterCategory = function(catName) {
-      let filtered = catName === 'সব' ? products : products.filter(p => p.category === catName);
-      renderProducts(filtered);
-    };
-
-    window.searchProducts = function() {
-      let query = document.getElementById('searchInput').value.toLowerCase();
-      let filtered = products.filter(p => p.title.toLowerCase().includes(query));
-      renderProducts(filtered);
-    };
-
-    // অ্যাপ চালু হলেই রিয়েল-টাইম ডাটা লোড শুরু হবে
-    loadProductsRealtime();
-  </script>
-
+    <script>
+        function switchPage(pageId, element) {
+            document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
+            document.getElementById('page-' + pageId).classList.add('active');
+            
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+        }
+    </script>
 </body>
-  </html>                 
+  </html>
