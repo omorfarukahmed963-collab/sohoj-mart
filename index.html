@@ -22,9 +22,10 @@
         .section.active { display: block; }
 
         /* দারাজ শর্টকাট ক্যাটাগরি আইকন গ্রিড */
-        .shortcut-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; background: white; padding: 10px; border-radius: 4px; margin-bottom: 10px; text-align: center; }
-        .shortcut-item img { width: 35px; height: 35px; object-fit: contain; margin-bottom: 3px; }
-        .shortcut-item span { font-size: 10px; color: #444; display: block; line-height: 1.2; }
+        .shortcut-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; background: white; padding: 10px 5px; border-radius: 4px; margin-bottom: 10px; text-align: center; }
+        .shortcut-item { background: #fafafa; padding: 8px 2px; border-radius: 6px; cursor: pointer; }
+        .shortcut-icon { font-size: 22px; display: block; margin-bottom: 4px; }
+        .shortcut-item span { font-size: 10px; color: #444; display: block; line-height: 1.2; font-weight: 500; }
 
         /* ব্যানার */
         .promo-banner { width: 100%; border-radius: 4px; overflow: hidden; margin-bottom: 10px; background: #ddd; min-height: 120px; display: flex; align-items: center; justify-content: center; }
@@ -45,7 +46,7 @@
         /* বক্স ও ফর্ম */
         .box { background: white; padding: 15px; border-radius: 6px; margin-bottom: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
         .box h3 { color: #f57224; margin-bottom: 10px; font-size: 15px; }
-        input[type="text"], input[type="password"], textarea { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; }
+        input[type="text"], input[type="password"], select, textarea { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; }
         .btn-orange { background: #f57224; color: white; border: none; padding: 10px; width: 100%; border-radius: 4px; font-weight: bold; cursor: pointer; }
         .btn-red { background: #ff3b30; color: white; border: none; padding: 10px; width: 100%; border-radius: 4px; font-weight: bold; cursor: pointer; margin-top: 5px; }
         .btn-wa { background: #25D366; color: white; border: none; padding: 10px; width: 100%; border-radius: 4px; font-weight: bold; cursor: pointer; margin-top: 10px; text-align: center; text-decoration: none; display: block; }
@@ -56,9 +57,10 @@
         .cat-menu-item { padding: 12px 10px; font-size: 11px; color: #333; border-bottom: 1px solid #f0f0f0; cursor: pointer; text-align: center; }
         .cat-menu-item.active { background: white; color: #f57224; font-weight: bold; border-left: 3px solid #f57224; }
         .category-content { width: 65%; padding: 10px; overflow-y: auto; }
-        .cat-sub-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; text-align: center; }
-        .cat-sub-item img { width: 50px; height: 50px; object-fit: contain; }
-        .cat-sub-item span { font-size: 10px; color: #444; margin-top: 4px; display: block; }
+        .cat-sub-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; text-align: center; }
+        .cat-sub-item { background: #fafafa; padding: 8px; border-radius: 6px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .cat-sub-item img { width: 100%; height: 80px; object-fit: cover; border-radius: 4px; margin-bottom: 4px; }
+        .cat-sub-item span { font-size: 11px; color: #444; display: block; }
 
         /* কার্ট আইটেম */
         .cart-item { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #eee; padding: 8px 0; }
@@ -68,7 +70,7 @@
         .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 6px 0; box-shadow: 0 -2px 5px rgba(0,0,0,0.1); z-index: 1000; border-top: 1px solid #eee; }
         .nav-item { text-align: center; font-size: 10px; color: #666; cursor: pointer; }
         .nav-item.active { color: #f57224; font-weight: bold; }
-        .nav-item svg, .nav-item .nav-icon { font-size: 16px; display: block; margin: 0 auto 2px auto; }
+        .nav-item .nav-icon { font-size: 16px; display: block; margin: 0 auto 2px auto; }
     </style>
 </head>
 <body>
@@ -84,47 +86,36 @@
 
     <!-- ১. হোম সেকশন -->
     <div id="home-section" class="section active">
-        <!-- দারাজ শর্টকাট আইকনস -->
         <div class="shortcut-grid">
-            <div class="shortcut-item"><img src="https://img.lazcdn.com/g/tps/img/TB1X59VcfDH8KJjy1XcXXcpqXaL-140-140.png" alt="Icon"><span>Free Gifts</span></div>
-            <div class="shortcut-item"><img src="https://img.lazcdn.com/g/tps/img/TB1s9VcfDH8KJjy1XcXXcpqXaL-140-140.png" alt="Icon"><span>Flash Sale</span></div>
-            <div class="shortcut-item"><img src="https://img.lazcdn.com/g/tps/img/TB1a9VcfDH8KJjy1XcXXcpqXaL-140-140.png" alt="Icon"><span>Vouchers</span></div>
-            <div class="shortcut-item"><img src="https://img.lazcdn.com/g/tps/img/TB1b9VcfDH8KJjy1XcXXcpqXaL-140-140.png" alt="Icon"><span>Top-Up</span></div>
-            <div class="shortcut-item" onclick="switchTab('admin', document.querySelectorAll('.nav-item')[3])"><img src="https://img.lazcdn.com/g/tps/img/TB1c9VcfDH8KJjy1XcXXcpqXaL-140-140.png" alt="Icon"><span>Admin Add</span></div>
+            <div class="shortcut-item"><span class="shortcut-icon">🎁</span><span>Free Gifts</span></div>
+            <div class="shortcut-item"><span class="shortcut-icon">⚡</span><span>Flash Sale</span></div>
+            <div class="shortcut-item"><span class="shortcut-icon">🎟️</span><span>Vouchers</span></div>
+            <div class="shortcut-item"><span class="shortcut-icon">💳</span><span>Top-Up</span></div>
+            <div class="shortcut-item" onclick="switchTab('admin', document.querySelectorAll('.nav-item')[3])"><span class="shortcut-icon">⚙️</span><span>Admin Add</span></div>
         </div>
 
-        <!-- প্রমোশনাল / অ্যাড ব্যানার (লাইভ ডেটা থেকে আসবে) -->
         <div class="promo-banner" id="home-banner-container">
             <img src="https://img.lazcdn.com/g/p/920b78d2b992f02636f8f553a15291b7.jpg_720q72.jpg" alt="Banner" id="currentBannerImg">
         </div>
 
         <div style="font-size: 13px; font-weight: bold; color: #333; margin: 8px 0;">🔥 Just For You (আপনার লাইভ পণ্য ও অ্যাড)</div>
         
-        <!-- লাইভ প্রোডাক্ট গ্রিড -->
-        <div class="product-grid" id="product-grid">
-            <!-- ফায়ারবেজ থেকে এখানে লাইভ লোড হবে -->
-        </div>
+        <div class="product-grid" id="product-grid"></div>
     </div>
 
-    <!-- ২. ক্যাটাগরি সেকশন (দারাজ স্টাইল) -->
+    <!-- ২. ক্যাটাগরি সেকশন -->
     <div id="category-section" class="section">
         <div class="category-container">
             <div class="category-sidebar">
-                <div class="cat-menu-item active" onclick="selectCategory('justForYou', this)">Just for You</div>
-                <div class="cat-menu-item" onclick="selectCategory('fashion', this)">Women Fashion</div>
-                <div class="cat-menu-item" onclick="selectCategory('mens', this)">Mens Fashion</div>
+                <div class="cat-menu-item active" onclick="selectCategory('mens', this)">Mens Fashion</div>
+                <div class="cat-menu-item" onclick="selectCategory('womens', this)">Women Fashion</div>
                 <div class="cat-menu-item" onclick="selectCategory('electronics', this)">Electronics</div>
                 <div class="cat-menu-item" onclick="selectCategory('homeApp', this)">Home Appliances</div>
                 <div class="cat-menu-item" onclick="selectCategory('mobiles', this)">Mobiles & Gadgets</div>
                 <div class="cat-menu-item" onclick="selectCategory('sports', this)">Sports & Outdoors</div>
             </div>
             <div class="category-content" id="cat-content-area">
-                <div class="cat-sub-grid">
-                    <div class="cat-sub-item"><img src="https://img.lazcdn.com/g/ic/cms/img/1a12.png" alt="Cat"><span>Anklets</span></div>
-                    <div class="cat-sub-item"><img src="https://img.lazcdn.com/g/ic/cms/img/1a13.png" alt="Cat"><span>Accessories</span></div>
-                    <div class="cat-sub-item"><img src="https://img.lazcdn.com/g/ic/cms/img/1a14.png" alt="Cat"><span>Kitchen</span></div>
-                    <div class="cat-sub-item"><img src="https://img.lazcdn.com/g/ic/cms/img/1a15.png" alt="Cat"><span>Watches</span></div>
-                </div>
+                <!-- এখানে ক্যাটাগরির আইটেমগুলো লোড হবে -->
             </div>
         </div>
     </div>
@@ -143,7 +134,7 @@
         </div>
     </div>
 
-    <!-- ৪. অ্যাডমিন প্যানেল সেকশন (ব্যানার ও পণ্য আপলোড) -->
+    <!-- ৪. অ্যাডমিন প্যানেল সেকশন -->
     <div id="admin-section" class="section">
         <div class="box" id="login-box">
             <h3>🔐 অ্যাডমিন প্যানেল লগইন</h3>
@@ -153,20 +144,35 @@
         </div>
 
         <div class="box" id="dashboard-box" style="display:none;">
-            <h3>🎯 হোম পেজ অ্যাড ব্যানার পরিবর্তন করুন</h3>
-            <label style="font-size: 12px; color: #666;">নতুন ব্যানার ছবি সিলেক্ট করুন:</label>
+            <h3>🎯 হোম পেজ অ্যাড ব্যানার পরিবর্তন</h3>
             <input type="file" id="bannerImageFile" accept="image/*" style="margin-top: 5px;">
-            <button class="btn-orange" onclick="updateBanner()" style="margin-bottom: 15px;">ব্যানার লাইভ আপডেট করুন</button>
+            <button class="btn-orange" onclick="updateBanner()" style="margin-bottom: 15px;">ব্যানার আপডেট করুন</button>
 
             <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
 
-            <h3>➕ নতুন পণ্য বা অফার যুক্ত করুন</h3>
+            <h3>📂 ক্যাটাগরি ছবি যুক্ত করুন (যেমন: Mens Fashion)</h3>
+            <select id="catSelectName">
+                <option value="mens">Mens Fashion</option>
+                <option value="womens">Women Fashion</option>
+                <option value="electronics">Electronics</option>
+                <option value="homeApp">Home Appliances</option>
+                <option value="mobiles">Mobiles & Gadgets</option>
+                <option value="sports">Sports & Outdoors</option>
+            </select>
+            <input type="text" id="catItemTitle" placeholder="আইটেমের নাম (যেমন: Shirt, Pant)">
+            <label style="font-size: 12px; color: #666;">ক্যাটাগরি আইটেমের ছবি:</label>
+            <input type="file" id="catItemImageFile" accept="image/*" style="margin-top: 5px;">
+            <button class="btn-orange" onclick="addCategoryItem()" style="margin-bottom: 15px;">ক্যাটাগরিতে ছবি যুক্ত করুন</button>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
+
+            <h3>➕ হোম পেজে নতুন পণ্য বা অ্যাড যুক্ত করুন</h3>
             <input type="text" id="itemName" placeholder="পণ্যের নাম">
             <input type="text" id="itemPrice" placeholder="দাম (যেমন: ৳450)">
-            <label style="font-size: 12px; color: #666;">পণ্যের ছবি সিলেক্ট করুন:</label>
+            <label style="font-size: 12px; color: #666;">পণ্যের ছবি:</label>
             <input type="file" id="itemImageFile" accept="image/*">
             <textarea id="itemDesc" placeholder="রেটিং বা বিবরণ (যেমন: ⭐ 4.5)"></textarea>
-            <button class="btn-orange" onclick="addNewItem()">পণ্য লাইভ আপলোড করুন</button>
+            <button class="btn-orange" onclick="addNewItem()">পণ্য আপলোড করুন</button>
             <button class="btn-red" onclick="logoutAdmin()">লগআউট</button>
         </div>
     </div>
@@ -183,27 +189,16 @@
         </div>
     </div>
 
-    <!-- দারাজ স্টাইল নিচের নেভিগেশন বার -->
+    <!-- নেভিগেশন বার -->
     <div class="nav-bar">
-        <div class="nav-item active" onclick="switchTab('home', this)">
-            <span class="nav-icon">🏠</span>হোম
-        </div>
-        <div class="nav-item" onclick="switchTab('category', this)">
-            <span class="nav-icon">📂</span>ক্যাটাগরি
-        </div>
-        <div class="nav-item" onclick="switchTab('cart', this)" id="cart-nav-badge">
-            <span class="nav-icon">🛒</span>কার্ট (0)
-        </div>
-        <div class="nav-item" onclick="switchTab('admin', this)">
-            <span class="nav-icon">➕</span>আপলোড
-        </div>
-        <div class="nav-item" onclick="switchTab('account', this)">
-            <span class="nav-icon">👤</span>অ্যাকাউন্ট
-        </div>
+        <div class="nav-item active" onclick="switchTab('home', this)"><span class="nav-icon">🏠</span>হোম</div>
+        <div class="nav-item" onclick="switchTab('category', this)"><span class="nav-icon">📂</span>ক্যাটাগরি</div>
+        <div class="nav-item" onclick="switchTab('cart', this)" id="cart-nav-badge"><span class="nav-icon">🛒</span>কার্ট (0)</div>
+        <div class="nav-item" onclick="switchTab('admin', this)"><span class="nav-icon">➕</span>আপলোড</div>
+        <div class="nav-item" onclick="switchTab('account', this)"><span class="nav-icon">👤</span>অ্যাকাউন্ট</div>
     </div>
 
     <script>
-        // ফায়ারবেজ কনফিগারেশন
         const firebaseConfig = {
             databaseURL: "https://sohoj-mart-default-rtdb.firebaseio.com/"
         };
@@ -213,13 +208,17 @@
         const db = firebase.database();
 
         let cart = [];
+        let currentSelectedCat = 'mens';
 
         function switchTab(tabName, element) {
             document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
 
             if(tabName === 'home') document.getElementById('home-section').classList.add('active');
-            else if(tabName === 'category') document.getElementById('category-section').classList.add('active');
+            else if(tabName === 'category') {
+                document.getElementById('category-section').classList.add('active');
+                loadCategoryData(currentSelectedCat);
+            }
             else if(tabName === 'cart') {
                 document.getElementById('cart-section').classList.add('active');
                 renderCart();
@@ -230,26 +229,65 @@
             if(element) element.classList.add('active');
         }
 
-        // ক্যাটাগরি সাইডবার ক্লিক হ্যান্ডলার
+        // ক্যাটাগরি সাইডবার ক্লিক
         function selectCategory(cat, el) {
             document.querySelectorAll('.cat-menu-item').forEach(item => item.classList.remove('active'));
             el.classList.add('active');
-            const area = document.getElementById('cat-content-area');
-            
-            if(cat === 'justForYou') {
-                area.innerHTML = `<div class="cat-sub-grid">
-                    <div class="cat-sub-item"><img src="https://img.lazcdn.com/g/ic/cms/img/1a12.png"><span>Anklets</span></div>
-                    <div class="cat-sub-item"><img src="https://img.lazcdn.com/g/ic/cms/img/1a13.png"><span>Accessories</span></div>
-                </div>`;
-            } else {
-                area.innerHTML = `<div class="cat-sub-grid">
-                    <div class="cat-sub-item"><img src="https://img.lazcdn.com/g/ic/cms/img/1a14.png"><span>${cat} Item 1</span></div>
-                    <div class="cat-sub-item"><img src="https://img.lazcdn.com/g/ic/cms/img/1a15.png"><span>${cat} Item 2</span></div>
-                </div>`;
-            }
+            currentSelectedCat = cat;
+            loadCategoryData(cat);
         }
 
-        // অ্যাডমিন লগইন
+        // ফায়ারবেজ থেকে নির্দিষ্ট ক্যাটাগরির ছবি লোড করা
+        function loadCategoryData(cat) {
+            const area = document.getElementById('cat-content-area');
+            db.ref('categories/' + cat).once('value').then((snapshot) => {
+                let html = '<div class="cat-sub-grid">';
+                if(snapshot.exists()) {
+                    snapshot.forEach((child) => {
+                        let item = child.val();
+                        html += `
+                            <div class="cat-sub-item">
+                                <img src="${item.image}" alt="Img">
+                                <span>${item.title}</span>
+                            </div>
+                        `;
+                    });
+                } else {
+                    html += '<p style="grid-column: span 2; text-align:center; color:#777; font-size:12px; padding:20px;">এই ক্যাটাগরিতে এখনো কোনো ছবি দেওয়া হয়নি। অ্যাডমিন প্যানেল থেকে ছবি যোগ করুন।</p>';
+                }
+                html += '</div>';
+                area.innerHTML = html;
+            });
+        }
+
+        // অ্যাডমিন প্যানেল থেকে ক্যাটাগরিতে ছবি যোগ করা
+        function addCategoryItem() {
+            const catName = document.getElementById('catSelectName').value;
+            const title = document.getElementById('catItemTitle').value;
+            const fileInput = document.getElementById('catItemImageFile');
+
+            if(!title || fileInput.files.length === 0) {
+                alert("দয়া করে আইটেমের নাম এবং ছবি দিন!");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.readAsDataURL(fileInput.files[0]);
+            reader.onload = function () {
+                db.ref('categories/' + catName).push({
+                    title: title,
+                    image: reader.result
+                }, (error) => {
+                    if(error) alert("ত্রুটি হয়েছে!");
+                    else {
+                        alert("সফলভাবে ক্যাটাগরিতে ছবি যুক্ত হয়েছে!");
+                        document.getElementById('catItemTitle').value = '';
+                        fileInput.value = '';
+                    }
+                });
+            };
+        }
+
         function checkAdmin() {
             if(document.getElementById('adminPin').value === "1234") {
                 document.getElementById('login-box').style.display = 'none';
@@ -265,7 +303,6 @@
             document.getElementById('adminPin').value = '';
         }
 
-        // ব্যানার আপডেট করার ফাংশন
         function updateBanner() {
             const bannerFile = document.getElementById('bannerImageFile');
             if(bannerFile.files.length === 0) {
@@ -288,7 +325,6 @@
             };
         }
 
-        // লাইভ পণ্য বা অ্যাড আপলোড
         function addNewItem() {
             const name = document.getElementById('itemName').value;
             const price = document.getElementById('itemPrice').value || "৳350";
@@ -312,9 +348,7 @@
                     if(error) alert("ত্রুটি হয়েছে!");
                     else {
                         alert("সফলভাবে নতুন পণ্য বা অ্যাড যুক্ত হয়েছে!");
-                        document.getElementById('itemName').value = '';
-                        document.getElementById('itemPrice').value = '';
-                        document.getElementById('itemDesc').value = '';
+                        document.getElementById('itemName', 'itemPrice', 'itemDesc').value = '';
                         fileInput.value = '';
                         switchTab('home', document.querySelectorAll('.nav-item')[0]);
                     }
@@ -322,14 +356,12 @@
             };
         }
 
-        // কার্টে যুক্ত করা
         function addToCart(name, price, image) {
             cart.push({ name, price, image });
             document.getElementById('cart-nav-badge').innerHTML = `<span class="nav-icon">🛒</span>কার্ট (${cart.length})`;
             alert(`"${name}" কার্টে যুক্ত হয়েছে!`);
         }
 
-        // কার্ট পেজ রেন্ডার
         function renderCart() {
             const container = document.getElementById('cart-items-container');
             const totalSection = document.getElementById('cart-total-section');
@@ -376,20 +408,18 @@
             if(cart.length === 0) return;
             let msg = "আসসালামু আলাইকুম, আমি সহজ মার্ট থেকে নিচের পণ্যগুলো অর্ডার করতে চাই:%0A";
             cart.forEach((item, i) => {
-                msg += `${i+1}. ${item.name} - ${item.price}%0A`;
+                msg += `${i+1}. `${item.name} - ${item.price}%0A`;
             });
             msg += "%0Aদয়া করে অর্ডারটি কনফার্ম করুন।";
             window.open(`https://wa.me/8801837197656?text=${msg}`, '_blank');
         }
 
-        // ফায়ারবেজ থেকে লাইভ ব্যানার লোড
         db.ref('banner/').on('value', (snapshot) => {
             if(snapshot.exists() && snapshot.val().image) {
                 document.getElementById('currentBannerImg').src = snapshot.val().image;
             }
         });
 
-        // ফায়ারবেজ থেকে লাইভ প্রোডাক্ট গ্রিড লোড
         db.ref('products/').on('value', (snapshot) => {
             const grid = document.getElementById('product-grid');
             grid.innerHTML = '';
