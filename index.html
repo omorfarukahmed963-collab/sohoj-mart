@@ -4,122 +4,138 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sohoj Mart - সহজ মার্ট</title>
-    <!-- Firebase SDK লোড করার জন্য -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
         body { background: #f4f4f4; color: #333; padding-bottom: 70px; }
-        
-        /* হেডার প্রোফাইল কার্ড */
-        .profile-card { background: white; margin: 10px; padding: 15px; border-radius: 10px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .profile-card h3 { color: #333; margin-bottom: 5px; }
-        .profile-card p { font-size: 14px; color: #666; margin-bottom: 3px; }
-        .wa-btn { background: #25D366; color: white; border: none; padding: 8px 15px; border-radius: 5px; margin-top: 8px; font-weight: bold; cursor: pointer; }
 
-        /* সেকশন ডিজাইন */
-        .section { padding: 15px; display: none; }
+        /* হেডার */
+        .app-header { background: #ff6600; color: white; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; }
+        .app-title { font-size: 18px; font-weight: bold; }
+        .header-contact { font-size: 12px; background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 4px; }
+        
+        /* সেকশন */
+        .section { display: none; padding: 10px; }
         .section.active { display: block; }
-        
-        /* অ্যাডমিন ও কার্ড বক্স */
-        .box { background: white; padding: 15px; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border: 2px solid #ff6600; }
-        .box h3 { color: #ff6600; margin-bottom: 10px; font-size: 16px; }
-        input, textarea { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; }
-        button.primary-btn { background: #ff6600; color: white; border: none; padding: 10px; width: 100%; border-radius: 5px; font-weight: bold; cursor: pointer; }
-        
-        /* প্রোডাক্ট ও মুভি কার্ড */
-        .item-card { background: white; padding: 10px; border-radius: 8px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 10px; }
-        .item-card img { width: 70px; height: 70px; object-fit: cover; border-radius: 5px; }
-        .item-info { flex-grow: 1; }
-        .item-info h4 { font-size: 15px; color: #333; }
-        .item-info p { font-size: 13px; color: #666; }
 
-        /* ইন-অ্যাপ ব্রাউজার */
-        .browser-box input { width: 75%; display: inline-block; }
-        .browser-box button { width: 22%; display: inline-block; background: #333; color: white; border: none; padding: 10px; border-radius: 5px; }
-        iframe { width: 100%; height: 350px; border: 1px solid #ddd; border-radius: 5px; margin-top: 5px; }
+        /* দারাজ স্টাইল প্রোডাক্ট গ্রিড */
+        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 5px; }
+        .daraz-card { background: white; border-radius: 6px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: space-between; }
+        .daraz-card img { width: 100%; height: 130px; object-fit: cover; }
+        .daraz-card-body { padding: 8px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
+        .daraz-title { font-size: 13px; color: #222; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .daraz-price { color: #f57224; font-size: 14px; font-weight: bold; }
+        .daraz-rating { font-size: 11px; color: #757575; margin: 2px 0; }
+        
+        /* কার্ডে যোগ করার বাটন */
+        .btn-cart-add { background: #fff2e5; color: #f57224; border: 1px solid #f57224; padding: 6px; width: 100%; border-radius: 4px; font-size: 12px; font-weight: bold; cursor: pointer; margin-top: 5px; }
+        .btn-cart-add:hover { background: #f57224; color: white; }
+
+        /* বক্স ও ফর্ম */
+        .box { background: white; padding: 15px; border-radius: 8px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .box h3 { color: #ff6600; margin-bottom: 10px; font-size: 15px; }
+        input, textarea { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; }
+        .btn-orange { background: #f57224; color: white; border: none; padding: 10px; width: 100%; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        .btn-red { background: #ff3b30; color: white; border: none; padding: 10px; width: 100%; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 5px; }
+        .btn-wa { background: #25D366; color: white; border: none; padding: 10px; width: 100%; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 10px; text-align: center; text-decoration: none; display: block; }
+
+        /* কার্ট পেজ আইটেম স্টাইল */
+        .cart-item { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #eee; padding: 8px 0; }
+        .cart-item img { width: 50px; height: 50px; object-fit: cover; border-radius: 4px; }
 
         /* নিচের নেভিগেশন বার */
-        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 8px 0; box-shadow: 0 -2px 5px rgba(0,0,0,0.1); z-index: 1000; }
-        .nav-item { text-align: center; font-size: 11px; color: #666; cursor: pointer; text-decoration: none; }
-        .nav-item.active { color: #ff6600; font-weight: bold; }
+        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 8px 0; box-shadow: 0 -2px 5px rgba(0,0,0,0.1); z-index: 1000; border-top: 1px solid #eee; }
+        .nav-item { text-align: center; font-size: 11px; color: #666; cursor: pointer; }
+        .nav-item.active { color: #f57224; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <!-- প্রোফাইল ইনফো -->
-    <div class="profile-card">
-        <h3>Sohoj Mart</h3>
-        <p>নাম: শামিম হোসেন</p>
-        <p>ঠিকানা: শাহজাদপুর, সিরাজগঞ্জ</p>
-        <p>হোয়াটসঅ্যাপ: 01837197656</p>
-        <button class="wa-btn" onclick="window.open('https://wa.me/8801837197656')">💬 হোয়াটসঅ্যাপে চ্যাট করুন</button>
+    <!-- টপ হেডার -->
+    <div class="app-header">
+        <span class="app-title">Sohoj Mart 🛒</span>
+        <span class="header-contact">📞 01837197656</span>
     </div>
 
-    <!-- হোম পেজ -->
+    <!-- হোম পেজ (লাইভ প্রোডাক্ট গ্রিড) -->
     <div id="home-section" class="section active">
+        <div style="font-size: 14px; font-weight: bold; color: #444; margin: 5px 5px 10px 5px;">🔥 লাইভ পণ্য ও অফার (Just For You)</div>
+        <div class="product-grid" id="product-grid">
+            <!-- ফায়ারবেজ থেকে লাইভ ডাটা এখানে লোড হবে -->
+        </div>
+    </div>
+
+    <!-- ব্রাউজার পেজ -->
+    <div id="browser-section" class="section">
+        <div class="box" style="text-align: center; padding: 25px;">
+            <h3 style="margin-bottom: 15px;">🌐 ইন্টারনেট ব্রাউজার</h3>
+            <p style="font-size: 13px; color: #666; margin-bottom: 15px;">সরাসরি যেকোনো ওয়েবসাইট ব্রাউজ করতে নিচে ক্লিক করুন:</p>
+            <input type="text" id="urlInput" placeholder="https://www.google.com" style="margin-bottom: 10px;">
+            <button onclick="openWebSite()" class="btn-orange">ব্রাউজারে ওপেন করুন</button>
+        </div>
+    </div>
+
+    <!-- অ্যাডমিন প্যানেল পেজ (লাইভ অ্যাড সেভ করার জায়গা) -->
+    <div id="admin-section" class="section">
+        <div class="box" id="login-box">
+            <h3>🔐 অ্যাডমিন প্যানেল লগইন</h3>
+            <p style="font-size: 12px; color: #666; margin-bottom: 8px;">পণ্য বা বিজ্ঞাপন যোগ করতে পাসওয়ার্ড দিন (1234)</p>
+            <input type="password" id="adminPin" placeholder="পাসওয়ার্ড দিন">
+            <button class="btn-orange" onclick="checkAdmin()">লগইন করুন</button>
+        </div>
+
+        <div class="box" id="dashboard-box" style="display:none;">
+            <h3>➕ লাইভ পণ্য বা অ্যাড যোগ করুন</h3>
+            <input type="text" id="itemName" placeholder="পণ্যের বা ad-এর নাম">
+            <input type="text" id="itemPrice" placeholder="দাম (যেমন: ৳450)">
+            <label style="font-size: 12px; color: #666;">গ্যালারি থেকে ছবি সিলেক্ট করুন:</label>
+            <input type="file" id="itemImageFile" accept="image/*">
+            <textarea id="itemDesc" placeholder="রেটিং বা বিবরণ (যেমন: ⭐ 4.5)"></textarea>
+            <button class="btn-orange" onclick="addNewItem()">লাইভ আপলোড করুন</button>
+            <button class="btn-red" onclick="logoutAdmin()">লগআউট</button>
+        </div>
+    </div>
+
+    <!-- কার্ট ও অর্ডার পেজ -->
+    <div id="cart-section" class="section">
         <div class="box">
-            <h3>🛒 পণ্য ও মুভি তালিকা</h3>
-            <div id="product-list">
-                <!-- ফায়ারবেজ থেকে ডাটা এখানে আসবে -->
+            <h3>🛍️ আপনার শপিং কার্ট</h3>
+            <div id="cart-items-container">
+                <p style="text-align: center; color: #777; padding: 20px;">আপনার কার্ট খালি আছে।</p>
+            </div>
+            <div id="cart-total-section" style="display: none; margin-top: 15px; border-top: 1px solid #ddd; padding-top: 10px;">
+                <p style="font-weight: bold; margin-bottom: 10px;" id="total-price-text">মোট মূল্য: ৳0</p>
+                <button class="btn-orange" style="background: #25D366;" onclick="checkoutOrder()">📦 হোয়াটসঅ্যাপে অর্ডার কনফার্ম করুন</button>
             </div>
         </div>
     </div>
 
-    <!-- মুভি বক্স ও ব্রাউজার পেজ -->
-    <div id="movie-section" class="section">
-        <div class="box browser-box">
-            <h3>🌐 ইন-অ্যাপ ইন্টারনেট ব্রাউজার</h3>
-            <input type="text" id="urlInput" placeholder="https://www.google.com">
-            <button onclick="loadWebPage()">যান</button>
-            <iframe id="browserFrame" src="https://www.google.com"></iframe>
-        </div>
-    </div>
-
-    <!-- অ্যাডমিন প্যানেল পেজ -->
-    <div id="admin-section" class="section">
-        <div class="box" id="login-box">
-            <h3>🔐 অ্যাডমিন লগইন</h3>
-            <input type="password" id="adminPin" placeholder="পাসওয়ার্ড দিন (1234)">
-            <button class="primary-btn" onclick="checkAdmin()">লগইন করুন</button>
-        </div>
-
-        <div class="box" id="dashboard-box" style="display:none;">
-            <h3>➕ নতুন পণ্য বা মুভি যোগ করুন (গ্যালারি থেকে)</h3>
-            <input type="text" id="itemName" placeholder="পণ্যের বা মুভির নাম">
-            <label style="font-size: 13px; color: #666;">গ্যালারি থেকে ছবি সিলেক্ট করুন:</label>
-            <input type="file" id="itemImageFile" accept="image/*">
-            <textarea id="itemDesc" placeholder="বিস্তারিত বিবরণ লিখুন"></textarea>
-            <button class="primary-btn" onclick="addNewItem()">পণ্য যুক্ত করুন</button>
-            <button class="wa-btn" style="background:#ff3b30; width:100%; margin-top:10px;" onclick="logoutAdmin()">লগআউট</button>
-        </div>
-    </div>
-
-    <!-- কার্ট পেজ -->
-    <div id="cart-section" class="section">
-        <div class="box">
-            <h3>🛍️ আপনার কার্ট (1)</h3>
-            <p>আপনার কার্টে বর্তমানে ১টি পণ্য যুক্ত আছে।</p>
-        </div>
-    </div>
-
-    <!-- অ্যাকাউন্ট / অ্যাডমিন ট্যাব -->
+    <!-- অ্যাকাউন্ট পেজ -->
     <div id="account-section" class="section">
-        <!-- এখানে সরাসরি অ্যাকাউন্ট সেকশন দেখানো হচ্ছে -->
+        <div class="box" style="padding: 15px;">
+            <h4 style="color: #222; font-size: 16px;">শামিম হোসেন</h4>
+            <p style="font-size: 13px; color: #555; margin-top: 3px;">ঠিকানা: শাহজাদপুর, সিরাজগঞ্জ</p>
+            <p style="font-size: 13px; color: #f57224; font-weight: bold; margin-top: 3px;">হোয়াটসঅ্যাপ/মোবাইল: 01837197656</p>
+            
+            <a href="https://wa.me/8801837197656" class="btn-wa" target="_blank">💬 সরাসরি হোয়াটসঅ্যাপে চ্যাট করুন</a>
+            <button class="btn-orange" style="margin-top: 10px;" onclick="switchTab('admin', document.querySelectorAll('.nav-item')[2])">⚙️ অ্যাডমিন প্যানেল (পণ্য যোগ করুন)</button>
+        </div>
     </div>
 
     <!-- নিচের নেভিগেশন বার -->
     <div class="nav-bar">
         <div class="nav-item active" onclick="switchTab('home', this)">🏠 হোম</div>
-        <div class="nav-item" onclick="switchTab('movie', this)">🎬 ব্রাউজার</div>
-        <div class="nav-item" onclick="switchTab('admin', this)">⚙️ অ্যাডমিন</div>
-        <div class="nav-item" onclick="switchTab('cart', this)">🛒 কার্ট</div>
+        <div class="nav-item" onclick="switchTab('browser', this)">🌐 ব্রাউজার</div>
+        <div class="nav-item" onclick="switchTab('admin', this)">➕ আপলোড</div>
+        <div class="nav-item" onclick="switchTab('cart', this)" id="cart-nav-badge">🛒 কার্ট (0)</div>
         <div class="nav-item" onclick="switchTab('account', this)">👤 অ্যাকাউন্ট</div>
     </div>
 
     <script>
-        // ফায়ারবেজ কনফিগারেশন (তোমার প্রজেক্টের সঠিক তথ্য এখানে যুক্ত থাকবে)
+        // ফায়ারবেজ কনফিগারেশন
         const firebaseConfig = {
             databaseURL: "https://sohoj-mart-default-rtdb.firebaseio.com/"
         };
@@ -128,42 +144,40 @@
         }
         const db = firebase.database();
 
-        // ট্যাব পরিবর্তনের ফাংশন
+        let cart = []; // কার্ট ডাটা সংরক্ষণের জন্য
+
+        // ট্যাব পরিবর্তন ফাংশন
         function switchTab(tabName, element) {
             document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
 
-            if(tabName === 'home') {
-                document.getElementById('home-section').classList.add('active');
-            } else if(tabName === 'movie') {
-                document.getElementById('movie-section').classList.add('active');
-            } else if(tabName === 'admin') {
-                document.getElementById('admin-section').classList.add('active');
-            } else if(tabName === 'cart') {
+            if(tabName === 'home') document.getElementById('home-section').classList.add('active');
+            else if(tabName === 'browser') document.getElementById('browser-section').classList.add('active');
+            else if(tabName === 'admin') document.getElementById('admin-section').classList.add('active');
+            else if(tabName === 'cart') {
                 document.getElementById('cart-section').classList.add('active');
-            } else if(tabName === 'account') {
-                document.getElementById('admin-section').classList.add('active'); // অ্যাকাউন্ট থেকে সহজে অ্যাডামিনে যাওয়া যাবে
+                renderCart();
             }
+            else if(tabName === 'account') document.getElementById('account-section').classList.add('active');
+            
             element.classList.add('active');
         }
 
-        // ইন-অ্যাপ ব্রাউজার লোড করার ফাংশন
-        function loadWebPage() {
-            let url = document.getElementById('urlInput').value;
-            if(!url.startsWith('http://') && !url.startsWith('https://')) {
-                url = 'https://' + url;
-            }
-            document.getElementById('browserFrame').src = url;
+        // ব্রাউজার ওপেন
+        function openWebSite() {
+            let url = document.getElementById('urlInput').value.trim();
+            if(!url) url = "https://www.google.com";
+            else if(!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url;
+            window.open(url, '_blank');
         }
 
-        // অ্যাডমিন পাসওয়ার্ড চেক ("1234")
+        // অ্যাডমিন লগইন
         function checkAdmin() {
-            const pin = document.getElementById('adminPin').value;
-            if(pin === "1234") {
+            if(document.getElementById('adminPin').value === "1234") {
                 document.getElementById('login-box').style.display = 'none';
                 document.getElementById('dashboard-box').style.display = 'block';
             } else {
-                alert("ভুল পাসওয়ার্ড! সঠিক পাসওয়ার্ড দিন (1234)।");
+                alert("ভুল পাসওয়ার্ড! (1234 দিন)");
             }
         }
 
@@ -173,33 +187,32 @@
             document.getElementById('adminPin').value = '';
         }
 
-        // গ্যালারি থেকে ছবি নিয়ে ফায়ারবেজে সেভ করার ফাংশন
+        // গ্যালারি থেকে ছবি নিয়ে ফায়ারবেজে লাইভ প্রোডাক্ট বা অ্যাড সেভ করা
         function addNewItem() {
             const name = document.getElementById('itemName').value;
-            const desc = document.getElementById('itemDesc').value;
+            const price = document.getElementById('itemPrice').value || "৳350";
+            const desc = document.getElementById('itemDesc').value || "⭐ 4.5";
             const fileInput = document.getElementById('itemImageFile');
 
             if(!name || fileInput.files.length === 0) {
-                alert("দয়া করে নাম এবং একটি ছবি সিলেক্ট করুন!");
+                alert("দয়া করে নাম এবং একটি ছবি দিন!");
                 return;
             }
 
             const reader = new FileReader();
             reader.readAsDataURL(fileInput.files[0]);
             reader.onload = function () {
-                const base64Image = reader.result;
-
                 db.ref('products/').push({
                     name: name,
-                    image: base64Image,
-                    description: desc,
-                    rating: 5
+                    price: price,
+                    image: reader.result,
+                    rating: desc
                 }, (error) => {
-                    if(error) {
-                        alert("সংযুক্ত করতে সমস্যা হয়েছে!");
-                    } else {
-                        alert("সফলভাবে পণ্য যুক্ত হয়েছে!");
+                    if(error) alert("ত্রুটি হয়েছে!");
+                    else {
+                        alert("সফলভাবে লাইভ পণ্য বা অ্যাড যুক্ত হয়েছে!");
                         document.getElementById('itemName').value = '';
+                        document.getElementById('itemPrice').value = '';
                         document.getElementById('itemDesc').value = '';
                         fileInput.value = '';
                         switchTab('home', document.querySelectorAll('.nav-item')[0]);
@@ -208,28 +221,96 @@
             };
         }
 
-        // ফায়ারবেজ থেকে লাইভ প্রোডাক্ট লোড করা এবং রেটিং দেখানোর সিস্টেম
+        // কার্টে পণ্য যুক্ত করার ফাংশন
+        function addToCart(name, price, image) {
+            cart.push({ name, price, image });
+            document.getElementById('cart-nav-badge').innerText = `🛒 কার্ট (${cart.length})`;
+            alert(`"${name}" কার্টে সফলভাবে যুক্ত হয়েছে!`);
+        }
+
+        // কার্ট পেজ রেন্ডার করা
+        function renderCart() {
+            const container = document.getElementById('cart-items-container');
+            const totalSection = document.getElementById('cart-total-section');
+            container.innerHTML = '';
+
+            if(cart.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #777; padding: 20px;">আপনার কার্ট খালি আছে।</p>';
+                totalSection.style.display = 'none';
+                return;
+            }
+
+            totalSection.style.display = 'block';
+            let total = 0;
+
+            cart.forEach((item, index) => {
+                // দাম থেকে সংখ্যা বের করা সহজ হিসাবের জন্য
+                let numPrice = parseInt(item.price.replace(/[^0-9]/g, '')) || 0;
+                total += numPrice;
+
+                const div = document.createElement('div');
+                div.className = 'cart-item';
+                div.innerHTML = `
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <img src="${item.image}" alt="Img">
+                        <div>
+                            <h4 style="font-size: 13px;">${item.name}</h4>
+                            <p style="font-size: 12px; color: #f57224; font-weight: bold;">${item.price}</p>
+                        </div>
+                    </div>
+                    <button onclick="removeFromCart(${index})" style="background:#ff3b30; color:white; border:none; padding:4px 8px; border-radius:4px; font-size:11px; cursor:pointer;">মুছে ফেলুন</button>
+                `;
+                container.appendChild(div);
+            });
+
+            document.getElementById('total-price-text').innerText = `মোট আনুমানিক মূল্য: ৳${total}`;
+        }
+
+        // কার্ট থেকে আইটেম ডিলিট করা
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            document.getElementById('cart-nav-badge').innerText = `🛒 কার্ট (${cart.length})`;
+            renderCart();
+        }
+
+        // হোয়াটসঅ্যাপে অর্ডার কনফার্ম করা
+        function checkoutOrder() {
+            if(cart.length === 0) return;
+            let msg = "আসসালামু আলাইকুম, আমি সহজ মার্ট থেকে নিচের পণ্যগুলো অর্ডার করতে চাই:%0A";
+            cart.forEach((item, i) => {
+                msg += `${i+1}. ${item.name} - ${item.price}%0A`;
+            });
+            msg += "%0Aদয়া করে অর্ডারটি কনফার্ম করুন।";
+            window.open(`https://wa.me/8801837197656?text=${msg}`, '_blank');
+        }
+
+        // ফায়ারবেজ থেকে লাইভ প্রোডাক্ট গ্রিড লোড করা
         db.ref('products/').on('value', (snapshot) => {
-            const listDiv = document.getElementById('product-list');
-            listDiv.innerHTML = '';
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = '';
             
             if(snapshot.exists()) {
-                snapshot.forEach((childSnapshot) => {
-                    const item = childSnapshot.val();
+                snapshot.forEach((child) => {
+                    const item = child.val();
                     const card = document.createElement('div');
-                    card.className = 'item-card';
+                    card.className = 'daraz-card';
                     card.innerHTML = `
-                        <img src="${item.image}" alt="Img">
-                        <div class="item-info">
-                            <h4>${item.name}</h4>
-                            <p>${item.description || "বিস্তারিত নেই"}</p>
-                            <p style="color: #ff6600; font-weight: bold; margin-top: 4px;">⭐ রেটিং: ${item.rating || 5}/5</p>
+                        <div>
+                            <img src="${item.image}" alt="Product">
+                            <div class="daraz-card-body">
+                                <div class="daraz-title">${item.name}</div>
+                                <div class="daraz-price">${item.price}</div>
+                                <div class="daraz-rating">${item.rating}</div>
+                            </div>
+                        </div>
+                        <div style="padding: 0 8px 8px 8px;">
+                            <button class="btn-cart-add" onclick="addToCart('${item.name.replace(/'/g, "")}', '${item.price}', '${item.image}')">🛒 কার্টে যুক্ত করুন</button>
                         </div>
                     `;
-                    listDiv.appendChild(card);
+                    grid.appendChild(card);
                 });
             } else {
-                listDiv.innerHTML = '<p style="text-align:center; color:#777;">কোনো পণ্য বা মুভি পাওয়া যায়নি।</p>';
+                grid.innerHTML = '<p style="grid-column: span 2; text-align:center; color:#777; padding:20px;">কোনো পণ্য বা লাইভ অ্যাড নেই। অ্যাডমিন প্যানেল থেকে যোগ করুন।</p>';
             }
         });
     </script>
