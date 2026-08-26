@@ -7,171 +7,226 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #eaeded;
+      background-color: #f4f4f4;
       margin: 0;
-      padding: 0;
+      padding-bottom: 60px; /* নিচে মেনু বারের জন্য জায়গা */
     }
-    /* অ্যামাজন স্টাইল টপ হেডার */
-    .header {
-      background-color: #131921;
-      color: white;
-      padding: 10px 15px;
+    /* টপ সার্চ সেকশন */
+    .top-search-bar {
+      background-color: #f85606;
+      padding: 10px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
     }
-    .logo {
-      font-size: 20px;
-      font-weight: bold;
-      color: #ff9900;
-    }
-    .cart-info {
-      background: #febd69;
-      color: #111;
-      padding: 5px 10px;
-      border-radius: 4px;
-      font-weight: bold;
-      font-size: 14px;
-    }
-    /* সার্চ বার */
-    .search-container {
-      background-color: #232f3e;
-      padding: 10px;
-    }
-    .search-box {
+    .search-input {
       width: 100%;
       padding: 10px 15px;
       font-size: 15px;
       border: none;
       border-radius: 4px;
       outline: none;
-      box-sizing: border-box;
     }
-    /* লাইভ ব্যানার */
-    .sohoj-banner {
-      width: 100%;
-      height: 160px;
-      background-image: url('https://img.freepik.com/free-vector/flat-design-ecommerce-banner-template_23-2149903964.jpg');
-      background-size: cover;
-      background-position: center;
-    }
-    /* কন্টেইনার */
-    .container {
-      padding: 10px;
-    }
-    .section-title {
-      font-size: 16px;
-      font-weight: bold;
-      margin: 10px 0;
-      color: #333;
-    }
-    /* প্রোডাক্ট গ্রিড */
-    .product-grid {
+    /* ক্যাটাগরি আইকন গ্রিড (দারাজ স্টাইল) */
+    .category-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-    }
-    .product-card {
-      background: white;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
       padding: 10px;
-      border-radius: 6px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      background: #fff;
+      margin-bottom: 10px;
       text-align: center;
     }
-    .product-card img {
+    .cat-item img {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: #eee;
+      object-fit: cover;
+    }
+    .cat-item span {
+      font-size: 11px;
+      color: #333;
+      display: block;
+      margin-top: 4px;
+    }
+    /* ব্যানার */
+    .banner {
       width: 100%;
-      height: 120px;
+      height: 140px;
+      background-image: url('https://img.freepik.com/free-vector/flat-design-sale-banner_23-2149318856.jpg');
+      background-size: cover;
+      background-position: center;
+      margin-bottom: 10px;
+    }
+    /* ফ্ল্যাশ সেল সেকশন */
+    .section-header {
+      background: #fff;
+      padding: 10px 15px;
+      font-weight: bold;
+      font-size: 15px;
+      color: #f85606;
+      border-bottom: 1px solid #eee;
+    }
+    .flash-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      padding: 10px;
+      background: #fff;
+      margin-bottom: 10px;
+    }
+    .flash-card {
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 4px;
+      padding: 8px;
+      text-align: center;
+    }
+    .flash-card img {
+      width: 100%;
+      height: 90px;
       object-fit: cover;
       border-radius: 4px;
     }
-    .product-name {
-      font-size: 14px;
-      margin: 8px 0 4px;
-      color: #111;
+    .p-title {
+      font-size: 12px;
+      color: #333;
+      margin: 5px 0 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .product-price {
-      color: #B12704;
-      font-weight: bold;
-      font-size: 15px;
-      margin-bottom: 8px;
-    }
-    .buy-btn {
-      width: 100%;
-      background: #ffd814;
-      border: 1px solid #fcd200;
-      padding: 8px;
-      border-radius: 20px;
-      cursor: pointer;
+    .p-price {
+      color: #f85606;
       font-weight: bold;
       font-size: 13px;
     }
-    .buy-btn:hover {
-      background: #f7ca00;
+    .order-btn {
+      width: 100%;
+      background: #f85606;
+      color: white;
+      border: none;
+      padding: 5px;
+      border-radius: 3px;
+      font-size: 11px;
+      margin-top: 5px;
+      cursor: pointer;
+    }
+    /* নিচের বটম নেভিগেশন বার */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #fff;
+      border-top: 1px solid #ddd;
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0;
+      z-index: 1000;
+    }
+    .nav-item {
+      text-align: center;
+      font-size: 11px;
+      color: #666;
+      text-decoration: none;
+    }
+    .nav-item.active {
+      color: #f85606;
+      font-weight: bold;
+    }
+    .nav-item div {
+      font-size: 18px;
     }
   </style>
 </head>
 <body>
 
-  <!-- ১. হেডার -->
-  <div class="header">
-    <div class="logo">Sohoj Mart 🛒</div>
-    <div class="cart-info" id="cartCount">কার্ট: ০</div>
+  <!-- ১. সার্চ বার -->
+  <div class="top-search-bar">
+    <input type="text" id="searchInput" class="search-input" placeholder="🔍 সহজ মার্ট-এ পণ্য খুঁজুন..." onkeyup="searchProducts()">
   </div>
 
-  <!-- ২. সার্চ বার -->
-  <div class="search-container">
-    <input type="text" id="searchInput" class="search-box" placeholder="অ্যামাজনের মতো পণ্য খুঁজুন..." onkeyup="searchProducts()">
-  </div>
-
-  <!-- ৩. লাইভ ব্যানার -->
-  <div class="sohoj-banner"></div>
-
-  <!-- ৪. পণ্যের তালিকা -->
-  <div class="container">
-    <div class="section-title">🔥 আজকের সেরা অফার</div>
-    
-    <div class="product-grid" id="productGrid">
-      <div class="product-card">
-        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30" alt="ওয়াচ">
-        <div class="product-name">প্রিমিয়াম স্মার্ট ওয়াচ</div>
-        <div class="product-price">১,২৫০ ৳</div>
-        <button class="buy-btn" onclick="orderProduct('প্রিমিয়াম স্মার্ট ওয়াচ', '১,২৫০ ৳')">অর্ডার করুন</button>
-      </div>
-
-      <div class="product-card">
-        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e" alt="হেডফোন">
-        <div class="product-name">ওয়্যারলেস হেডফোন</div>
-        <div class="product-price">২,১০০ ৳</div>
-        <button class="buy-btn" onclick="orderProduct('ওয়্যারলেস হেডফোন', '২,১০০ ৳')">অর্ডার করুন</button>
-      </div>
-
-      <div class="product-card">
-        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff" alt="জুতো">
-        <div class="product-name">স্টাইলিশ স্নিকার্স</div>
-        <div class="product-price">১,৮০০ ৳</div>
-        <button class="buy-btn" onclick="orderProduct('স্টাইলিশ স্নিকার্স', '১,৮০০ ৳')">অর্ডার করুন</button>
-      </div>
-
-      <div class="product-card">
-        <img src="https://images.unsplash.com/photo-1583394838336-acd977736f90" alt="গেম কন্ট্রোলার">
-        <div class="product-name">গেমিং কন্ট্রোলার</div>
-        <div class="product-price">১,৫০০ ৳</div>
-        <button class="buy-btn" onclick="orderProduct('গেমিং কন্ট্রোলার', '১,১৫০০ ৳')">অর্ডার করুন</button>
-      </div>
+  <!-- ২. ক্যাটাগরি আইকনগুলো -->
+  <div class="category-grid">
+    <div class="cat-item">
+      <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30" alt="">
+      <span>ওয়াচ</span>
+    </div>
+    <div class="cat-item">
+      <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e" alt="">
+      <span>হেডফোন</span>
+    </div>
+    <div class="cat-item">
+      <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff" alt="">
+      <span>জুতো</span>
+    </div>
+    <div class="cat-item">
+      <img src="https://images.unsplash.com/photo-1583394838336-acd977736f90" alt="">
+      <span>গেমিং</span>
+    </div>
+    <div class="cat-item">
+      <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f" alt="">
+      <span>ক্যামেরা</span>
     </div>
   </div>
 
+  <!-- ৩. প্রমোশনাল ব্যানার -->
+  <div class="banner"></div>
+
+  <!-- ৪. ফ্ল্যাশ সেল ও প্রোডাক্ট লিস্ট -->
+  <div class="section-header">⚡ ফ্লাশ সেল (Flash Sale)</div>
+  <div class="flash-grid" id="productGrid">
+    
+    <div class="flash-card">
+      <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30" alt="">
+      <div class="p-title">স্মার্ট ওয়াচ</div>
+      <div class="p-price">৳ ১,২৫০</div>
+      <button class="order-btn" onclick="orderProduct('স্মার্ট ওয়াচ', '৳ ১,২৫০')">অর্ডার</button>
+    </div>
+
+    <div class="flash-card">
+      <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e" alt="">
+      <div class="p-title">ওয়্যারলেস হেডফোন</div>
+      <div class="p-price">৳ ২,১০০</div>
+      <button class="order-btn" onclick="orderProduct('ওয়্যারলেস হেডফোন', '৳ ২,১০০')">অর্ডার</button>
+    </div>
+
+    <div class="flash-card">
+      <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff" alt="">
+      <div class="p-title">স্টাইলিশ স্নিকার্স</div>
+      <div class="p-price">৳ ১,৮০০</div>
+      <button class="order-btn" onclick="orderProduct('স্টাইলিশ স্নিকার্স', '৳ ১,৮০০')">অর্ডার</button>
+    </div>
+
+  </div>
+
+  <!-- ৫. নিচের ফিক্সড ন্যাভিগেশন বার (ডারাজ স্টাইল) -->
+  <div class="bottom-nav">
+    <a href="#" class="nav-item active">
+      <div>🏠</div>হোম
+    </a>
+    <a href="#" class="nav-item">
+      <div>📂</div>ক্যাটাগরি
+    </a>
+    <a href="#" class="nav-item">
+      <div>🛒</div>কার্ট
+    </a>
+    <a href="#" class="nav-item">
+      <div>👤</div>একাউন্ট
+    </a>
+  </div>
+
   <script>
-    let cartItems = 0;
-    const ownerPhone = "8801837197656"; // তোমার নাম্বার
+    const ownerPhone = "8801837197656"; // তোমার হোয়াটসঅ্যাপ নাম্বার
 
     function searchProducts() {
       let query = document.getElementById('searchInput').value.toLowerCase();
-      let cards = document.getElementsByClassName('product-card');
+      let cards = document.getElementsByClassName('flash-card');
       
       for (let i = 0; i < cards.length; i++) {
-        let name = cards[i].getElementsByClassName('product-name')[0].innerText.toLowerCase();
-        if (name.includes(query)) {
+        let title = cards[i].getElementsByClassName('p-title')[0].innerText.toLowerCase();
+        if (title.includes(query)) {
           cards[i].style.display = "block";
         } else {
           cards[i].style.display = "none";
@@ -180,17 +235,14 @@
     }
 
     function orderProduct(productName, price) {
-      cartItems++;
-      document.getElementById('cartCount').innerText = "কার্ট: " + cartItems;
-      
-      let message = `আসসালামু আলাইকুম, আমি এই পণ্যটি অর্ডার করতে চাই:\nপণ্য: ${productName}\nদাম: ${price}`;
+      let message = `আসসালামু আলাইকুম, আমি সহজ মার্ট থেকে এই পণ্যটি অর্ডার করতে চাই:\nপণ্য: ${productName}\nদাম: ${price}`;
       let whatsappUrl = `https://wa.me/${ownerPhone}?text=` + encodeURIComponent(message);
       
-      if(confirm(`"${productName}" কার্টে যোগ হয়েছে! আপনি কি সরাসরি হোয়াটসঅ্যাপে অর্ডার কনফার্ম করতে চান?`)) {
+      if(confirm(`"${productName}" (${price}) অর্ডার করতে চান? সরাসরি হোয়াটসঅ্যাপে চলে যাবে।`)) {
         window.open(whatsappUrl, '_blank');
       }
     }
   </script>
 
 </body>
-          </html>
+        </html>
