@@ -10,16 +10,16 @@
     
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
-        body { background: #f4f4f4; color: #333; padding-bottom: 70px; }
+        body { background: #f4f4f4; color: #333; padding-bottom: 80px; }
 
         /* দারাজ টপ সার্চ বার */
         .daraz-top-bar { background: #f57224; padding: 10px 12px; display: flex; align-items: center; gap: 8px; }
         .daraz-search-box { flex-grow: 1; background: white; display: flex; align-items: center; padding: 6px 10px; border-radius: 3px; }
         .daraz-search-box input { border: none; outline: none; width: 100%; font-size: 13px; margin-left: 5px; }
 
-        /* সেকশন */
+        /* সেকশন ম্যানেজমেন্ট */
         .section { display: none; padding: 10px; }
-        .section.active { display: block; }
+        .section.active { display: block !important; }
 
         /* দারাজ শর্টকাট ক্যাটাগরি আইকন গ্রিড */
         .shortcut-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; background: white; padding: 10px 5px; border-radius: 4px; margin-bottom: 10px; text-align: center; }
@@ -28,7 +28,7 @@
         .shortcut-item span { font-size: 10px; color: #444; display: block; line-height: 1.2; font-weight: 500; }
 
         /* ব্যানার */
-        .promo-banner { width: 100%; border-radius: 4px; overflow: hidden; margin-bottom: 10px; background: #ddd; min-height: 120px; display: flex; align-items: center; justify-content: center; }
+        .promo-banner { width: 100%; border-radius: 4px; overflow: hidden; margin-bottom: 10px; background: #e0e0e0; min-height: 140px; display: flex; align-items: center; justify-content: center; }
         .promo-banner img { width: 100%; display: block; max-height: 180px; object-fit: cover; }
 
         /* দারাজ প্রোডাক্ট গ্রিড */
@@ -67,10 +67,10 @@
         .cart-item img { width: 45px; height: 45px; object-fit: cover; border-radius: 4px; }
 
         /* নিচের দারাজ নেভিগেশন বার */
-        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 6px 0; box-shadow: 0 -2px 5px rgba(0,0,0,0.1); z-index: 1000; border-top: 1px solid #eee; }
-        .nav-item { text-align: center; font-size: 10px; color: #666; cursor: pointer; }
+        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 8px 0; box-shadow: 0 -2px 5px rgba(0,0,0,0.1); z-index: 9999; border-top: 1px solid #eee; }
+        .nav-item { text-align: center; font-size: 11px; color: #666; cursor: pointer; flex-grow: 1; }
         .nav-item.active { color: #f57224; font-weight: bold; }
-        .nav-item .nav-icon { font-size: 16px; display: block; margin: 0 auto 2px auto; }
+        .nav-item .nav-icon { font-size: 18px; display: block; margin: 0 auto 2px auto; }
     </style>
 </head>
 <body>
@@ -81,7 +81,7 @@
             <span>🔍</span>
             <input type="text" placeholder="daraz এ সার্চ করুন..." id="mainSearchInput">
         </div>
-        <span style="color:white; font-size:18px; cursor:pointer;" onclick="switchTab('cart', document.querySelectorAll('.nav-item')[2])">🛒</span>
+        <span style="color:white; font-size:20px; cursor:pointer;" onclick="switchTab('cart')">🛒</span>
     </div>
 
     <!-- ১. হোম সেকশন -->
@@ -91,11 +91,11 @@
             <div class="shortcut-item"><span class="shortcut-icon">⚡</span><span>Flash Sale</span></div>
             <div class="shortcut-item"><span class="shortcut-icon">🎟️</span><span>Vouchers</span></div>
             <div class="shortcut-item"><span class="shortcut-icon">💳</span><span>Top-Up</span></div>
-            <div class="shortcut-item" onclick="switchTab('admin', document.querySelectorAll('.nav-item')[3])"><span class="shortcut-icon">⚙️</span><span>Admin Add</span></div>
+            <div class="shortcut-item" onclick="switchTab('admin')"><span class="shortcut-icon">⚙️</span><span>Admin Add</span></div>
         </div>
 
         <div class="promo-banner" id="home-banner-container">
-            <img src="https://img.lazcdn.com/g/p/920b78d2b992f02636f8f553a15291b7.jpg_720q72.jpg" alt="Banner" id="currentBannerImg">
+            <span style="color: #777; font-size: 12px;">ব্যানার লোড হচ্ছে...</span>
         </div>
 
         <div style="font-size: 13px; font-weight: bold; color: #333; margin: 8px 0;">🔥 Just For You (আপনার লাইভ পণ্য ও অ্যাড)</div>
@@ -114,9 +114,7 @@
                 <div class="cat-menu-item" onclick="selectCategory('mobiles', this)">Mobiles & Gadgets</div>
                 <div class="cat-menu-item" onclick="selectCategory('sports', this)">Sports & Outdoors</div>
             </div>
-            <div class="category-content" id="cat-content-area">
-                <!-- এখানে ক্যাটাগরির আইটেমগুলো লোড হবে -->
-            </div>
+            <div class="category-content" id="cat-content-area"></div>
         </div>
     </div>
 
@@ -150,7 +148,7 @@
 
             <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
 
-            <h3>📂 ক্যাটাগরি ছবি যুক্ত করুন (যেমন: Mens Fashion)</h3>
+            <h3>📂 ক্যাটাগরি ছবি যুক্ত করুন</h3>
             <select id="catSelectName">
                 <option value="mens">Mens Fashion</option>
                 <option value="womens">Women Fashion</option>
@@ -185,17 +183,27 @@
             <p style="font-size: 13px; color: #f57224; font-weight: bold; margin-top: 3px;">হোয়াটসঅ্যাপ: 01837197656</p>
             
             <a href="https://wa.me/8801837197656" class="btn-wa" target="_blank">💬 সরাসরি হোয়াটসঅ্যাপে চ্যাট করুন</a>
-            <button class="btn-orange" style="margin-top: 10px;" onclick="switchTab('admin', document.querySelectorAll('.nav-item')[3])">⚙️ অ্যাডমিন প্যানেল</button>
+            <button class="btn-orange" style="margin-top: 10px;" onclick="switchTab('admin')">⚙️ অ্যাডমিন প্যানেল</button>
         </div>
     </div>
 
-    <!-- নেভিগেশন বার -->
+    <!-- নিচের নেভিগেশন বার -->
     <div class="nav-bar">
-        <div class="nav-item active" onclick="switchTab('home', this)"><span class="nav-icon">🏠</span>হোম</div>
-        <div class="nav-item" onclick="switchTab('category', this)"><span class="nav-icon">📂</span>ক্যাটাগরি</div>
-        <div class="nav-item" onclick="switchTab('cart', this)" id="cart-nav-badge"><span class="nav-icon">🛒</span>কার্ট (0)</div>
-        <div class="nav-item" onclick="switchTab('admin', this)"><span class="nav-icon">➕</span>আপলোড</div>
-        <div class="nav-item" onclick="switchTab('account', this)"><span class="nav-icon">👤</span>অ্যাকাউন্ট</div>
+        <div class="nav-item active" id="nav-home" onclick="switchTab('home')">
+            <span class="nav-icon">🏠</span>হোম
+        </div>
+        <div class="nav-item" id="nav-category" onclick="switchTab('category')">
+            <span class="nav-icon">📂</span>ক্যাটাগরি
+        </div>
+        <div class="nav-item" id="nav-cart" onclick="switchTab('cart')">
+            <span class="nav-icon">🛒</span>কার্ট (0)
+        </div>
+        <div class="nav-item" id="nav-admin" onclick="switchTab('admin')">
+            <span class="nav-icon">➕</span>আপলোড
+        </div>
+        <div class="nav-item" id="nav-account" onclick="switchTab('account')">
+            <span class="nav-icon">👤</span>অ্যাকাউন্ট
+        </div>
     </div>
 
     <script>
@@ -210,26 +218,40 @@
         let cart = [];
         let currentSelectedCat = 'mens';
 
-        function switchTab(tabName, element) {
-            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+        // ট্যাব পরিবর্তন ফাংশন (খুব সহজ ও নিখুঁত করা হয়েছে)
+        function switchTab(tabName) {
+            // সব সেকশন হাইড করো
+            document.querySelectorAll('.section').forEach(sec => {
+                sec.classList.remove('active');
+            });
 
-            if(tabName === 'home') document.getElementById('home-section').classList.add('active');
-            else if(tabName === 'category') {
+            // সব নেভ আইটেম থেকে একটিভ রিমোভ করো
+            document.querySelectorAll('.nav-item').forEach(nav => {
+                nav.classList.remove('active');
+            });
+
+            // কাঙ্ক্ষিত সেকশন দেখাও
+            if(tabName === 'home') {
+                document.getElementById('home-section').classList.add('active');
+                document.getElementById('nav-home').classList.add('active');
+            } else if(tabName === 'category') {
                 document.getElementById('category-section').classList.add('active');
+                document.getElementById('nav-category').classList.add('active');
                 loadCategoryData(currentSelectedCat);
-            }
-            else if(tabName === 'cart') {
+            } else if(tabName === 'cart') {
                 document.getElementById('cart-section').classList.add('active');
+                document.getElementById('nav-cart').classList.add('active');
                 renderCart();
+            } else if(tabName === 'admin') {
+                document.getElementById('admin-section').classList.add('active');
+                document.getElementById('nav-admin').classList.add('active');
+            } else if(tabName === 'account') {
+                document.getElementById('account-section').classList.add('active');
+                document.getElementById('nav-account').classList.add('active');
             }
-            else if(tabName === 'admin') document.getElementById('admin-section').classList.add('active');
-            else if(tabName === 'account') document.getElementById('account-section').classList.add('active');
-            
-            if(element) element.classList.add('active');
+            window.scrollTo(0, 0);
         }
 
-        // ক্যাটাগরি সাইডবার ক্লিক
         function selectCategory(cat, el) {
             document.querySelectorAll('.cat-menu-item').forEach(item => item.classList.remove('active'));
             el.classList.add('active');
@@ -237,9 +259,10 @@
             loadCategoryData(cat);
         }
 
-        // ফায়ারবেজ থেকে নির্দিষ্ট ক্যাটাগরির ছবি লোড করা
         function loadCategoryData(cat) {
             const area = document.getElementById('cat-content-area');
+            area.innerHTML = '<p style="text-align:center; color:#777; padding:20px; font-size:12px;">লোড হচ্ছে...</p>';
+            
             db.ref('categories/' + cat).once('value').then((snapshot) => {
                 let html = '<div class="cat-sub-grid">';
                 if(snapshot.exists()) {
@@ -260,7 +283,6 @@
             });
         }
 
-        // অ্যাডমিন প্যানেল থেকে ক্যাটাগরিতে ছবি যোগ করা
         function addCategoryItem() {
             const catName = document.getElementById('catSelectName').value;
             const title = document.getElementById('catItemTitle').value;
@@ -348,9 +370,11 @@
                     if(error) alert("ত্রুটি হয়েছে!");
                     else {
                         alert("সফলভাবে নতুন পণ্য বা অ্যাড যুক্ত হয়েছে!");
-                        document.getElementById('itemName', 'itemPrice', 'itemDesc').value = '';
+                        document.getElementById('itemName').value = '';
+                        document.getElementById('itemPrice').value = '';
+                        document.getElementById('itemDesc').value = '';
                         fileInput.value = '';
-                        switchTab('home', document.querySelectorAll('.nav-item')[0]);
+                        switchTab('home');
                     }
                 });
             };
@@ -358,7 +382,7 @@
 
         function addToCart(name, price, image) {
             cart.push({ name, price, image });
-            document.getElementById('cart-nav-badge').innerHTML = `<span class="nav-icon">🛒</span>কার্ট (${cart.length})`;
+            document.getElementById('nav-cart').innerHTML = `<span class="nav-icon">🛒</span>কার্ট (${cart.length})`;
             alert(`"${name}" কার্টে যুক্ত হয়েছে!`);
         }
 
@@ -400,7 +424,7 @@
 
         function removeFromCart(index) {
             cart.splice(index, 1);
-            document.getElementById('cart-nav-badge').innerHTML = `<span class="nav-icon">🛒</span>কার্ট (${cart.length})`;
+            document.getElementById('nav-cart').innerHTML = `<span class="nav-icon">🛒</span>কার্ট (${cart.length})`;
             renderCart();
         }
 
@@ -408,15 +432,19 @@
             if(cart.length === 0) return;
             let msg = "আসসালামু আলাইকুম, আমি সহজ মার্ট থেকে নিচের পণ্যগুলো অর্ডার করতে চাই:%0A";
             cart.forEach((item, i) => {
-                msg += `${i+1}. `${item.name} - ${item.price}%0A`;
+                msg += `${i+1}. ${item.name} - ${item.price}%0A`;
             });
             msg += "%0Aদয়া করে অর্ডারটি কনফার্ম করুন।";
             window.open(`https://wa.me/8801837197656?text=${msg}`, '_blank');
         }
 
+        // ফায়ারবেজ লাইভ লিসেনার
         db.ref('banner/').on('value', (snapshot) => {
+            const bannerContainer = document.getElementById('home-banner-container');
             if(snapshot.exists() && snapshot.val().image) {
-                document.getElementById('currentBannerImg').src = snapshot.val().image;
+                bannerContainer.innerHTML = `<img src="${snapshot.val().image}" alt="Banner">`;
+            } else {
+                bannerContainer.innerHTML = `<span style="color: #777; font-size: 12px; padding: 20px; text-align: center;">কোনো ব্যানার নেই। অ্যাডমিন প্যানেল থেকে ব্যানার আপলোড করুন।</span>`;
             }
         });
 
