@@ -27,6 +27,18 @@
             color: #4CAF50;
             font-size: 24px;
         }
+        .whatsapp-top-btn {
+            background-color: #25D366;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
         .search-box-container {
             background-color: #ff6600;
             padding: 10px 15px;
@@ -209,6 +221,56 @@
             text-align: center;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
+        .whatsapp-link-btn {
+            display: block;
+            background-color: #25D366;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        /* Cart Page Style */
+        .cart-item-card {
+            background: white;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin: 10px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            gap: 10px;
+        }
+        .cart-item-card img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        .cart-item-info {
+            flex-grow: 1;
+        }
+        .cart-item-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        .cart-item-price {
+            color: #ff6600;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .btn-remove {
+            background: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
         /* Bottom Navigation */
         .bottom-nav {
             position: fixed;
@@ -248,7 +310,7 @@
 
     <div class="top-header">
         <h1>Sohoj Mart</h1>
-        <div class="star-icon">⭐</div>
+        <a href="https://wa.me/8801837197656?text=হ্যালো, আমি সহজ মার্ট থেকে বলছি।" target="_blank" class="whatsapp-top-btn">💬 চ্যাট</a>
     </div>
 
     <div class="search-box-container">
@@ -310,8 +372,9 @@
 
     <!-- CART PAGE -->
     <div id="page-cart" class="page-section">
-        <div style="text-align: center; padding: 50px; color: #666;">
-            <h3>আপনার কার্ট খালি আছে</h3>
+        <div class="section-title">🛒 আপনার কার্ট তালিকা</div>
+        <div id="cart-items-container">
+            <!-- Cart items will load here -->
         </div>
     </div>
 
@@ -321,7 +384,8 @@
             <h3>👤 প্রোফাইল তথ্য</h3>
             <p><b>নাম:</b> শামিম হোসেন</p>
             <p><b>ঠিকানা:</b> শাহজাদপুর, সিরাজগঞ্জ</p>
-            <p><b>স্ট্যাটাস:</b> সক্রিয় বিক্রেতা</p>
+            <p><b>হোয়াটসঅ্যাপ:</b> 01837197656</p>
+            <a href="https://wa.me/8801837197656?text=হ্যালো, আমি সহজ মার্ট থেকে বলছি।" target="_blank" class="whatsapp-link-btn">💬 হোয়াটসঅ্যাপে সরাসরি চ্যাট করুন</a>
         </div>
     </div>
 
@@ -333,8 +397,8 @@
         <div class="nav-item" onclick="switchPage('vendor', this)">
             <span>➕</span>ক্যাটাগরি/আপলোড
         </div>
-        <div class="nav-item" onclick="switchPage('cart', this)">
-            <span>🛒</span>কার্ট (0)
+        <div class="nav-item" onclick="switchPage('cart', this)" id="cart-nav-btn">
+            <span>🛒</span><span id="cart-count-text">কার্ট (0)</span>
         </div>
         <div class="nav-item" onclick="switchPage('account', this)">
             <span>👤</span>অ্যাকাউন্ট
@@ -360,8 +424,44 @@
 
         let productBase64 = "";
         let bannerBase64 = "";
+        let cart = JSON.parse(localStorage.getItem('sohoj_cart')) || [];
 
-        // সুপার স্ট্রং ছবি কম্প্রেশন ফাংশন (সাইজ সবসময় লিমিটের নিচে রাখবে)
+        function updateCartUI() {
+            document.getElementById('cart-count-text').innerText = `কার্ট (${cart.length})`;
+            localStorage.setItem('sohoj_cart', JSON.stringify(cart));
+            
+            const cartContainer = document.getElementById('cart-items-container');
+            if (cart.length === 0) {
+                cartContainer.innerHTML = `<div style="text-align: center; padding: 50px; color: #666;"><h3>আপনার কার্ট খালি আছে</h3></div>`;
+                return;
+            }
+
+            cartContainer.innerHTML = "";
+            cart.forEach((item, index) => {
+                cartContainer.innerHTML += `
+                    <div class="cart-item-card">
+                        <img src="${item.image}" alt="Item">
+                        <div class="cart-item-info">
+                            <div class="cart-item-title">${item.name}</div>
+                            <div class="cart-item-price">৳ ${item.price}</div>
+                        </div>
+                        <button class="btn-remove" onclick="removeFromCart(${index})">রিমুভ</button>
+                    </div>
+                `;
+            });
+        }
+
+        window.addToCart = function(name, price, image) {
+            cart.push({ name, price, image });
+            updateCartUI();
+            alert("পণ্যটি কার্টে সফলভাবে যোগ করা হয়েছে!");
+        }
+
+        window.removeFromCart = function(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
         window.compressAndConvert = function(event, type) {
             const file = event.target.files[0];
             if (!file) return;
@@ -393,7 +493,6 @@
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
 
-                    // কোয়ালিটি ০.৬ (60%) রেখে একদম সেফ সাইজ করা হলো
                     const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.6);
 
                     if (type === 'product') {
@@ -409,7 +508,6 @@
             reader.readAsDataURL(file);
         };
 
-        // Upload Product
         window.uploadProduct = async function() {
             const name = document.getElementById('p-name').value;
             const price = document.getElementById('p-price').value;
@@ -436,7 +534,6 @@
             }
         };
 
-        // Upload Banner Ad
         window.uploadBanner = async function() {
             if(!bannerBase64) {
                 alert("দয়া করে গ্যালারি থেকে একটি ব্যানার ছবি সিলেক্ট করুন!");
@@ -456,24 +553,23 @@
             }
         };
 
-        // Real-time Products Load
         onSnapshot(collection(db, "products"), (snapshot) => {
             const productList = document.getElementById('product-list');
             productList.innerHTML = "";
             snapshot.forEach((doc) => {
                 const p = doc.data();
+                const safeName = p.name.replace(/'/g, "\\'");
                 productList.innerHTML += `
                     <div class="product-card">
                         <img src="${p.image}" alt="Product">
                         <div class="product-title">${p.name}</div>
                         <div class="product-price">৳ ${p.price}</div>
-                        <button class="btn-cart">কার্ডে যোগ করুন</button>
+                        <button class="btn-cart" onclick="addToCart('${safeName}', '${p.price}', '${p.image}')">কার্ডে যোগ করুন</button>
                     </div>
                 `;
             });
         });
 
-        // Real-time Banners Load
         onSnapshot(collection(db, "banners"), (snapshot) => {
             const bannerSlider = document.getElementById('banner-slider');
             bannerSlider.innerHTML = "";
@@ -486,6 +582,8 @@
                 `;
             });
         });
+
+        updateCartUI();
     </script>
 
     <script>
@@ -498,4 +596,4 @@
         }
     </script>
 </body>
-                </html>
+    </html>
