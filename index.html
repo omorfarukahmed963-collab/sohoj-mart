@@ -93,24 +93,24 @@
             gap: 10px;
             padding: 10px;
         }
-        .product-card {
+        .product-card, .movie-card {
             background: white;
             border-radius: 8px;
-            padding: 10px;
+            overflow: hidden;
             text-align: center;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding-bottom: 10px;
         }
-        .product-card img {
+        .product-card img, .movie-card img {
             width: 100%;
-            height: 120px;
+            height: 150px;
             object-fit: cover;
-            border-radius: 5px;
         }
-        .product-title {
+        .product-title, .movie-title {
             font-size: 14px;
-            margin: 8px 0 4px 0;
-            color: #333;
             font-weight: bold;
+            color: #333;
+            margin: 8px 5px;
         }
         .product-price {
             color: #ff6600;
@@ -118,16 +118,22 @@
             font-size: 15px;
             margin-bottom: 8px;
         }
-        .btn-cart {
+        .btn-cart, .btn-watch {
             background: #ff6600;
             color: white;
             border: none;
             padding: 8px;
-            width: 100%;
+            width: 90%;
             border-radius: 5px;
             cursor: pointer;
             font-size: 13px;
             font-weight: bold;
+            margin: 0 auto;
+        }
+        .btn-watch {
+            background: #e50914;
+            width: auto;
+            padding: 6px 12px;
         }
         .sub-card {
             background: white;
@@ -199,41 +205,11 @@
             color: #333;
             border-radius: 5px;
         }
-        /* Movie Box Grid Style */
         .movie-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 10px;
             padding: 10px;
-        }
-        .movie-card {
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            text-align: center;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            padding-bottom: 10px;
-        }
-        .movie-card img {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-        }
-        .movie-title {
-            font-size: 14px;
-            font-weight: bold;
-            color: #333;
-            margin: 8px 5px;
-        }
-        .btn-watch {
-            background: #e50914; /* Netflix Red vibe */
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: bold;
         }
         .cart-item-card {
             background: white;
@@ -274,13 +250,20 @@
             cursor: pointer;
             font-size: 12px;
         }
-        .account-box {
+        .account-box, .admin-box {
             background: white;
             padding: 15px;
             margin: 10px;
             border-radius: 8px;
-            text-align: center;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .admin-box input {
+            width: 100%;
+            padding: 8px;
+            margin: 6px 0 12px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
         }
         .whatsapp-link-btn {
             display: block;
@@ -290,6 +273,7 @@
             border-radius: 5px;
             text-decoration: none;
             font-weight: bold;
+            text-align: center;
             margin-top: 10px;
         }
         .bottom-nav {
@@ -301,7 +285,7 @@
             display: flex;
             justify-content: space-around;
             padding: 8px 0;
-            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+            box-shadow: -2px 5px rgba(0,0,0,0.1);
             z-index: 1000;
         }
         .nav-item {
@@ -344,11 +328,11 @@
                 <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30" class="cat-img" alt="Watch">
                 <p>ওয়াচ</p>
             </div>
-            <div class="cat-circle-item" onclick="switchPage('movies', document.querySelectorAll('.nav-item')[2])">
+            <div class="cat-circle-item" onclick="switchPage('movies', document.querySelectorAll('.nav-item')[1])">
                 <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba" class="cat-img" alt="Movies">
                 <p>মুভি বক্স</p>
             </div>
-            <div class="cat-circle-item" onclick="switchPage('games', document.querySelectorAll('.nav-item')[1])">
+            <div class="cat-circle-item" onclick="switchPage('games', document.querySelectorAll('.nav-item')[2])">
                 <img src="https://images.unsplash.com/photo-1612287233002-b1d3ba70b553" class="cat-img" alt="Gaming">
                 <p>গেমিং</p>
             </div>
@@ -370,12 +354,6 @@
                 <div class="product-price">৳ ১৫০</div>
                 <button class="btn-cart" onclick="addToCart('Finger gloves', '১৫০', 'https://images.unsplash.com/photo-1583394838336-acd977736f90')">কার্ডে যোগ করুন</button>
             </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30" alt="Product">
-                <div class="product-title">প্রিমিয়াম ওয়াচ</div>
-                <div class="product-price">৳ ৮৫০</div>
-                <button class="btn-cart" onclick="addToCart('প্রিমিয়াম ওয়াচ', '৮৫০', 'https://images.unsplash.com/photo-1523275335684-37898b6baf30')">কার্ডে যোগ করুন</button>
-            </div>
         </div>
     </div>
 
@@ -392,28 +370,18 @@
         </div>
     </div>
 
-    <!-- MOVIES PAGE (Movie Box) -->
+    <!-- MOVIES PAGE -->
     <div id="page-movies" class="page-section">
         <div class="section-title">🎬 মুভি বক্স (অনলাইন মুভি জোন)</div>
-        
         <div id="movie-list-view" class="movie-grid">
-            <div class="movie-card">
-                <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1" alt="Movie">
-                <div class="movie-title">অ্যাকশন থ্রিলার মুভি</div>
-                <button class="btn-watch" onclick="openMovie('https://www.youtube.com/embed/dQw4w9WgXcQ', 'অ্যাকশন থ্রিলার মুভি')">▶ মুভি দেখুন</button>
-            </div>
-            <div class="movie-card">
-                <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728" alt="Movie">
-                <div class="movie-title">সায়েন্স ফিকশন অ্যাডভেঞ্চার</div>
-                <button class="btn-watch" onclick="openMovie('https://www.youtube.com/embed/dQw4w9WgXcQ', 'সায়েন্স ফিকশন অ্যাডভেঞ্চার')">▶ মুভি দেখুন</button>
-            </div>
+            <!-- এখানে ডাইনামিক মুভিগুলো লোড হবে -->
         </div>
 
         <!-- Movie Player Screen -->
         <div id="movie-player-screen" class="play-screen" style="display: none;">
             <button class="back-btn" onclick="closeMovie()">⬅ মুভি তালিকা</button>
             <h3 id="movie-player-title" style="margin-top: 40px; color: #ff6600;">মুভির নাম</h3>
-            <div style="position: relative; width: 100%; height: 220px; background: black; border-radius: 5px; overflow: hidden; margin-top: 10px;">
+            <div style="position: relative; width: 100%; height: 230px; background: black; border-radius: 5px; overflow: hidden; margin-top: 10px;">
                 <iframe id="movie-iframe" src="" style="width: 100%; height: 100%; border: none;" allowfullscreen></iframe>
             </div>
         </div>
@@ -470,7 +438,7 @@
             <h3 style="margin-top: 40px; color: #ff6600; text-align: center;">রহস্যময় পৃথিবী ও মহাবিশ্ব</h3>
             <div style="font-size: 14px; line-height: 1.6; color: #333; padding: 10px; background: #fafafa; border-radius: 5px; max-height: 350px; overflow-y: auto;">
                 <p><b>অধ্যায় ১: মহাবিশ্বের অজানা রহস্য</b></p>
-                <p>আমাদের এই বিশাল মহাবিশ্বে কোটি কোটি গ্যালাক্সি রয়েছে। বিজ্ঞানীরা এখনো এর সমস্ত রহস্য উদঘাটন করতে পারেননি...</p>
+                <p>আমাদের এই বিশাল মহাবিশ্বে কোটি কোটি গ্যালাক্সি রয়েছে...</p>
             </div>
         </div>
     </div>
@@ -481,14 +449,38 @@
         <div id="cart-items-container"></div>
     </div>
 
-    <!-- ACCOUNT PAGE -->
+    <!-- ACCOUNT & ADMIN PANEL PAGE -->
     <div id="page-account" class="page-section">
-        <div class="account-box">
+        <div class="account-box" style="text-align: center;">
             <h3>👤 প্রোফাইল তথ্য</h3>
             <p><b>নাম:</b> শামিম হোসেন</p>
             <p><b>ঠিকানা:</b> শাহজাদপুর, সিরাজগঞ্জ</p>
             <p><b>হোয়াটসঅ্যাপ:</b> 01837197656</p>
-            <a href="https://wa.me/8801837197656?text=হ্যালো, আমি সহজ মার্ট থেকে বলছি।" target="_blank" class="whatsapp-link-btn">💬 হোয়াটসঅ্যাপে সরাসরি চ্যাট করুন</a>
+            <a href="https://wa.me/8801837197656?text=হ্যালো, আমি সহজ মার্ট থেকে বলছি।" target="_blank" class="whatsapp-link-btn">💬 হোয়াটসঅ্যাপে চ্যাট করুন</a>
+        </div>
+
+        <!-- Admin Login Section -->
+        <div id="admin-login-box" class="admin-box">
+            <h3>🔐 অ্যাডমিন প্যানেল লগইন</h3>
+            <p style="font-size: 12px; color: #666;">কোডিং ছাড়া মুভি যোগ করতে পাসওয়ার্ড দিন (পাসওয়ার্ড: 1234)</p>
+            <input type="password" id="admin-pass" placeholder="পাসওয়ার্ড দিন (1234)">
+            <button class="btn-cart" onclick="checkAdminLogin()">লগইন করুন</button>
+        </div>
+
+        <!-- Admin Control Panel (Hidden by default) -->
+        <div id="admin-panel-box" class="admin-box" style="display: none; border: 2px solid #ff6600;">
+            <h3 style="color: #ff6600;">🎬 নতুন মুভি যোগ করুন (অ্যাডমিন)</h3>
+            <label style="font-size: 13px; font-weight: bold;">মুভির নাম:</label>
+            <input type="text" id="new-movie-title" placeholder="যেমন: নতুন অ্যাকশন মুভি">
+            
+            <label style="font-size: 13px; font-weight: bold;">পোস্টার ছবির লিংক (Image URL):</label>
+            <input type="text" id="new-movie-img" placeholder="ছবির লিংক এখানে দিন">
+            
+            <label style="font-size: 13px; font-weight: bold;">ইউটিউব এমবেড লিংক (Embed Link):</label>
+            <input type="text" id="new-movie-url" placeholder="যেমন: https://www.youtube.com/embed/VIDEO_ID">
+            
+            <button class="btn-cart" onclick="addNewMovie()">➕ মুভি যোগ করুন</button>
+            <button class="btn-remove" style="width: 100%; margin-top: 10px; padding: 8px;" onclick="adminLogout()">লগআউট</button>
         </div>
     </div>
 
@@ -515,6 +507,7 @@
     </div>
 
     <script>
+        // Cart Logic
         let cart = JSON.parse(localStorage.getItem('sohoj_cart')) || [];
 
         function updateCartUI() {
@@ -561,7 +554,73 @@
             if(element) element.classList.add('active');
         }
 
-        // Movie Player Logic
+        // Dynamic Movie Box Logic with Admin Panel
+        let movies = JSON.parse(localStorage.getItem('sohoj_movies')) || [
+            { title: "অ্যাকশন থ্রিলার মুভি", image: "https://images.unsplash.com/photo-1536440136628-849c177e76a1", url: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { title: "সায়েন্স ফিকশন অ্যাডভেঞ্চার", image: "https://images.unsplash.com/photo-1485846234645-a62644f84728", url: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
+        ];
+
+        function renderMovies() {
+            const movieListContainer = document.getElementById('movie-list-view');
+            movieListContainer.innerHTML = "";
+            movies.forEach((movie, index) => {
+                movieListContainer.innerHTML += `
+                    <div class="movie-card">
+                        <img src="${movie.image}" alt="Movie">
+                        <div class="movie-title">${movie.title}</div>
+                        <button class="btn-watch" onclick="openMovie('${movie.url}', '${movie.title}')">▶ মুভি দেখুন</button>
+                        <button class="btn-remove" style="margin-top: 5px; background: #dc3545; padding: 3px 8px; font-size: 11px;" onclick="deleteMovie(${index})">ডিলিট</button>
+                    </div>
+                `;
+            });
+            localStorage.setItem('sohoj_movies', JSON.stringify(movies));
+        }
+
+        window.addNewMovie = function() {
+            let title = document.getElementById('new-movie-title').value;
+            let image = document.getElementById('new-movie-img').value;
+            let url = document.getElementById('new-movie-url').value;
+
+            if(!title || !image || !url) {
+                alert("দয়া করে সবকটি ঘর পূরণ করুন!");
+                return;
+            }
+
+            movies.push({ title, image, url });
+            renderMovies();
+
+            document.getElementById('new-movie-title').value = "";
+            document.getElementById('new-movie-img').value = "";
+            document.getElementById('new-movie-url').value = "";
+            alert("অভিনন্দন! নতুন মুভি সফলভাবে যোগ করা হয়েছে!");
+            switchPage('movies', document.querySelectorAll('.nav-item')[1]);
+        }
+
+        window.deleteMovie = function(index) {
+            if(confirm("আপনি কি এই মুভিটি ডিলিট করতে চান?")) {
+                movies.splice(index, 1);
+                renderMovies();
+            }
+        }
+
+        // Admin Auth
+        window.checkAdminLogin = function() {
+            let pass = document.getElementById('admin-pass').value;
+            if(pass === "1234") {
+                document.getElementById('admin-login-box').style.display = 'none';
+                document.getElementById('admin-panel-box').style.display = 'block';
+                alert("সফলভাবে অ্যাডমিন প্যানেলে প্রবেশ করেছেন!");
+            } else {
+                alert("ভুল পাসওয়ার্ড! সঠিক পাসওয়ার্ড দিন (1234)।");
+            }
+        }
+
+        window.adminLogout = function() {
+            document.getElementById('admin-panel-box').style.display = 'none';
+            document.getElementById('admin-login-box').style.display = 'block';
+            document.getElementById('admin-pass').value = "";
+        }
+
         function openMovie(videoUrl, title) {
             document.getElementById('movie-list-view').style.display = 'none';
             document.getElementById('movie-player-screen').style.display = 'block';
@@ -570,7 +629,7 @@
         }
 
         function closeMovie() {
-            document.getElementById('movie-iframe').src = ""; // Stop video playback
+            document.getElementById('movie-iframe').src = ""; 
             document.getElementById('movie-player-screen').style.display = 'none';
             document.getElementById('movie-list-view').style.display = 'grid';
         }
@@ -639,6 +698,7 @@
         }
 
         updateCartUI();
+        renderMovies();
     </script>
 </body>
 </html>
