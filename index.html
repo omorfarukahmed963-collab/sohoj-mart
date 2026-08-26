@@ -287,7 +287,7 @@
             <input type="number" id="p-price" class="form-control" placeholder="দাম লিখুন (টাকায়)">
             
             <label for="p-image-file" class="file-label" id="file-label-text">📁 পণ্যের ছবি (গ্যালারি থেকে)</label>
-            <input type="file" id="p-image-file" accept="image/*" style="display: none;" onchange="previewProductImage(event)">
+            <input type="file" id="p-image-file" accept="image/*" style="display: none;" onchange="compressAndConvert(event, 'product')">
 
             <input type="text" id="p-category" class="form-control" placeholder="ক্যাটাগরি দিন (যেমন: ওয়াচ, হেডফোন)">
             <button class="btn-submit" onclick="uploadProduct()">পণ্য লাইভ করুন</button>
@@ -297,7 +297,7 @@
         <div class="form-container">
             <h3>📢 নতুন বিজ্ঞাপন/ব্যানার যোগ করুন</h3>
             <label for="b-image-file" class="file-label" id="banner-label-text">🖼️ ব্যানার ছবি (গ্যালারি থেকে)</label>
-            <input type="file" id="b-image-file" accept="image/*" style="display: none;" onchange="previewBannerImage(event)">
+            <input type="file" id="b-image-file" accept="image/*" style="display: none;" onchange="compressAndConvert(event, 'banner')">
             <button class="btn-submit btn-banner" onclick="uploadBanner()">ব্যানার লাইভ করুন</button>
         </div>
 
@@ -361,26 +361,52 @@
         let productBase64 = "";
         let bannerBase64 = "";
 
-        // Product image select
-        window.previewProductImage = function(event) {
+        // ছবি অটো কম্প্রেশন ফাংশন (যাতে সাইজ বড় হয়ে ফায়ারবেসে এরর না দেয়)
+        window.compressAndConvert = function(event, type) {
             const file = event.target.files[0];
-            if (file) {
-                document.getElementById('file-label-text').innerText = "✅ ছবি সিলেক্ট হয়েছে: " + file.name;
-                const reader = new FileReader();
-                reader.onload = function(e) { productBase64 = e.target.result; };
-                reader.readAsDataURL(file);
-            }
-        };
+            if (!file) return;
 
-        // Banner image select
-        window.previewBannerImage = function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                document.getElementById('banner-label-text').innerText = "✅ ব্যানার সিলেক্ট হয়েছে: " + file.name;
-                const reader = new FileReader();
-                reader.onload = function(e) { bannerBase64 = e.target.result; };
-                reader.readAsDataURL(file);
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 800;
+                    const MAX_HEIGHT = 800;
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height) {
+                        if (width > MAX_WIDTH) {
+                            height *= MAX_WIDTH / width;
+                            width = MAX_WIDTH;
+                        }
+                    } else {
+                        if (height > MAX_HEIGHT) {
+                            width *= MAX_HEIGHT / height;
+                            height = MAX_HEIGHT;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    // কোয়ালিটি ০.৭ (70%) রেখে কম্প্রেস করা হলো
+                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
+
+                    if (type === 'product') {
+                        productBase64 = compressedDataUrl;
+                        document.getElementById('file-label-text').innerText = "✅ পণ্যের ছবি রেডি হয়েছে!";
+                    } else if (type === 'banner') {
+                        bannerBase64 = compressedDataUrl;
+                        document.getElementById('banner-label-text').innerText = "✅ ব্যানার ছবি রেডি হয়েছে!";
+                    }
+                }
+                img.src = e.target.result;
             }
+            reader.readAsDataURL(file);
         };
 
         // Upload Product
@@ -472,4 +498,4 @@
         }
     </script>
 </body>
-  </html>
+    </html>
