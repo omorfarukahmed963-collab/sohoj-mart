@@ -19,10 +19,9 @@
             overscroll-behavior-y: none; 
             touch-action: pan-y;
             height: 100%;
-            overflow: hidden; /* পুরো পেজের ওভারফ্লো বন্ধ, শুধু নির্দিষ্ট সেকশন স্ক্রল হবে */
+            overflow: hidden;
         }
 
-        /* মূল অ্যাপ কন্টেইনার যাতে ফিক্সড থাকে */
         .app-container {
             height: 100%;
             overflow-y: auto;
@@ -100,7 +99,6 @@
 </head>
 <body>
 
-    <!-- মূল স্ক্রোল কনটেইনার যার ভেতরে সব কন্টেন্ট থাকবে -->
     <div class="app-container" id="appContainer">
 
         <!-- একক এবং সাজানো টপ হেডার -->
@@ -390,9 +388,7 @@
             const reader = new FileReader();
             reader.readAsDataURL(bannerFile.files[0]);
             reader.onload = function () {
-                db.ref('banner/').set({
-                    image: reader.result
-                }, (error) => {
+                db.ref('banner/image').set(reader.result, (error) => {
                     if(error) alert("ব্যানার আপডেটে সমস্যা হয়েছে!");
                     else {
                         alert("সফলভাবে নতুন ব্যানার সেট হয়েছে!");
@@ -416,19 +412,21 @@
             const reader = new FileReader();
             reader.readAsDataURL(fileInput.files[0]);
             reader.onload = function () {
-                db.ref('products/').push({
+                db.ref('products').push({
                     name: name,
                     price: price,
                     image: reader.result,
                     rating: desc
                 }, (error) => {
-                    if(error) alert("ত্রুটি হয়েছে!");
-                    else {
+                    if(error) {
+                        alert("ত্রুটি হয়েছে: " + error.message);
+                    } else {
                         alert("সফলভাবে নতুন পণ্য বা অ্যাড যুক্ত হয়েছে!");
                         document.getElementById('itemName').value = '';
                         document.getElementById('itemPrice').value = '';
                         document.getElementById('itemDesc').value = '';
                         fileInput.value = '';
+                        switchTab('home');
                     }
                 });
             };
@@ -492,21 +490,19 @@
             window.open(`https://wa.me/8801837197656?text=${msg}`, '_blank');
         }
 
-        // ফায়ারবেজ লাইভ লিসেনার
-        db.ref('banner/').on('value', (snapshot) => {
+        // ফায়ারবেজ লাইভ লিসেনার (ব্যানার)
+        db.ref('banner/image').on('value', (snapshot) => {
             const bannerContainer = document.getElementById('home-banner-container');
-            if(snapshot.exists() && snapshot.val().image) {
-                bannerContainer.innerHTML = `<img src="${snapshot.val().image}" alt="Banner">`;
+            if(snapshot.exists() && snapshot.val()) {
+                bannerContainer.innerHTML = `<img src="${snapshot.val()}" alt="Banner">`;
             } else {
                 bannerContainer.innerHTML = `<span style="color: #777; font-size: 12px; padding: 20px; text-align: center;">কোনো ব্যানার নেই। অ্যাডমিন প্যানেল থেকে ব্যানার আপলোড করুন।</span>`;
             }
         });
 
-        db.ref('products/').on('value', (snapshot) => {
+        // ফায়ারবেজ লাইভ লিসেনার (পণ্য)
+        db.ref('products').on('value', (snapshot) => {
             const grid = document.getElementById('product-grid');
-            const appContainer = document.getElementById('appContainer');
-            let currentScroll = appContainer.scrollTop;
-            
             grid.innerHTML = '';
             
             if(snapshot.exists()) {
@@ -532,8 +528,6 @@
             } else {
                 grid.innerHTML = '<p style="grid-column: span 2; text-align:center; color:#777; padding:20px; font-size:12px;">কোনো পণ্য বা লাইভ অ্যাড নেই। আপলোড অপশন থেকে যোগ করুন।</p>';
             }
-
-            appContainer.scrollTop = currentScroll;
         });
 
         function addToCardFix(name, price, image) {
