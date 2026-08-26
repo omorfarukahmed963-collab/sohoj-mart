@@ -27,8 +27,8 @@
         .shortcut-item span { font-size: 10px; color: #444; display: block; line-height: 1.2; }
 
         /* ব্যানার */
-        .promo-banner { width: 100%; border-radius: 4px; overflow: hidden; margin-bottom: 10px; }
-        .promo-banner img { width: 100%; display: block; }
+        .promo-banner { width: 100%; border-radius: 4px; overflow: hidden; margin-bottom: 10px; background: #ddd; min-height: 120px; display: flex; align-items: center; justify-content: center; }
+        .promo-banner img { width: 100%; display: block; max-height: 180px; object-fit: cover; }
 
         /* দারাজ প্রোডাক্ট গ্রিড */
         .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
@@ -93,9 +93,9 @@
             <div class="shortcut-item" onclick="switchTab('admin', document.querySelectorAll('.nav-item')[3])"><img src="https://img.lazcdn.com/g/tps/img/TB1c9VcfDH8KJjy1XcXXcpqXaL-140-140.png" alt="Icon"><span>Admin Add</span></div>
         </div>
 
-        <!-- প্রমোশনাল ব্যানার -->
-        <div class="promo-banner">
-            <img src="https://img.lazcdn.com/g/p/920b78d2b992f02636f8f553a15291b7.jpg_720q72.jpg" alt="Banner">
+        <!-- প্রমোশনাল / অ্যাড ব্যানার (লাইভ ডেটা থেকে আসবে) -->
+        <div class="promo-banner" id="home-banner-container">
+            <img src="https://img.lazcdn.com/g/p/920b78d2b992f02636f8f553a15291b7.jpg_720q72.jpg" alt="Banner" id="currentBannerImg">
         </div>
 
         <div style="font-size: 13px; font-weight: bold; color: #333; margin: 8px 0;">🔥 Just For You (আপনার লাইভ পণ্য ও অ্যাড)</div>
@@ -143,7 +143,7 @@
         </div>
     </div>
 
-    <!-- ৪. অ্যাডমিন প্যানেল সেকশন (লাইভ অ্যাড/প্রোডাক্ট আপলোড) -->
+    <!-- ৪. অ্যাডমিন প্যানেল সেকশন (ব্যানার ও পণ্য আপলোড) -->
     <div id="admin-section" class="section">
         <div class="box" id="login-box">
             <h3>🔐 অ্যাডমিন প্যানেল লগইন</h3>
@@ -153,13 +153,20 @@
         </div>
 
         <div class="box" id="dashboard-box" style="display:none;">
-            <h3>➕ লাইভ পণ্য বা অ্যাড যোগ করুন</h3>
+            <h3>🎯 হোম পেজ অ্যাড ব্যানার পরিবর্তন করুন</h3>
+            <label style="font-size: 12px; color: #666;">নতুন ব্যানার ছবি সিলেক্ট করুন:</label>
+            <input type="file" id="bannerImageFile" accept="image/*" style="margin-top: 5px;">
+            <button class="btn-orange" onclick="updateBanner()" style="margin-bottom: 15px;">ব্যানার লাইভ আপডেট করুন</button>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
+
+            <h3>➕ নতুন পণ্য বা অফার যুক্ত করুন</h3>
             <input type="text" id="itemName" placeholder="পণ্যের নাম">
             <input type="text" id="itemPrice" placeholder="দাম (যেমন: ৳450)">
-            <label style="font-size: 12px; color: #666;">গ্যালারি থেকে ছবি সিলেক্ট করুন:</label>
+            <label style="font-size: 12px; color: #666;">পণ্যের ছবি সিলেক্ট করুন:</label>
             <input type="file" id="itemImageFile" accept="image/*">
             <textarea id="itemDesc" placeholder="রেটিং বা বিবরণ (যেমন: ⭐ 4.5)"></textarea>
-            <button class="btn-orange" onclick="addNewItem()">লাইভ আপলোড করুন</button>
+            <button class="btn-orange" onclick="addNewItem()">পণ্য লাইভ আপলোড করুন</button>
             <button class="btn-red" onclick="logoutAdmin()">লগআউট</button>
         </div>
     </div>
@@ -258,6 +265,29 @@
             document.getElementById('adminPin').value = '';
         }
 
+        // ব্যানার আপডেট করার ফাংশন
+        function updateBanner() {
+            const bannerFile = document.getElementById('bannerImageFile');
+            if(bannerFile.files.length === 0) {
+                alert("দয়া করে ব্যানার হিসেবে একটি ছবি সিলেক্ট করুন!");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.readAsDataURL(bannerFile.files[0]);
+            reader.onload = function () {
+                db.ref('banner/').set({
+                    image: reader.result
+                }, (error) => {
+                    if(error) alert("ব্যানার আপডেটে সমস্যা হয়েছে!");
+                    else {
+                        alert("সফলভাবে নতুন ব্যানার সেট হয়েছে!");
+                        bannerFile.value = '';
+                    }
+                });
+            };
+        }
+
         // লাইভ পণ্য বা অ্যাড আপলোড
         function addNewItem() {
             const name = document.getElementById('itemName').value;
@@ -266,7 +296,7 @@
             const fileInput = document.getElementById('itemImageFile');
 
             if(!name || fileInput.files.length === 0) {
-                alert("দয়া করে নাম এবং একটি ছবি দিন!");
+                alert("দয়া করে পণ্যের নাম এবং একটি ছবি দিন!");
                 return;
             }
 
@@ -281,7 +311,7 @@
                 }, (error) => {
                     if(error) alert("ত্রুটি হয়েছে!");
                     else {
-                        alert("সফলভাবে লাইভ পণ্য বা অ্যাড যুক্ত হয়েছে!");
+                        alert("সফলভাবে নতুন পণ্য বা অ্যাড যুক্ত হয়েছে!");
                         document.getElementById('itemName').value = '';
                         document.getElementById('itemPrice').value = '';
                         document.getElementById('itemDesc').value = '';
@@ -299,7 +329,7 @@
             alert(`"${name}" কার্টে যুক্ত হয়েছে!`);
         }
 
-        // কার্ট পেজ رেন্ডার
+        // কার্ট পেজ রেন্ডার
         function renderCart() {
             const container = document.getElementById('cart-items-container');
             const totalSection = document.getElementById('cart-total-section');
@@ -351,6 +381,13 @@
             msg += "%0Aদয়া করে অর্ডারটি কনফার্ম করুন।";
             window.open(`https://wa.me/8801837197656?text=${msg}`, '_blank');
         }
+
+        // ফায়ারবেজ থেকে লাইভ ব্যানার লোড
+        db.ref('banner/').on('value', (snapshot) => {
+            if(snapshot.exists() && snapshot.val().image) {
+                document.getElementById('currentBannerImg').src = snapshot.val().image;
+            }
+        });
 
         // ফায়ারবেজ থেকে লাইভ প্রোডাক্ট গ্রিড লোড
         db.ref('products/').on('value', (snapshot) => {
