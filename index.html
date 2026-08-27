@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sohoj Mart</title>
+
+    <!-- Social Media Share Preview (Open Graph Meta Tags) -->
+    <meta property="og:title" content="Sohoj Mart - অনলাইন শপ">
+    <meta property="og:description" content="যেকোনো পণ্য পছন্দ করে সরাসরি হোয়াটসঅ্যাপে অর্ডার করুন।">
+    <meta property="og:image" content="https://omorfarukahmed963-collab.github.io/sohoj-mart/favicon.ico"> <!-- এখানে তোমার অ্যাপের লোগো বা আইকন ইমেজ লিংক দিতে পারো -->
+    <meta property="og:url" content="https://omorfarukahmed963-collab.github.io/sohoj-mart/">
+    <meta property="og:type" content="website">
+
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
@@ -103,7 +111,7 @@
         .banner-container img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* অ্যাপের মাপে সুন্দরভাবে ফিট হবে */
+            object-fit: cover;
             border-radius: 8px;
         }
         .section-title {
@@ -128,7 +136,7 @@
         .product-card img {
             width: 100%;
             height: 130px;
-            object-fit: cover; /* ছবির রেজুলেশন ঠিক রেখে অ্যাপের মাপে দেখাবে */
+            object-fit: cover;
             border-radius: 5px;
         }
         .product-title {
@@ -232,7 +240,7 @@
             color: #333;
             margin-top: 5px;
         }
-        /* নিচের ফিক্সড নেভিগেশন বার - ভাঙার সমস্যা স্থায়ীভাবে সমাধান */
+        /* নিচের ফিক্সড নেভিগেশন বার */
         .bottom-nav {
             position: fixed;
             bottom: 0; left: 0; width: 100%;
@@ -468,7 +476,7 @@
             `;
         }
 
-        // ছবিকে রিসাইজ করে সঠিক রেজুলেশনে রূপান্তর করার ফাংশন (Canvas ব্যবহার করে)
+        // ছবিকে রিসাইজ করে সঠিক রেজুলেশনে রূপান্তর করার ফাংশন
         function resizeImage(file, maxWidth, maxHeight, callback) {
             const reader = new FileReader();
             reader.onload = function (event) {
@@ -495,7 +503,6 @@
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
                     
-                    // কম্প্রেসড ইমেজ ডেটা আউটপুট (JPEG format)
                     callback(canvas.toDataURL('image/jpeg', 0.8));
                 };
                 img.src = event.target.result;
