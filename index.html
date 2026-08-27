@@ -400,32 +400,50 @@
         </div>
     </div>
 
-    <!-- অ্যাডমিন / আপলোড পেজ -->
+    <!-- অ্যাডমিন / আপলোড পেজ (পিন প্রোটেক্টেড) -->
     <div id="adminPage" class="page-section">
-        <div class="section-title">🖼️ ব্যানার আপডেট করুন</div>
-        <div class="admin-form">
-            <input type="file" id="bannerImageFile" accept="image/*">
-            <button class="submit-upload-btn" onclick="uploadBannerFile()">ব্যানার সেভ করুন</button>
+        <div class="section-title">🔐 সিক্রেট অ্যাডমিন ভেরিফিকেশন</div>
+        
+        <!-- পিন দেওয়ার বক্স (এখানে পাসওয়ার্ড হিসেবে টাইপ করলে ডট • দেখাবে) -->
+        <div id="adminLockBox" class="admin-form" style="text-align: center;">
+            <p style="font-size: 13px; color: #666;">পণ্য আপলোড করতে সিক্রেট পিন নম্বরটি দিন:</p>
+            <input type="password" id="adminPinInput" placeholder="পিন দিন" style="text-align: center; font-size: 18px; letter-spacing: 5px;">
+            <button class="submit-upload-btn" onclick="verifyAdminPin()">লগইন করুন</button>
         </div>
 
-        <div class="section-title">➕ পণ্য আপলোড (৩টি ছবি দিন)</div>
-        <div class="admin-form">
-            <label>পণ্যের নাম:</label>
-            <input type="text" id="prodName" placeholder="নাম লিখুন">
+        <!-- পিন সঠিক হলে আসল আপলোড প্যানেল শো করবে -->
+        <div id="adminPanelContent" style="display: none;">
+            <div style="background: #e8f5e9; padding: 10px; border-radius: 6px; margin-bottom: 10px; text-align: center; color: #2e7d32; font-weight: bold;">
+                ✔ অ্যাডমিন মোড সচল আছে
+            </div>
+
+            <div class="section-title">🖼️ ব্যানার আপডেট করুন</div>
+            <div class="admin-form">
+                <input type="file" id="bannerImageFile" accept="image/*">
+                <button class="submit-upload-btn" onclick="uploadBannerFile()">ব্যানার সেভ করুন</button>
+            </div>
+
+            <div class="section-title">➕ পণ্য আপলোড (৩টি ছবি দিন)</div>
+            <div class="admin-form">
+                <label>পণ্যের নাম:</label>
+                <input type="text" id="prodName" placeholder="নাম লিখুন">
+                
+                <label>পণ্যের দাম (টাকা):</label>
+                <input type="number" id="prodPrice" placeholder="দাম লিখুন">
+                
+                <label>১ম ছবি (মেইন):</label>
+                <input type="file" id="prodImg1" accept="image/*">
+                
+                <label>২য় ছবি:</label>
+                <input type="file" id="prodImg2" accept="image/*">
+                
+                <label>৩য় ছবি:</label>
+                <input type="file" id="prodImg3" accept="image/*">
+                
+                <button class="submit-upload-btn" onclick="uploadProductWithThreeImages()">পণ্য আপলোড করুন</button>
+            </div>
             
-            <label>পণ্যের দাম (টাকা):</label>
-            <input type="number" id="prodPrice" placeholder="দাম লিখুন">
-            
-            <label>১ম ছবি (মেইন):</label>
-            <input type="file" id="prodImg1" accept="image/*">
-            
-            <label>২য় ছবি:</label>
-            <input type="file" id="prodImg2" accept="image/*">
-            
-            <label>৩য় ছবি:</label>
-            <input type="file" id="prodImg3" accept="image/*">
-            
-            <button class="submit-upload-btn" onclick="uploadProductWithThreeImages()">পণ্য আপলোড করুন</button>
+            <button class="feature-btn" style="background: #d32f2f; margin-top: 20px;" onclick="lockAdminPanel()">লগআউট / বন্ধ করুন</button>
         </div>
     </div>
 
@@ -475,6 +493,25 @@
         let selectedPrice = "";
         let currentProductId = "";
 
+        // তোমার গোপন পিন এখানে সেট করে নাও (যেমন: 1234 এর জায়গায় তোমার পছন্দমতো যেকোনো সংখ্যা দিতে পারো)
+        const MY_SECRET_PIN = "1234"; 
+
+        function verifyAdminPin() {
+            let enteredPin = document.getElementById('adminPinInput').value;
+            if(enteredPin === MY_SECRET_PIN) {
+                document.getElementById('adminLockBox').style.display = 'none';
+                document.getElementById('adminPanelContent').style.display = 'block';
+                document.getElementById('adminPinInput').value = "";
+            } else {
+                alert("ভুল পিন দিয়েছেন! সঠিক পিন দিয়ে প্রবেশ করুন।");
+            }
+        }
+
+        function lockAdminPanel() {
+            document.getElementById('adminLockBox').style.display = 'block';
+            document.getElementById('adminPanelContent').style.display = 'none';
+        }
+
         function switchPage(pageId) {
             document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active-page'));
             document.querySelectorAll('.bottom-nav .nav-item').forEach(nav => nav.classList.remove('active'));
@@ -487,6 +524,11 @@
             window.scrollTo(0, 0);
 
             if(pageId === 'freeGiftsPage') updatePointsDisplay();
+            
+            // যদি কেউ অ্যাডমিন পেজে যায়, তবে পিন বক্স আবার লক করে দেবো (নিরাপত্তার জন্য)
+            if(pageId === 'adminPage') {
+                lockAdminPanel();
+            }
         }
 
         db.ref('banner').on('value', (snapshot) => {
@@ -808,7 +850,7 @@
         function submitOrder() {
             let cName = document.getElementById('customerName').value;
             let phone = document.getElementById('customerPhone').value;
-            let address = document.getElementById('customerAddress').value;
+            let address = document.getElementById('customerAddress চাই').value || document.getElementById('customerAddress').value;
 
             if(cName === "" || phone === "" || address === "") {
                 alert("সব তথ্য পূরণ করুন!");
