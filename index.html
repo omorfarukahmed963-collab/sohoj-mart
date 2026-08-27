@@ -169,7 +169,6 @@
         .cart-btn {
             background-color: #ff9800;
         }
-        /* ডিটেইলস পেজ ডিজাইন */
         .details-container {
             background: white;
             padding: 15px;
@@ -323,7 +322,7 @@
         </div>
     </div>
 
-    <!-- ================= 1. হোম পেজ ================= -->
+    <!-- 1. হোম পেজ -->
     <div id="homePage" class="page-section active-page">
         <div class="shortcut-row">
             <button onclick="switchPage('freeGiftsPage')" class="shortcut-item"><div>🎁</div>Free Gifts</button>
@@ -343,15 +342,13 @@
         </div>
     </div>
 
-    <!-- ================= প্রোডাক্ট ডিটেইলস পেজ (৩টি ছবি ও রিভিউ সহ) ================= -->
+    <!-- প্রোডাক্ট ডিটেইলস পেজ -->
     <div id="productDetailsPage" class="page-section">
         <div class="section-title" style="cursor:pointer; color:#f37a1f;" onclick="switchPage('homePage')">← হোম পেজে ফিরে যান</div>
-        <div class="details-container" id="detailsContent">
-            <!-- ডাইনামিক ডাটা লোড হবে -->
-        </div>
+        <div class="details-container" id="detailsContent"></div>
     </div>
 
-    <!-- ================= বাকি পেজসমূহ ================= -->
+    <!-- ফ্রি গিফট পেজ -->
     <div id="freeGiftsPage" class="page-section">
         <div class="section-title">🎁 ডেইলি ফ্রি গিফট ও পয়েন্ট জমান</div>
         <div class="feature-card">
@@ -362,6 +359,7 @@
         </div>
     </div>
 
+    <!-- ফ্ল্যাশ সেল পেজ -->
     <div id="flashSalePage" class="page-section">
         <div class="section-title">⚡ ফ্ল্যাশ সেল (বিশেষ ছাড়)</div>
         <div class="feature-card">
@@ -370,6 +368,7 @@
         </div>
     </div>
 
+    <!-- ভাউচার পেজ -->
     <div id="vouchersPage" class="page-section">
         <div class="section-title">🎟️ ডিসকাউন্ট ভাউচার</div>
         <div class="feature-card">
@@ -378,6 +377,7 @@
         </div>
     </div>
 
+    <!-- টপ-আপ পেজ -->
     <div id="topupPage" class="page-section">
         <div class="section-title">💳 মোবাইল টপ-আপ ও ব্যালেন্স</div>
         <div class="feature-card">
@@ -386,11 +386,13 @@
         </div>
     </div>
 
+    <!-- ক্যাটাগরি পেজ -->
     <div id="categoryPage" class="page-section">
         <div class="section-title">📂 সকল ক্যাটাগরি ও পণ্য</div>
         <div id="categoryProductContainer" class="product-grid"></div>
     </div>
 
+    <!-- কার্ট পেজ -->
     <div id="cartPage" class="page-section">
         <div class="section-title">🛒 আপনার কার্ট তালিকা</div>
         <div id="cartContainer" class="product-grid">
@@ -398,7 +400,7 @@
         </div>
     </div>
 
-    <!-- ================= অ্যাডমিন / আপলোড পেজ (৩টি ছবি ও পন্য আপলোড) ================= -->
+    <!-- অ্যাডমিন / আপলোড পেজ -->
     <div id="adminPage" class="page-section">
         <div class="section-title">🖼️ ব্যানার আপডেট করুন</div>
         <div class="admin-form">
@@ -427,6 +429,7 @@
         </div>
     </div>
 
+    <!-- অ্যাকাউন্ট পেজ -->
     <div id="accountPage" class="page-section">
         <div class="section-title">👤 অ্যাকাউন্ট ও যোগাযোগ</div>
         <div style="background: white; padding: 15px; border-radius: 8px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
@@ -452,6 +455,7 @@
         </div>
     </div>
 
+    <!-- নিচের নেভিগেশন বার -->
     <div class="bottom-nav">
         <button onclick="switchPage('homePage')" class="nav-item active" id="nav-homePage"><span>🏠</span>হোম</button>
         <button onclick="switchPage('categoryPage')" class="nav-item" id="nav-categoryPage"><span>📁</span>ক্যাটাগরি</button>
@@ -475,7 +479,9 @@
             document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active-page'));
             document.querySelectorAll('.bottom-nav .nav-item').forEach(nav => nav.classList.remove('active'));
             
-            document.getElementById(pageId).classList.add('active-page');
+            let targetPage = document.getElementById(pageId);
+            if(targetPage) targetPage.classList.add('active-page');
+            
             let navBtn = document.getElementById('nav-' + pageId);
             if(navBtn) navBtn.classList.add('active');
             window.scrollTo(0, 0);
@@ -497,8 +503,10 @@
         db.ref('products').on('value', (snapshot) => {
             const prodContainer = document.getElementById('productContainer');
             const catContainer = document.getElementById('categoryProductContainer');
+            if(!prodContainer) return;
+
             prodContainer.innerHTML = "";
-            catContainer.innerHTML = "";
+            if(catContainer) catContainer.innerHTML = "";
             allProducts = [];
             
             const data = snapshot.val();
@@ -510,12 +518,12 @@
                     
                     let cardHTML = createProductCard(product);
                     prodContainer.innerHTML += cardHTML;
-                    catContainer.innerHTML += cardHTML;
+                    if(catContainer) catContainer.innerHTML += cardHTML;
                 });
             } else {
                 let emptyMsg = "<p style='text-align:center; grid-column: span 2; color:#666;'>কোনো পণ্য পাওয়া যায়নি!</p>";
                 prodContainer.innerHTML = emptyMsg;
-                catContainer.innerHTML = emptyMsg;
+                if(catContainer) catContainer.innerHTML = emptyMsg;
             }
         });
 
@@ -537,10 +545,12 @@
             `;
         }
 
-        // পণ্যের ডিটেইলস পেজ ওপেন ও ৩টি ছবি দেখানোর লজিক
         function openProductDetails(prodId) {
             let product = allProducts.find(p => p.id === prodId);
-            if(!product) return;
+            if(!product) {
+                alert("পণ্যটি খুঁজে পাওয়া যায়নি!");
+                return;
+            }
 
             currentProductId = prodId;
             let img1 = product.img1 || product.image || "https://via.placeholder.com/150";
@@ -554,8 +564,8 @@
                     <img src="${img2}" class="thumb-img" onclick="changeMainImage('${img2}', this)">
                     <img src="${img3}" class="thumb-img" onclick="changeMainImage('${img3}', this)">
                 </div>
-                <h2>${product.name}</h2>
-                <div class="product-price" style="font-size:18px;">৳${product.price}</div>
+                <h2>${product.name || "পণ্য"}</h2>
+                <div class="product-price" style="font-size:18px;">৳${product.price || "0"}</div>
                 <button class="feature-btn" style="background:#25D366;" onclick="openOrderModal('${product.name}', '${product.price}')">হোয়াটসঅ্যাপে অর্ডার করুন</button>
                 
                 <hr style="margin:20px 0; border:0; border-top:1px solid #ddd;">
@@ -622,7 +632,6 @@
             });
         }
 
-        // ৩টি ছবিসহ পণ্য আপলোড লজিক
         function uploadProductWithThreeImages() {
             let name = document.getElementById('prodName').value;
             let price = document.getElementById('prodPrice').value;
@@ -647,7 +656,7 @@
                         img2: img2Data,
                         img3: img3Data
                     }, () => {
-                        alert("পণ্য সফলভাবে ৩টি ছবি সহ আপলোড হয়েছে!");
+                        alert("পণ্য সফলভাবে আপলোড হয়েছে!");
                         document.getElementById('prodName').value = "";
                         document.getElementById('prodPrice').value = "";
                         document.getElementById('prodImg1').value = "";
@@ -676,7 +685,6 @@
             });
         }
 
-        // রিভিউ সাবমিট ও ছবি সহ সেভ করা
         function submitReview() {
             let rName = document.getElementById('reviewName').value;
             let rText = document.getElementById('reviewText').value;
@@ -694,7 +702,7 @@
                     image: imgData,
                     date: new Date().toLocaleDateString()
                 }, () => {
-                    alert("আপনার রিভিউ সফলভাবে যোগ হয়েছে!");
+                    alert("রিভিউ যোগ হয়েছে!");
                     document.getElementById('reviewName').value = "";
                     document.getElementById('reviewText').value = "";
                     document.getElementById('reviewImgFile').value = "";
@@ -751,7 +759,7 @@
             let newPoints = getUserPoints() + 10;
             localStorage.setItem('sohoj_mart_points', newPoints);
             localStorage.setItem('last_claim_date', today);
-            alert("অভিনন্দন! ১০ পয়েন্ট যোগ হয়েছে। মোট পয়েন্ট: " + newPoints);
+            alert("অভিনন্দন! ১০ পয়েন্ট যোগ হয়েছে।");
             updatePointsDisplay();
         }
 
@@ -769,6 +777,7 @@
 
         function updateCartDisplay() {
             let cartContainer = document.getElementById('cartContainer');
+            if(!cartContainer) return;
             cartContainer.innerHTML = "";
             if(cartItems.length === 0) {
                 cartContainer.innerHTML = "<p style='text-align:center; grid-column: span 2; color:#666;'>কার্ট খালি রয়েছে!</p>";
@@ -797,11 +806,11 @@
         }
 
         function submitOrder() {
-            let name = document.getElementById('customerName').value;
+            let cName = document.getElementById('customerName').value;
             let phone = document.getElementById('customerPhone').value;
             let address = document.getElementById('customerAddress').value;
 
-            if(name === "" || phone === "" || address === "") {
+            if(cName === "" || phone === "" || address === "") {
                 alert("সব তথ্য পূরণ করুন!");
                 return;
             }
@@ -810,7 +819,7 @@
             let text = `*নতুন অর্ডার - Sohoj Mart*%0A` +
                        `📦 পণ্য: ${selectedProduct}%0A` +
                        `💰 দাম: ৳${selectedPrice}%0A%0A` +
-                       `👤 ক্রেতা: ${name}%0A` +
+                       `👤 ক্রেতা: ${cName}%0A` +
                        `📞 ফোন: ${phone}%0A` +
                        `🏠 ঠিকানা: ${address}`;
 
@@ -821,6 +830,7 @@
         function searchProducts() {
             let query = document.getElementById('searchInput').value.toLowerCase();
             const prodContainer = document.getElementById('productContainer');
+            if(!prodContainer) return;
             prodContainer.innerHTML = "";
             let filtered = allProducts.filter(p => p.name && p.name.toLowerCase().includes(query));
             if(filtered.length > 0) {
