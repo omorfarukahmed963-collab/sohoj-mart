@@ -3,125 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sohoj Mart - Your Favorite Store</title>
+    <title>Sohoj Mart</title>
     <!-- FontAwesome & Firebase SDK v8 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #f4f4f4; color: #333; }
+        body { background-color: #f4f4f4; color: #333; padding-bottom: 60px; }
 
         /* হেডার */
-        header { background: linear-gradient(135deg, #131921, #232f3e); color: white; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-        .logo { font-size: 22px; font-weight: bold; color: #ff9900; letter-spacing: 0.5px; }
-        .cart-badge { background: #ff9900; color: #131921; padding: 3px 8px; border-radius: 50%; font-size: 12px; font-weight: bold; }
+        header { background: #131921; color: white; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .logo { font-size: 20px; font-weight: bold; color: #ff9900; }
 
         .container { padding: 12px; max-width: 600px; margin: 0 auto; }
 
-        /* স্ট্যাটাস বক্স */
-        #status-msg { font-size: 12px; text-align: center; margin-bottom: 10px; font-weight: bold; padding: 5px; border-radius: 4px; }
+        /* সেকশন পেজ কন্ট্রোল */
+        .page-section { display: none; }
+        .page-section.active { display: block; }
 
-        /* অ্যাডমিন প্যানেল */
-        .admin-card { background: white; padding: 15px; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); border-top: 5px solid #ff9900; }
-        .admin-card h3 { font-size: 15px; color: #131921; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
-        .admin-card input, .admin-card button { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; outline: none; }
-        .admin-card input:focus { border-color: #ff9900; box-shadow: 0 0 5px rgba(255,153,0,0.3); }
-        .admin-card button { background: linear-gradient(to bottom, #ffd814, #f7ca00); border: 1px solid #fcd200; font-weight: bold; cursor: pointer; color: #111; transition: 0.2s; }
-        .admin-card button:hover { background: linear-gradient(to bottom, #f7ca00, #f2b801); }
+        /* ক্যাটাগরি আইকন রো (ব্যানারের উপরে বা নিচে ছোট আইকন) */
+        .category-row { display: flex; gap: 10px; overflow-x: auto; padding: 10px 0; margin-bottom: 15px; scrollbar-width: none; }
+        .category-row::-webkit-scrollbar { display: none; }
+        .cat-item { background: white; padding: 10px 14px; border-radius: 25px; text-align: center; font-size: 12px; font-weight: 600; white-space: nowrap; box-shadow: 0 2px 5px rgba(0,0,0,0.05); cursor: pointer; display: flex; align-items: center; gap: 6px; color: #333; border: 1px solid #ddd; }
+        .cat-item i { color: #ff9900; font-size: 14px; }
+        .cat-item:hover { background: #ff9900; color: white; border-color: #ff9900; }
+        .cat-item:hover i { color: white; }
 
-        /* ফ্ল্যাশ সেল ও কাউন্টডাউন ব্যানার (চোখ জুড়ানো ফিচার) */
-        .flash-sale-banner { background: linear-gradient(135deg, #ff416c, #ff4b2b); color: white; border-radius: 10px; padding: 15px; margin-bottom: 15px; text-align: center; box-shadow: 0 4px 12px rgba(255,65,108,0.3); position: relative; overflow: hidden; }
-        .flash-sale-banner h2 { font-size: 18px; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
-        .timer { font-size: 16px; font-weight: bold; background: rgba(0,0,0,0.2); display: inline-block; padding: 4px 12px; border-radius: 20px; margin-top: 6px; }
-
-        /* ব্যানার স্লাইডার বক্স */
-        .banner-box { margin-bottom: 20px; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); background: white; }
-        .banner-item { display: none; text-align: center; position: relative; }
+        /* ব্যানার স্লাইডার */
+        .banner-box { margin-bottom: 15px; border-radius: 10px; overflow: hidden; box-shadow: 0 3px 8px rgba(0,0,0,0.1); background: white; }
+        .banner-item { display: none; text-align: center; }
         .banner-item.active-slide { display: block; animation: fadeIn 0.8s; }
-        .banner-item img { width: 100%; height: 160px; object-fit: cover; }
-        .banner-item h4 { padding: 10px; font-size: 14px; background: white; color: #222; font-weight: bold; }
-
+        .banner-item img { width: 100%; height: 150px; object-fit: cover; }
+        .banner-item h4 { padding: 8px; font-size: 13px; background: white; color: #111; font-weight: bold; }
         @keyframes fadeIn { from { opacity: 0.4; } to { opacity: 1; } }
 
-        /* সেクション টাইটেল */
-        .section-title { font-size: 16px; margin-bottom: 12px; color: #111; font-weight: bold; display: flex; align-items: center; justify-content: space-between; border-left: 4px solid #ff9900; padding-left: 8px; }
+        /* পণ্য গ্রিড */
+        .section-title { font-size: 15px; margin-bottom: 10px; color: #111; font-weight: bold; border-left: 4px solid #ff9900; padding-left: 8px; }
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .card { background: white; padding: 10px; border-radius: 8px; text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,0.05); position: relative; }
+        .discount-badge { position: absolute; top: 8px; left: 8px; background: #e63946; color: white; font-size: 9px; font-weight: bold; padding: 2px 5px; border-radius: 3px; }
+        .card img { width: 100%; height: 120px; object-fit: contain; margin-bottom: 6px; }
+        .card h4 { font-size: 12px; margin-bottom: 4px; color: #222; height: 32px; overflow: hidden; }
+        .card p { color: #b12704; font-weight: bold; font-size: 14px; margin-bottom: 8px; }
+        .buy-btn { background: #ffa41c; border: none; width: 100%; padding: 6px; border-radius: 4px; font-weight: bold; font-size: 11px; cursor: pointer; }
 
-        /* পণ্য গ্রিড ডিজাইন (আকর্ষণীয় কার্ড) */
-        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-        .card { background: white; padding: 12px; border-radius: 10px; text-align: center; box-shadow: 0 3px 8px rgba(0,0,0,0.06); position: relative; transition: transform 0.2s; }
-        .card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        
-        /* ডিসকাউন্ট ব্যাজ */
-        .discount-badge { position: absolute; top: 10px; left: 10px; background: #e63946; color: white; font-size: 10px; font-weight: bold; padding: 3px 6px; border-radius: 4px; text-transform: uppercase; }
+        /* অ্যাডমিন প্যানেল কার্ড */
+        .admin-card { background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-top: 4px solid #ff9900; }
+        .admin-card h3 { font-size: 14px; color: #131921; margin-bottom: 10px; }
+        .admin-card input, .admin-card button { width: 100%; padding: 9px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; }
+        .admin-card button { background: #febd69; border: none; font-weight: bold; cursor: pointer; color: #131921; }
 
-        .card img { width: 100%; height: 130px; object-fit: contain; margin-bottom: 8px; }
-        .card h4 { font-size: 13px; margin-bottom: 6px; color: #222; font-weight: 600; height: 35px; overflow: hidden; }
-        .price-box { display: flex; justify-content: center; align-items: center; gap: 6px; margin-bottom: 8px; }
-        .card p { color: #b12704; font-weight: bold; font-size: 15px; }
-        .old-price { text-decoration: line-through; color: #888; font-size: 12px; }
-        
-        .buy-btn { background: #ffa41c; border: none; width: 100%; padding: 7px; border-radius: 4px; font-weight: bold; font-size: 12px; cursor: pointer; color: #111; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .buy-btn:hover { background: #fa8900; }
+        /* নিচের ফিক্সড নেভিগেশন বার */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 8px 0; box-shadow: 0 -2px 5px rgba(0,0,0,0.1); z-index: 1000; border-top: 1px solid #ddd; }
+        .nav-item { text-align: center; color: #555; font-size: 11px; cursor: pointer; flex: 1; }
+        .nav-item i { font-size: 18px; display: block; margin-bottom: 2px; }
+        .nav-item.active { color: #ff9900; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <header>
         <div class="logo"><i class="fa-solid fa-store"></i> Sohoj Mart</div>
-        <div>
-            <i class="fa-solid fa-cart-shopping" style="font-size: 18px;"></i>
-            <span class="cart-badge">0</span>
-        </div>
+        <div id="top-title" style="font-size: 14px; font-weight: bold;">হোম</div>
     </header>
 
     <div class="container">
 
-        <div id="status-msg"></div>
+        <!-- ১. হোম পেজ (সামনে শুধু ব্যানার, ক্যাটাগরি ও পণ্য) -->
+        <div id="sec-home" class="page-section active">
+            
+            <!-- ক্যাটাগরি আইকন রো (জুতা, শাড়ি ইত্যাদি) -->
+            <div class="category-row">
+                <div class="cat-item" onclick="filterCategory('all')"><i class="fa-solid fa-border-all"></i> সব</div>
+                <div class="cat-item" onclick="filterCategory('شাড়ি')"><i class="fa-solid fa-shirt"></i> শাড়ি</div>
+                <div class="cat-item" onclick="filterCategory('জুতা')"><i class="fa-solid fa-shoe-prints"></i> জুতা</div>
+                <div class="cat-item" onclick="filterCategory('পোশাক')"><i class="fa-solid fa-vest"></i> পোশাক</div>
+                <div class="cat-item" onclick="filterCategory('ইলেকট্রনিক্স')"><i class="fa-solid fa-laptop"></i> ইলেকট্রনিক্স</div>
+            </div>
 
-        <!-- ফ্ল্যাশ সেল কাউন্টডাউন ব্যানার (আকর্ষক করার জন্য) -->
-        <div class="flash-sale-banner">
-            <h2>🔥 মেগা ফ্ল্যাশ সেল চলছে! 🔥</h2>
-            <p style="font-size: 12px;">সীমিত সময়ের জন্য বিশেষ ডিসকাউন্ট</p>
-            <div class="timer" id="countdown">05 : ১২ : ৪৫ : ৩০</div>
+            <!-- ব্যানার স্লাইডার -->
+            <div id="banners" class="banner-box">
+                <p style="text-align:center; padding:15px; color:#666; font-size:12px;">ব্যানার লোড হচ্ছে...</p>
+            </div>
+
+            <!-- পণ্যসমূহ -->
+            <div class="section-title">পণ্যসমূহ</div>
+            <div id="products" class="grid">
+                <p style="grid-column: span 2; text-align:center; color:#666; font-size:12px; padding:20px;">পণ্য লোড হচ্ছে...</p>
+            </div>
         </div>
 
-        <!-- অ্যাডমিন প্যানেল -->
-        <div class="admin-card">
-            <h3><i class="fa-solid fa-circle-plus" style="color: #ff9900;"></i> নতুন পণ্য যোগ করুন</h3>
-            <input type="text" id="p-name" placeholder="পণ্যের নাম">
-            <input type="text" id="p-price" placeholder="বর্তমান দাম (টাকা)">
-            <input type="text" id="p-old-price" placeholder="পূর্বের দাম / কেটে দেওয়া দাম (যেমন: 500)">
-            <input type="file" id="p-img" accept="image/*">
-            <button onclick="saveProduct()">পণ্য লাইভ করুন</button>
+        <!-- ২. ক্যাটাগরি পেজ -->
+        <div id="sec-cat" class="page-section">
+            <div class="section-title">সব ক্যাটাগরি</div>
+            <div style="background: white; padding: 15px; border-radius: 8px; text-align: center;">
+                <p style="font-size: 13px; color: #555; margin-bottom: 10px;">উপরের হোমপেজ থেকে সরাসরি ক্যাটাগরি সিলেক্ট করতে পারবেন।</p>
+            </div>
         </div>
 
-        <div class="admin-card">
-            <h3><i class="fa-solid fa-image" style="color: #ff9900;"></i> নতুন ব্যানার যোগ করুন</h3>
-            <input type="text" id="b-title" placeholder="ব্যানারের আকর্ষণীয় শিরোনাম বা অফার">
-            <input type="file" id="b-img" accept="image/*">
-            <button onclick="saveBanner()">ব্যানার লাইভ করুন</button>
+        <!-- ৩. কার্ট পেজ -->
+        <div id="sec-cart" class="page-section">
+            <div class="section-title">আপনার শপিং কার্ট</div>
+            <div style="background: white; padding: 20px; border-radius: 8px; text-align: center; color: #666; font-size: 13px;">
+                আপনার কার্ট খালি আছে।
+            </div>
         </div>
 
-        <hr style="border: none; border-top: 1px dashed #ccc; margin: 20px 0;">
+        <!-- ৪. অ্যাডমিন প্যানেল পেজ (নিচে ক্লিক করলে আসবে) -->
+        <div id="sec-admin" class="page-section">
+            <div class="admin-card">
+                <h3>⚙️ নতুন পণ্য যোগ করুন</h3>
+                <input type="text" id="p-name" placeholder="পণ্যের নাম (যেমন: সুন্দর শাড়ি বা জুতা)">
+                <input type="text" id="p-category" placeholder="ক্যাটাগরি (শাড়ি / জুতা / পোশাক ইত্যাদি)">
+                <input type="text" id="p-price" placeholder="দাম (টাকা)">
+                <input type="file" id="p-img" accept="image/*">
+                <button onclick="saveProduct()">পণ্য সেভ করুন</button>
+            </div>
 
-        <!-- স্লাইডার ব্যানার ডিসপ্লে -->
-        <div class="section-title"><span>সুপার অফার ও ব্যানার</span></div>
-        <div id="banners" class="banner-box">
-            <p style="text-align:center; padding:20px; color:#666; font-size:13px;">ব্যানার লোড হচ্ছে...</p>
-        </div>
-
-        <!-- পণ্যসমূহ ডিসপ্লে -->
-        <div class="section-title" style="margin-top: 20px;"><span>আমাদের ট্রেন্ডিং পণ্যসমূহ</span></div>
-        <div id="products" class="grid">
-            <p style="grid-column: span 2; text-align:center; color:#666; font-size:13px; padding:20px;">পণ্য লোড হচ্ছে...</p>
+            <div class="admin-card">
+                <h3>⚙️ নতুন ব্যানার যোগ করুন</h3>
+                <input type="text" id="b-title" placeholder="ব্যানার শিরোনাম">
+                <input type="file" id="b-img" accept="image/*">
+                <button onclick="saveBanner()">ব্যানার সেভ করুন</button>
+            </div>
         </div>
 
     </div>
 
-    <script>
-        const statusBox = document.getElementById('status-msg');
+    <!-- একদম নিচে ফিক্সড নেভিগেশন বার -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('home', this)"><i class="fa-solid fa-house"></i>হোম</div>
+        <div class="nav-item" onclick="switchTab('cat', this)"><i class="fa-solid fa-list"></i>ক্যাটাগরি</div>
+        <div class="nav-item" onclick="switchTab('cart', this)"><i class="fa-solid fa-cart-shopping"></i>কার্ট</div>
+        <div class="nav-item" onclick="switchTab('admin', this)"><i class="fa-solid fa-user-gear"></i>অ্যাডমিন</div>
+    </div>
 
+    <script>
         // ফায়ারবেজ কনফিগারেশন
         const firebaseConfig = {
             apiKey: "AIzaSyA9nOum8jHw3iztHF82KRyYpSRqhiFfwHg",
@@ -133,18 +151,31 @@
             appId: "1:1057254534445:web:450ba46a33980fae1db7a4",
             measurementId: "G-XBSCHB8MVW"
         };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
 
-        try {
-            firebase.initializeApp(firebaseConfig);
-            window.db = firebase.database();
-            statusBox.style.color = "green";
-            statusBox.innerText = "✨ সিস্টেম পুরোপুরি সচল আছে!";
-        } catch (err) {
-            statusBox.style.color = "red";
-            statusBox.innerText = "কানেকশন এরর: " + err.message;
+        // ট্যাব পরিবর্তনের ফাংশন
+        function switchTab(tabId, element) {
+            document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+
+            if(tabId === 'home') {
+                document.getElementById('sec-home').classList.add('active');
+                document.getElementById('top-title').innerText = "হোম";
+            } else if(tabId === 'cat') {
+                document.getElementById('sec-cat').classList.add('active');
+                document.getElementById('top-title').innerText = "ক্যাটাগরি";
+            } else if(tabId === 'cart') {
+                document.getElementById('sec-cart').classList.add('active');
+                document.getElementById('top-title').innerText = "কার্ট";
+            } else if(tabId === 'admin') {
+                document.getElementById('sec-admin').classList.add('active');
+                document.getElementById('top-title').innerText = "অ্যাডমিন প্যানেল";
+            }
+            element.classList.add('active');
         }
 
-        // ছবি কমপ্রেস ও অপ্টিমাইজ করার ফাংশন
+        // ছবি ছোট করার ফাংশন
         function compressAndUpload(file, callback) {
             const reader = new FileReader();
             reader.readAsDataURL(file);
@@ -158,7 +189,7 @@
                     canvas.height = (img.height * MAX_WIDTH) / img.width;
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    callback(canvas.toDataURL('image/jpeg', 0.65));
+                    callback(canvas.toDataURL('image/jpeg', 0.6));
                 }
             }
         }
@@ -166,30 +197,26 @@
         // পণ্য সেভ করা
         window.saveProduct = function() {
             const name = document.getElementById('p-name').value;
+            const category = document.getElementById('p-category').value || "General";
             const price = document.getElementById('p-price').value;
-            const oldPrice = document.getElementById('p-old-price').value || "";
             const fileInput = document.getElementById('p-img');
 
             if(!name || !price || fileInput.files.length === 0) {
-                alert("দয়া করে পণ্যের নাম, দাম এবং ছবি দিন!");
+                alert("দয়া করে নাম, দাম এবং ছবি দিন!");
                 return;
             }
 
-            statusBox.style.color = "orange";
-            statusBox.innerText = "পণ্য আপলোড হচ্ছে...";
-
             compressAndUpload(fileInput.files[0], function(imgUrl) {
-                db.ref('products').push({ name, price, oldPrice, image: imgUrl }, (error) => {
+                db.ref('products').push({ name, category, price, image: imgUrl }, (error) => {
                     if (error) {
-                        statusBox.style.color = "red";
-                        statusBox.innerText = "সেভ হয়নি: " + error.message;
+                        alert("সেভ হয়নি: " + error.message);
                     } else {
-                        statusBox.style.color = "green";
-                        statusBox.innerText = "🎉 পণ্য সফলভাবে যোগ হয়েছে!";
+                        alert("পণ্য সফলভাবে যোগ হয়েছে!");
                         document.getElementById('p-name').value = '';
+                        document.getElementById('p-category').value = '';
                         document.getElementById('p-price').value = '';
-                        document.getElementById('p-old-price').value = '';
                         fileInput.value = '';
+                        switchTab('home', document.querySelectorAll('.nav-item')[0]);
                     }
                 });
             });
@@ -201,29 +228,25 @@
             const fileInput = document.getElementById('b-img');
 
             if(!title || fileInput.files.length === 0) {
-                alert("দয়া করে ব্যানারের শিরোনাম এবং ছবি দিন!");
+                alert("শিরোনাম এবং ব্যানার ছবি দিন!");
                 return;
             }
-
-            statusBox.style.color = "orange";
-            statusBox.innerText = "ব্যানার আপলোড হচ্ছে...";
 
             compressAndUpload(fileInput.files[0], function(imgUrl) {
                 db.ref('banners').push({ title, image: imgUrl }, (error) => {
                     if (error) {
-                        statusBox.style.color = "red";
-                        statusBox.innerText = "ব্যানার সেভ হয়নি: " + error.message;
+                        alert("সেভ হয়নি: " + error.message);
                     } else {
-                        statusBox.style.color = "green";
-                        statusBox.innerText = "🎉 ব্যানার সফলভাবে যোগ হয়েছে!";
+                        alert("ব্যানার সফলভাবে যোগ হয়েছে!");
                         document.getElementById('b-title').value = '';
                         fileInput.value = '';
+                        switchTab('home', document.querySelectorAll('.nav-item')[0]);
                     }
                 });
             });
         }
 
-        // ব্যানার স্লাইডার অটোমেটিক ঘোরানোর ফাংশন
+        // ব্যানার স্লাইডার
         let slideIndex = 0;
         function showSlides() {
             let slides = document.getElementsByClassName("banner-item");
@@ -235,7 +258,7 @@
                 if (slideIndex > slides.length) { slideIndex = 1; }
                 slides[slideIndex - 1].classList.add("active-slide");
             }
-            setTimeout(showSlides, 3500); // প্রতি ৩.৫ সেকেন্ড পর পর ছবি বদলাবে
+            setTimeout(showSlides, 3500);
         }
 
         // রিয়েল-টাইমে ব্যানার লোড
@@ -258,31 +281,50 @@
             }
         });
 
-        // রিয়েল-টাইমে পণ্য লোড (ডিসকাউন্ট ট্যাগ সহ)
+        // পণ্য লোড ও ফিল্টার করার গ্লোবাল ভ্যারিয়েবল
+        let allProductsData = {};
+
         db.ref('products').on('value', (snapshot) => {
+            allProductsData = snapshot.val() || {};
+            renderProducts(allProductsData);
+        });
+
+        function renderProducts(data) {
             const grid = document.getElementById('products');
             grid.innerHTML = '';
-            const data = snapshot.val();
-            if(data) {
+            if(data && Object.keys(data).length > 0) {
                 Object.values(data).forEach(p => {
-                    let oldPriceHTML = p.oldPrice ? `<span class="old-price">৳${p.oldPrice}</span>` : '';
                     grid.innerHTML += `
                         <div class="card">
-                            <span class="discount-badge">Hot Deal</span>
+                            <span class="discount-badge">${p.category}</span>
                             <img src="${p.image}">
                             <h4>${p.name}</h4>
-                            <div class="price-box">
-                                <p>৳${p.price}</p>
-                                ${oldPriceHTML}
-                            </div>
-                            <button class="buy-btn" onclick="alert('অর্ডার করতে ধন্যবাদ! খুব শীঘ্রই আপনার সাথে যোগাযোগ করা হবে।')">অর্ডার করুন</button>
+                            <p>৳${p.price}</p>
+                            <button class="buy-btn" onclick="alert('অর্ডার সম্পন্ন হয়েছে!')">অর্ডার করুন</button>
                         </div>
                     `;
                 });
             } else {
                 grid.innerHTML = '<p style="grid-column: span 2; font-size:12px; color:#666; text-align:center; padding:15px;">কোনো পণ্য পাওয়া যায়নি</p>';
             }
-        });
+        }
+
+        // ক্যাটাগরি ফিল্টার করা
+        window.filterCategory = function(catName) {
+            if(catName === 'all') {
+                renderProducts(allProductsData);
+                return;
+            }
+            let filtered = {};
+            if(allProductsData) {
+                Object.keys(allProductsData).forEach(key => {
+                    if(allProductsData[key].category && allProductsData[key].category.toLowerCase().includes(catName.toLowerCase())) {
+                        filtered[key] = allProductsData[key];
+                    }
+                });
+            }
+            renderProducts(filtered);
+        }
     </script>
 </body>
 </html>
