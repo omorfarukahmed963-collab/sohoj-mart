@@ -12,41 +12,97 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f9f9f9;
+            background-color: #f4f4f4;
+            padding-bottom: 60px;
         }
-        /* নড়াচড়া করা ব্যানার স্টাইল */
-        .moving-banner {
+        .moving-notice {
             background-color: #ff9800;
-            color: #fff;
-            padding: 10px;
+            color: white;
+            padding: 6px 10px;
+            font-size: 13px;
             font-weight: bold;
-            font-size: 15px;
             white-space: nowrap;
         }
-        header {
-            background-color: #232f3e;
+        .app-header {
+            background-color: #f37a1f;
+            padding: 10px 15px;
             color: white;
-            padding: 15px;
-            text-align: center;
-            font-size: 20px;
+        }
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 18px;
             font-weight: bold;
+            margin-bottom: 8px;
         }
-        .container {
-            padding: 10px;
-            max-width: 1200px;
-            margin: auto;
+        .search-box {
+            display: flex;
+            background: white;
+            border-radius: 4px;
+            padding: 6px 10px;
+            align-items: center;
         }
-        /* প্রোডাক্ট গ্রিড ডিজাইন */
+        .search-box input {
+            border: none;
+            outline: none;
+            width: 100%;
+            font-size: 14px;
+            margin-left: 5px;
+        }
+        .shortcut-row {
+            display: flex;
+            justify-content: space-between;
+            background: white;
+            padding: 10px 5px;
+            margin: 10px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+        .shortcut-item {
+            text-align: center;
+            font-size: 11px;
+            color: #333;
+            min-width: 60px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .shortcut-item div {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 8px;
+            margin-bottom: 4px;
+            font-size: 16px;
+        }
+        .banner-container {
+            margin: 10px;
+            background: #e0e0e0;
+            height: 140px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-weight: bold;
+            overflow: hidden;
+        }
+        .banner-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .section-title {
+            margin: 15px 10px 10px 10px;
+            font-size: 15px;
+            font-weight: bold;
+            color: #222;
+        }
         .product-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 10px;
-            margin-top: 15px;
-        }
-        @media(min-width: 768px) {
-            .product-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
+            padding: 0 10px;
         }
         .product-card {
             background: #fff;
@@ -57,102 +113,265 @@
         }
         .product-card img {
             width: 100%;
-            height: 140px;
+            height: 130px;
             object-fit: cover;
             border-radius: 5px;
         }
         .product-title {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: bold;
-            margin: 8px 0 4px 0;
+            margin: 6px 0 3px 0;
             color: #333;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .product-price {
-            color: #b12704;
+            color: #d32f2f;
             font-weight: bold;
             font-size: 14px;
             margin-bottom: 8px;
         }
-        /* হোয়াটসঅ্যাপ অর্ডার বাটন */
         .whatsapp-btn {
             background-color: #25D366;
             color: white;
             border: none;
-            padding: 8px 10px;
+            padding: 7px 5px;
             width: 100%;
             border-radius: 4px;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: bold;
             cursor: pointer;
             text-decoration: none;
             display: inline-block;
             box-sizing: border-box;
         }
+        /* অর্ডার পপ-আপ মোডাল ডিজাইন */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: white;
+            padding: 20px;
+            width: 85%;
+            max-width: 350px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .modal-content h3 { margin-top: 0; color: #333; font-size: 16px; }
+        .modal-content input, .modal-content textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 6px 0 12px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .modal-btn {
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-modal {
+            background: #ccc;
+            color: #333;
+            margin-top: 5px;
+        }
+        .bottom-nav {
+            position: fixed;
+            bottom: 0; left: 0; width: 100%;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+        .nav-item {
+            text-align: center;
+            font-size: 11px;
+            color: #666;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .nav-item.active { color: #f37a1f; font-weight: bold; }
+        .nav-item span { display: block; font-size: 18px; }
     </style>
 </head>
 <body>
 
     <!-- ওপরের নড়াচড়া করা ব্যানার -->
-    <div class="moving-banner">
+    <div class="moving-notice">
         <marquee behavior="scroll" direction="left">
-            🎉 Sohoj Mart-এ স্বাগতম! যেকোনো পণ্য পছন্দ করে সরাসরি হোয়াটসঅ্যাপে অর্ডার করুন। হটলাইন: 01837197656
+            🎉 Sohoj Mart-এ স্বাগতম! যেকোনো পণ্য পছন্দ করে সরাসরি হোয়াটসঅ্যাপে অর্ডার করুন। হটлайн: 01837197656
         </marquee>
     </div>
 
-    <header>Sohoj Mart</header>
-
-    <div class="container">
-        <h3>আমাদের পণ্যসমূহ</h3>
-        <div id="productContainer" class="product-grid">
-            <!-- ফায়ারবেজ থেকে পণ্যগুলো এখানে শো করবে -->
-            <p style="text-align:center; grid-column: span 2;">লোড হচ্ছে...</p>
+    <!-- মূল হেডার -->
+    <div class="app-header">
+        <div class="header-top">
+            <span>Sohoj Mart</span>
+            <div>🛒 ⭐</div>
+        </div>
+        <div class="search-box">
+            <span>🔍</span>
+            <input type="text" id="searchInput" placeholder="Sohoj Mart এ সার্চ করুন..." onkeyup="searchProducts()">
         </div>
     </div>
 
+    <!-- শর্টকাট আইকন রো -->
+    <div class="shortcut-row">
+        <a href="#" class="shortcut-item"><div>🎁</div>Free Gifts</a>
+        <a href="#" class="shortcut-item"><div>⚡</div>Flash Sale</a>
+        <a href="#" class="shortcut-item"><div>🎟️</div>Vouchers</a>
+        <a href="#" class="shortcut-item"><div>💳</div>Top-Up</a>
+        <a href="admin.html" class="shortcut-item"><div>⚙️</div>Admin Add</a>
+    </div>
+
+    <!-- ব্যানার স্লাইডার -->
+    <div class="banner-container" id="bannerArea">
+        📢 ব্যানার স্লাইডার এখানে শো করবে
+    </div>
+
+    <div class="section-title">🔥 Just For You (আপনার লাইভ পণ্য ও অ্যাড)</div>
+
+    <!-- প্রোডাক্ট গ্রিড -->
+    <div id="productContainer" class="product-grid">
+        <p style="text-align:center; grid-column: span 2; color:#666;">লোড হচ্ছে...</p>
+    </div>
+
+    <!-- অর্ডার ফর্ম পপ-আপ মোডাল -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <h3>হোয়াটসঅ্যাপে অর্ডার কনফার্ম করুন</h3>
+            <p id="modalProductName" style="font-size: 13px; color: #d32f2f; font-weight: bold;"></p>
+            
+            <label>আপনার নাম:</label>
+            <input type="text" id="customerName" placeholder="আপনার নাম লিখুন">
+            
+            <label>আপনার মোবাইল নম্বর:</label>
+            <input type="text" id="customerPhone" placeholder="আপনার ফোন নম্বর লিখুন">
+            
+            <label>আপনার ঠিকানা:</label>
+            <textarea id="customerAddress" rows="2" placeholder="গ্রাম, থানা, জেলা"></textarea>
+            
+            <button class="modal-btn" onclick="submitOrder()">অর্ডার পাঠান (WhatsApp)</button>
+            <button class="modal-btn close-modal" onclick="closeModal()">বাতিল</button>
+        </div>
+    </div>
+
+    <!-- নিচের ফিক্সড নেভিগেশন বার -->
+    <div class="bottom-nav">
+        <a href="index.html" class="nav-item active"><span>🏠</span>হোম</a>
+        <a href="category.html" class="nav-item"><span>📁</span>ক্যাটাগরি</a>
+        <a href="cart.html" class="nav-item"><span>🛒</span>কার্ট (0)</a>
+        <a href="admin.html" class="nav-item"><span>➕</span>আপলোড</a>
+        <a href="account.html" class="nav-item"><span>👤</span>অ্যাকাউন্ট</a>
+    </div>
+
     <script>
-        // আপনার ফায়ারবেজ কনফিগারেশন
         const firebaseConfig = {
             databaseURL: "https://sohoj-mart-default-rtdb.firebaseio.com/"
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // ফায়ারবেজ থেকে ডাটা এনে প্রোডাক্ট শো করানো এবং হোয়াটসঅ্যাপ অর্ডার লিংক যুক্ত করা
         const productContainer = document.getElementById('productContainer');
+        let allProducts = [];
+        let selectedProduct = "";
+        let selectedPrice = "";
 
         db.ref('products').on('value', (snapshot) => {
             productContainer.innerHTML = "";
+            allProducts = [];
             const data = snapshot.val();
+            
             if (data) {
                 Object.keys(data).forEach((key) => {
                     let product = data[key];
-                    let pName = product.name || "পণ্য";
-                    let pPrice = product.price || "0";
-                    let pImg = product.image || "https://via.placeholder.com/150";
-
-                    let card = document.createElement('div');
-                    card.className = "product-card";
-                    card.innerHTML = `
-                        <img src="${pImg}" alt="${pName}">
-                        <div class="product-title">${pName}</div>
-                        <div class="product-price">৳${pPrice}</div>
-                        <a href="javascript:void(0);" class="whatsapp-btn" onclick="sendOrder('${pName}', '${pPrice}')">
-                            💬 হোয়াটসঅ্যাপে অর্ডার
-                        </a>
-                    `;
-                    productContainer.appendChild(card);
+                    allProducts.push(product);
+                    renderProduct(product);
                 });
             } else {
-                productContainer.innerHTML = "<p style='text-align:center; grid-column: span 2;'>কোনো পণ্য পাওয়া যায়নি!</p>";
+                productContainer.innerHTML = "<p style='text-align:center; grid-column: span 2; color:#666;'>কোনো পণ্য পাওয়া যায়নি!</p>";
             }
         });
 
-        // হোয়াটসঅ্যাপে অর্ডার পাঠানোর ফাংশন
-        function sendOrder(name, price) {
-            let phone = "8801837197656"; // আপনার হোয়াটসঅ্যাপ নম্বর
-            let text = `হ্যালো, আমি এই পণ্যটি অর্ডার করতে চাই:%0A📦 নাম: ${name}%0A💰 দাম: ৳${price}%0A%0Aদя করে আমার নাম ও ঠিকানা নিশ্চিত করুন।`;
-            let url = `https://wa.me/${phone}?text=${text}`;
+        function renderProduct(product) {
+            let pName = product.name || "পণ্য";
+            let pPrice = product.price || "0";
+            let pImg = product.image || "https://via.placeholder.com/150";
+
+            let card = document.createElement('div');
+            card.className = "product-card";
+            card.innerHTML = `
+                <img src="${pImg}" alt="${pName}">
+                <div class="product-title" title="${pName}">${pName}</div>
+                <div class="product-price">৳${pPrice}</div>
+                <a href="javascript:void(0);" class="whatsapp-btn" onclick="openOrderModal('${pName}', '${pPrice}')">
+                    💬 হোয়াটসঅ্যাপ অর্ডার
+                </a>
+            `;
+            productContainer.appendChild(card);
+        }
+
+        // মোডাল ওপেন করা
+        function openOrderModal(name, price) {
+            selectedProduct = name;
+            selectedPrice = price;
+            document.getElementById('modalProductName').innerText = `পণ্য: ${name} (৳${price})`;
+            document.getElementById('orderModal').style.display = 'flex';
+        }
+
+        // মোডাল বন্ধ করা
+        function closeModal() {
+            document.getElementById('orderModal').style.display = 'none';
+        }
+
+        // হোয়াটসঅ্যাপে নাম-ঠিকানাসহ অর্ডার সাবমিট করা
+        function submitOrder() {
+            let name = document.getElementById('customerName').value;
+            let phone = document.getElementById('customerPhone').value;
+            let address = document.getElementById('customerAddress').value;
+
+            if(name === "" || phone === "" || address === "") {
+                alert("দয়া করে নাম, ফোন নম্বর এবং ঠিকানা সঠিকভাবে পূরণ করুন!");
+                return;
+            }
+
+            let adminPhone = "8801837197656"; // আপনার হোয়াটসঅ্যাপ নম্বর
+            let text = `*নতুন অর্ডার - Sohoj Mart*%0A` +
+                       `📦 পণ্য: ${selectedProduct}%0A` +
+                       `💰 দাম: ৳${selectedPrice}%0A%0A` +
+                       `👤 ক্রেতার নাম: ${name}%0A` +
+                       `📞 ফোন: ${phone}%0A` +
+                       `🏠 ঠিকানা: ${address}`;
+
+            let url = `https://wa.me/${adminPhone}?text=${text}`;
             window.open(url, '_blank');
+            closeModal();
+        }
+
+        function searchProducts() {
+            let query = document.getElementById('searchInput').value.toLowerCase();
+            productContainer.innerHTML = "";
+            let filtered = allProducts.filter(p => p.name && p.name.toLowerCase().includes(query));
+            if(filtered.length > 0) {
+                filtered.forEach(p => renderProduct(p));
+            } else {
+                productContainer.innerHTML = "<p style='text-align:center; grid-column: span 2; color:#666;'>কোনো পণ্য পাওয়া যায়নি!</p>";
+            }
         }
     </script>
 
