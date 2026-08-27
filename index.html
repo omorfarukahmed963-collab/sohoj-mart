@@ -13,7 +13,7 @@
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
-            padding-bottom: 70px;
+            padding-bottom: 75px;
         }
         /* নড়াচড়া করা ব্যানার */
         .moving-notice {
@@ -86,10 +86,11 @@
             margin-bottom: 4px;
             font-size: 16px;
         }
-        /* ব্যানার স্লাইডার */
+        /* ব্যানার স্লাইডার - সঠিক রেজুলেশন ফিট */
         .banner-container {
             background: #e0e0e0;
-            height: 140px;
+            width: 100%;
+            height: 160px;
             border-radius: 8px;
             display: flex;
             align-items: center;
@@ -102,7 +103,7 @@
         .banner-container img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: cover; /* অ্যাপের মাপে সুন্দরভাবে ফিট হবে */
             border-radius: 8px;
         }
         .section-title {
@@ -126,8 +127,8 @@
         }
         .product-card img {
             width: 100%;
-            height: 120px;
-            object-fit: cover;
+            height: 130px;
+            object-fit: cover; /* ছবির রেজুলেশন ঠিক রেখে অ্যাপের মাপে দেখাবে */
             border-radius: 5px;
         }
         .product-title {
@@ -231,29 +232,30 @@
             color: #333;
             margin-top: 5px;
         }
-        /* নিচের ফিক্সড নেভিগেশন বার */
+        /* নিচের ফিক্সড নেভিগেশন বার - ভাঙার সমস্যা স্থায়ীভাবে সমাধান */
         .bottom-nav {
             position: fixed;
             bottom: 0; left: 0; width: 100%;
             background: white;
             display: flex;
             justify-content: space-around;
-            padding: 8px 0;
+            padding: 8px 2px;
             box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
             z-index: 1000;
         }
         .nav-item {
             text-align: center;
-            font-size: 11px;
+            font-size: 10px;
             color: #666;
             text-decoration: none;
             cursor: pointer;
             background: none;
             border: none;
-            white-space: nowrap; /* যাতে এক লাইনে থাকে */
+            white-space: nowrap;
+            flex: 1;
         }
         .nav-item.active { color: #f37a1f; font-weight: bold; }
-        .nav-item span { display: block; font-size: 18px; }
+        .nav-item span { display: block; font-size: 16px; }
     </style>
 </head>
 <body>
@@ -317,15 +319,16 @@
 
     <!-- ================= 4. আপলোড / অ্যাডমিন পেজ ================= -->
     <div id="adminPage" class="page-section">
-        <!-- নতুন ব্যানার আপলোড ফর্ম -->
-        <div class="section-title">🖼️ নতুন ব্যানার যোগ করুন</div>
+        <!-- গ্যালারি থেকে ব্যানার আপলোড -->
+        <div class="section-title">🖼️ গ্যালারি থেকে ব্যানার যোগ করুন</div>
         <div class="admin-form">
-            <label>ব্যনার ছবির লিংক (Image URL):</label>
-            <input type="text" id="bannerImgUrl" placeholder="ব্যানারের ডিরেক্ট লিংক দিন">
-            <button class="submit-upload-btn" onclick="uploadBanner()">ব্যানার আপডেট করুন</button>
+            <label>ব্যানার ছবি সিলেক্ট করুন (গ্যালারি):</label>
+            <input type="file" id="bannerImageFile" accept="image/*">
+            <button class="submit-upload-btn" onclick="uploadBannerFile()">ব্যানার আপডেট করুন</button>
         </div>
 
-        <div class="section-title">➕ নতুন পণ্য আপলোড করুন</div>
+        <!-- গ্যালারি থেকে পণ্য আপলোড -->
+        <div class="section-title">➕ গ্যালারি থেকে পণ্য আপলোড করুন</div>
         <div class="admin-form">
             <label>পণ্যের নাম:</label>
             <input type="text" id="prodName" placeholder="পণ্যের নাম লিখুন">
@@ -333,10 +336,10 @@
             <label>পণ্যের দাম (টাকা):</label>
             <input type="number" id="prodPrice" placeholder="যেমন: 500">
             
-            <label>ছবির লিংক (Image URL):</label>
-            <input type="text" id="prodImage" placeholder="ছবির ডিরেক্ট লিংক দিন">
+            <label>পণ্যের ছবি সিলেক্ট করুন (গ্যালারি):</label>
+            <input type="file" id="prodImageFile" accept="image/*">
             
-            <button class="submit-upload-btn" onclick="uploadProduct()">পণ্য সেভ করুন</button>
+            <button class="submit-upload-btn" onclick="uploadProductFile()">পণ্য সেভ করুন</button>
         </div>
     </div>
 
@@ -402,7 +405,6 @@
         let selectedProduct = "";
         let selectedPrice = "";
 
-        // পেজ পরিবর্তন করার ফাংশন (SPA)
         function switchPage(pageId) {
             document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active-page'));
             document.querySelectorAll('.bottom-nav .nav-item').forEach(nav => nav.classList.remove('active'));
@@ -466,49 +468,89 @@
             `;
         }
 
-        // ব্যানার আপলোড ফাংশন
-        function uploadBanner() {
-            let bannerUrl = document.getElementById('bannerImgUrl').value;
-            if(bannerUrl === "") {
-                alert("দয়া করে ব্যানারের ছবির লিংক দিন!");
+        // ছবিকে রিসাইজ করে সঠিক রেজুলেশনে রূপান্তর করার ফাংশন (Canvas ব্যবহার করে)
+        function resizeImage(file, maxWidth, maxHeight, callback) {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                const img = new Image();
+                img.onload = function () {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height) {
+                        if (width > maxWidth) {
+                            height *= maxWidth / width;
+                            width = maxWidth;
+                        }
+                    } else {
+                        if (height > maxHeight) {
+                            width *= maxHeight / height;
+                            height = maxHeight;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    // কম্প্রেসড ইমেজ ডেটা আউটপুট (JPEG format)
+                    callback(canvas.toDataURL('image/jpeg', 0.8));
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // গ্যালারি থেকে ব্যানার আপলোড
+        function uploadBannerFile() {
+            const fileInput = document.getElementById('bannerImageFile');
+            if (fileInput.files.length === 0) {
+                alert("দয়া করে গ্যালারি থেকে একটি ব্যানার ছবি সিলেক্ট করুন!");
                 return;
             }
-            db.ref('banner').set(bannerUrl, (error) => {
-                if (error) {
-                    alert("ব্যানার সেভ করতে সমস্যা হয়েছে!");
-                } else {
-                    alert("ব্যানার সফলভাবে আপডেট হয়েছে!");
-                    document.getElementById('bannerImgUrl').value = "";
-                    switchPage('homePage');
-                }
+
+            resizeImage(fileInput.files[0], 800, 400, function(encodedImg) {
+                db.ref('banner').set(encodedImg, (error) => {
+                    if (error) {
+                        alert("ব্যানার সেভ করতে সমস্যা হয়েছে!");
+                    } else {
+                        alert("ব্যানার সফলভাবে আপডেট হয়েছে!");
+                        fileInput.value = "";
+                        switchPage('homePage');
+                    }
+                });
             });
         }
 
-        // পণ্য আপলোড ফাংশন
-        function uploadProduct() {
+        // গ্যালারি থেকে পণ্য আপলোড
+        function uploadProductFile() {
             let name = document.getElementById('prodName').value;
             let price = document.getElementById('prodPrice').value;
-            let image = document.getElementById('prodImage').value;
+            const fileInput = document.getElementById('prodImageFile');
 
-            if(name === "" || price === "" || image === "") {
-                alert("দয়া করে সব তথ্য পূরণ করুন!");
+            if (name === "" || price === "" || fileInput.files.length === 0) {
+                alert("দয়া করে পণ্যের নাম, দাম এবং গ্যালারি থেকে ছবি সিলেক্ট করুন!");
                 return;
             }
 
-            db.ref('products').push({
-                name: name,
-                price: price,
-                image: image
-            }, (error) => {
-                if (error) {
-                    alert("ডাটা সেভ করতে সমস্যা হয়েছে!");
-                } else {
-                    alert("পণ্য সফলভাবে আপলোড হয়েছে!");
-                    document.getElementById('prodName').value = "";
-                    document.getElementById('prodPrice').value = "";
-                    document.getElementById('prodImage').value = "";
-                    switchPage('homePage');
-                }
+            resizeImage(fileInput.files[0], 500, 500, function(encodedImg) {
+                db.ref('products').push({
+                    name: name,
+                    price: price,
+                    image: encodedImg
+                }, (error) => {
+                    if (error) {
+                        alert("ডাটা সেভ করতে সমস্যা হয়েছে!");
+                    } else {
+                        alert("পণ্য সফলভাবে আপলোড হয়েছে!");
+                        document.getElementById('prodName').value = "";
+                        document.getElementById('prodPrice').value = "";
+                        fileInput.value = "";
+                        switchPage('homePage');
+                    }
+                });
             });
         }
 
