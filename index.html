@@ -99,6 +99,12 @@
             margin-bottom: 15px;
             overflow: hidden;
         }
+        .banner-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
         .section-title {
             margin: 10px 0;
             font-size: 15px;
@@ -164,6 +170,7 @@
             padding: 15px;
             border-radius: 8px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
         }
         .admin-form input {
             width: 100%;
@@ -243,6 +250,7 @@
             cursor: pointer;
             background: none;
             border: none;
+            white-space: nowrap; /* যাতে এক লাইনে থাকে */
         }
         .nav-item.active { color: #f37a1f; font-weight: bold; }
         .nav-item span { display: block; font-size: 18px; }
@@ -280,7 +288,11 @@
             <a onclick="switchPage('adminPage')" class="shortcut-item"><div>⚙️</div>Admin Add</a>
         </div>
 
-        <div class="banner-container">📢 ব্যানার স্লাইডার এরিয়া</div>
+        <!-- ব্যানার স্লাইডার -->
+        <div class="banner-container" id="homeBannerDisplay">
+            📢 ব্যানার স্লাইডার এখানে শো করবে
+        </div>
+
         <div class="section-title">🔥 Just For You (লাইভ পণ্যসমূহ)</div>
         <div id="productContainer" class="product-grid">
             <p style="text-align:center; grid-column: span 2; color:#666;">লোড হচ্ছে...</p>
@@ -305,6 +317,14 @@
 
     <!-- ================= 4. আপলোড / অ্যাডমিন পেজ ================= -->
     <div id="adminPage" class="page-section">
+        <!-- নতুন ব্যানার আপলোড ফর্ম -->
+        <div class="section-title">🖼️ নতুন ব্যানার যোগ করুন</div>
+        <div class="admin-form">
+            <label>ব্যনার ছবির লিংক (Image URL):</label>
+            <input type="text" id="bannerImgUrl" placeholder="ব্যানারের ডিরেক্ট লিংক দিন">
+            <button class="submit-upload-btn" onclick="uploadBanner()">ব্যানার আপডেট করুন</button>
+        </div>
+
         <div class="section-title">➕ নতুন পণ্য আপলোড করুন</div>
         <div class="admin-form">
             <label>পণ্যের নাম:</label>
@@ -393,7 +413,17 @@
             window.scrollTo(0, 0);
         }
 
-        // ফায়ারবেজ থেকে পণ্য লোড করা
+        // ফায়ারবেজ থেকে ব্যানার ও পণ্য লোড করা
+        db.ref('banner').on('value', (snapshot) => {
+            let bannerUrl = snapshot.val();
+            let bannerDisplay = document.getElementById('homeBannerDisplay');
+            if(bannerUrl) {
+                bannerDisplay.innerHTML = `<img src="${bannerUrl}" alt="Banner">`;
+            } else {
+                bannerDisplay.innerHTML = "📢 ব্যানার স্লাইডার এখানে শো করবে";
+            }
+        });
+
         db.ref('products').on('value', (snapshot) => {
             const prodContainer = document.getElementById('productContainer');
             const catContainer = document.getElementById('categoryProductContainer');
@@ -436,7 +466,25 @@
             `;
         }
 
-        // অ্যাডমিন প্যানেল থেকে পণ্য আপলোড
+        // ব্যানার আপলোড ফাংশন
+        function uploadBanner() {
+            let bannerUrl = document.getElementById('bannerImgUrl').value;
+            if(bannerUrl === "") {
+                alert("দয়া করে ব্যানারের ছবির লিংক দিন!");
+                return;
+            }
+            db.ref('banner').set(bannerUrl, (error) => {
+                if (error) {
+                    alert("ব্যানার সেভ করতে সমস্যা হয়েছে!");
+                } else {
+                    alert("ব্যানার সফলভাবে আপডেট হয়েছে!");
+                    document.getElementById('bannerImgUrl').value = "";
+                    switchPage('homePage');
+                }
+            });
+        }
+
+        // পণ্য আপলোড ফাংশন
         function uploadProduct() {
             let name = document.getElementById('prodName').value;
             let price = document.getElementById('prodPrice').value;
