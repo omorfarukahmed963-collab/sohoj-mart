@@ -133,7 +133,8 @@
         .product-card img {
             width: 100%;
             height: 130px;
-            object-fit: cover;
+            object-fit: contain; /* ছবি যেন কার্ডের বাইরে না যায় এবং পারফেক্ট দেখায় */
+            background-color: #f9f9f9;
             border-radius: 5px;
         }
         .product-title {
@@ -179,7 +180,8 @@
         .main-preview-img {
             width: 100%;
             height: 250px;
-            object-fit: cover;
+            object-fit: contain;
+            background-color: #f9f9f9;
             border-radius: 6px;
             margin-bottom: 10px;
         }
