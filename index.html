@@ -4,101 +4,155 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sohoj Mart</title>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background-color: #f9f9f9;
         }
-        /* নড়াচড়া করা ব্যানার বা নোটিশের স্টাইল */
-        .moving-notice {
-            background-color: #ff9900;
+        /* নড়াচড়া করা ব্যানার স্টাইল */
+        .moving-banner {
+            background-color: #ff9800;
             color: #fff;
             padding: 10px;
             font-weight: bold;
-            font-size: 16px;
+            font-size: 15px;
+            white-space: nowrap;
+        }
+        header {
+            background-color: #232f3e;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
         }
         .container {
-            padding: 15px;
-        }
-        .order-box {
-            background: #fff;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            margin-top: 20px;
-        }
-        .order-box input, .order-box textarea {
-            width: 100%;
             padding: 10px;
-            margin: 8px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
+            max-width: 1200px;
+            margin: auto;
         }
-        .order-btn {
+        /* প্রোডাক্ট গ্রিড ডিজাইন */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        @media(min-width: 768px) {
+            .product-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        .product-card {
+            background: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .product-card img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        .product-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin: 8px 0 4px 0;
+            color: #333;
+        }
+        .product-price {
+            color: #b12704;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        /* হোয়াটসঅ্যাপ অর্ডার বাটন */
+        .whatsapp-btn {
             background-color: #25D366;
             color: white;
-            padding: 12px;
             border: none;
+            padding: 8px 10px;
             width: 100%;
             border-radius: 4px;
-            font-size: 16px;
+            font-size: 13px;
             font-weight: bold;
             cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            box-sizing: border-box;
         }
     </style>
 </head>
 <body>
 
-    <!-- ওপরের নড়াচড়া করা অংশ (Marquee) -->
-    <div class="moving-notice">
+    <!-- ওপরের নড়াচড়া করা ব্যানার -->
+    <div class="moving-banner">
         <marquee behavior="scroll" direction="left">
-            স্বাগতম Sohoj Mart-এ! যেকোনো পণ্য অর্ডার করতে নিচের ফরম পূরণ করুন অথবা সরাসরি আমাদের হোয়াটসঅ্যাপ নম্বরে যোগাযোগ করুন।
+            🎉 Sohoj Mart-এ স্বাগতম! যেকোনো পণ্য পছন্দ করে সরাসরি হোয়াটসঅ্যাপে অর্ডার করুন। হটলাইন: 01837197656
         </marquee>
     </div>
 
+    <header>Sohoj Mart</header>
+
     <div class="container">
-        <h2>Sohoj Mart - অর্ডার পেজ</h2>
-        
-        <!-- কাস্টমার নাম-ঠিকানা এবং হোয়াটসঅ্যাপ অর্ডার ফর্ম -->
-        <div class="order-box">
-            <h3>হোয়াটসঅ্যাপে অর্ডার করুন</h3>
-            <label for="custName">আপনার নাম:</label>
-            <input type="text" id="custName" placeholder="আপনার নাম লিখুন">
-
-            <label for="custPhone">আপনার মোবাইল নম্বর:</label>
-            <input type="text" id="custPhone" placeholder="আপনার ফোন নম্বর লিখুন">
-
-            <label for="custAddress">আপনার সম্পূর্ণ ঠিকানা:</label>
-            <textarea id="custAddress" rows="3" placeholder="গ্রাম, থানা, জেলা লিখুন"></textarea>
-
-            <button class="order-btn" onclick="sendToWhatsApp()">হোয়াটসঅ্যাপে অর্ডার কনফার্ম করুন</button>
+        <h3>আমাদের পণ্যসমূহ</h3>
+        <div id="productContainer" class="product-grid">
+            <!-- ফায়ারবেজ থেকে পণ্যগুলো এখানে শো করবে -->
+            <p style="text-align:center; grid-column: span 2;">লোড হচ্ছে...</p>
         </div>
     </div>
 
     <script>
-        function sendToWhatsApp() {
-            let name = document.getElementById('custName').value;
-            let phone = document.getElementById('custPhone').value;
-            let address = document.getElementById('custAddress').value;
+        // আপনার ফায়ারবেজ কনফিগারেশন
+        const firebaseConfig = {
+            databaseURL: "https://sohoj-mart-default-rtdb.firebaseio.com/"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
 
-            if(name === "" || phone === "" || address === "") {
-                alert("দয়া করে নাম, ফোন নম্বর এবং ঠিকানা সঠিকভাবে পূরণ করুন!");
-                return;
+        // ফায়ারবেজ থেকে ডাটা এনে প্রোডাক্ট শো করানো এবং হোয়াটসঅ্যাপ অর্ডার লিংক যুক্ত করা
+        const productContainer = document.getElementById('productContainer');
+
+        db.ref('products').on('value', (snapshot) => {
+            productContainer.innerHTML = "";
+            const data = snapshot.val();
+            if (data) {
+                Object.keys(data).forEach((key) => {
+                    let product = data[key];
+                    let pName = product.name || "পণ্য";
+                    let pPrice = product.price || "0";
+                    let pImg = product.image || "https://via.placeholder.com/150";
+
+                    let card = document.createElement('div');
+                    card.className = "product-card";
+                    card.innerHTML = `
+                        <img src="${pImg}" alt="${pName}">
+                        <div class="product-title">${pName}</div>
+                        <div class="product-price">৳${pPrice}</div>
+                        <a href="javascript:void(0);" class="whatsapp-btn" onclick="sendOrder('${pName}', '${pPrice}')">
+                            💬 হোয়াটসঅ্যাপে অর্ডার
+                        </a>
+                    `;
+                    productContainer.appendChild(card);
+                });
+            } else {
+                productContainer.innerHTML = "<p style='text-align:center; grid-column: span 2;'>কোনো পণ্য পাওয়া যায়নি!</p>";
             }
+        });
 
-            // এখানে তোমার হোয়াটসঅ্যাপ নম্বরটি বসানো আছে (+880 দিয়ে শুরু করবে)
-            let adminPhone = "8801XXXXXXXXX"; // তোমার আসল হোয়াটসঅ্যাপ নম্বরটি এখানে বসিয়ে দিও
-
-            let message = `*নতুন অর্ডার - Sohoj Mart*%0A` +
-                          `👤 নাম: ${name}%0A` +
-                          `📞 ফোন: ${phone}%0A` +
-                          `🏠 ঠিকানা: ${address}`;
-
-            let whatsappUrl = `https://wa.me/${adminPhone}?text=${message}`;
-            window.open(whatsappUrl, '_blank');
+        // হোয়াটসঅ্যাপে অর্ডার পাঠানোর ফাংশন
+        function sendOrder(name, price) {
+            let phone = "8801837197656"; // আপনার হোয়াটসঅ্যাপ নম্বর
+            let text = `হ্যালো, আমি এই পণ্যটি অর্ডার করতে চাই:%0A📦 নাম: ${name}%0A💰 দাম: ৳${price}%0A%0Aদя করে আমার নাম ও ঠিকানা নিশ্চিত করুন।`;
+            let url = `https://wa.me/${phone}?text=${text}`;
+            window.open(url, '_blank');
         }
     </script>
 
