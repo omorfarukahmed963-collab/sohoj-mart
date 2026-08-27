@@ -4,327 +4,103 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sohoj Mart</title>
-    <!-- FontAwesome & Firebase SDK v8 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #f4f4f4; color: #333; padding-bottom: 60px; }
-
-        /* হেডার */
-        header { background: #131921; color: white; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-        .logo { font-size: 20px; font-weight: bold; color: #ff9900; }
-
-        .container { padding: 12px; max-width: 600px; margin: 0 auto; }
-
-        /* সেকশন পেজ কন্ট্রোল */
-        .page-section { display: none; }
-        .page-section.active { display: block; }
-
-        /* ক্যাটাগরি আইকন রো (ব্যানারের উপরে বা নিচে ছোট আইকন) */
-        .category-row { display: flex; gap: 10px; overflow-x: auto; padding: 10px 0; margin-bottom: 15px; scrollbar-width: none; }
-        .category-row::-webkit-scrollbar { display: none; }
-        .cat-item { background: white; padding: 10px 14px; border-radius: 25px; text-align: center; font-size: 12px; font-weight: 600; white-space: nowrap; box-shadow: 0 2px 5px rgba(0,0,0,0.05); cursor: pointer; display: flex; align-items: center; gap: 6px; color: #333; border: 1px solid #ddd; }
-        .cat-item i { color: #ff9900; font-size: 14px; }
-        .cat-item:hover { background: #ff9900; color: white; border-color: #ff9900; }
-        .cat-item:hover i { color: white; }
-
-        /* ব্যানার স্লাইডার */
-        .banner-box { margin-bottom: 15px; border-radius: 10px; overflow: hidden; box-shadow: 0 3px 8px rgba(0,0,0,0.1); background: white; }
-        .banner-item { display: none; text-align: center; }
-        .banner-item.active-slide { display: block; animation: fadeIn 0.8s; }
-        .banner-item img { width: 100%; height: 150px; object-fit: cover; }
-        .banner-item h4 { padding: 8px; font-size: 13px; background: white; color: #111; font-weight: bold; }
-        @keyframes fadeIn { from { opacity: 0.4; } to { opacity: 1; } }
-
-        /* পণ্য গ্রিড */
-        .section-title { font-size: 15px; margin-bottom: 10px; color: #111; font-weight: bold; border-left: 4px solid #ff9900; padding-left: 8px; }
-        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-        .card { background: white; padding: 10px; border-radius: 8px; text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,0.05); position: relative; }
-        .discount-badge { position: absolute; top: 8px; left: 8px; background: #e63946; color: white; font-size: 9px; font-weight: bold; padding: 2px 5px; border-radius: 3px; }
-        .card img { width: 100%; height: 120px; object-fit: contain; margin-bottom: 6px; }
-        .card h4 { font-size: 12px; margin-bottom: 4px; color: #222; height: 32px; overflow: hidden; }
-        .card p { color: #b12704; font-weight: bold; font-size: 14px; margin-bottom: 8px; }
-        .buy-btn { background: #ffa41c; border: none; width: 100%; padding: 6px; border-radius: 4px; font-weight: bold; font-size: 11px; cursor: pointer; }
-
-        /* অ্যাডমিন প্যানেল কার্ড */
-        .admin-card { background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-top: 4px solid #ff9900; }
-        .admin-card h3 { font-size: 14px; color: #131921; margin-bottom: 10px; }
-        .admin-card input, .admin-card button { width: 100%; padding: 9px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; }
-        .admin-card button { background: #febd69; border: none; font-weight: bold; cursor: pointer; color: #131921; }
-
-        /* নিচের ফিক্সড নেভিগেশন বার */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 8px 0; box-shadow: 0 -2px 5px rgba(0,0,0,0.1); z-index: 1000; border-top: 1px solid #ddd; }
-        .nav-item { text-align: center; color: #555; font-size: 11px; cursor: pointer; flex: 1; }
-        .nav-item i { font-size: 18px; display: block; margin-bottom: 2px; }
-        .nav-item.active { color: #ff9900; font-weight: bold; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        /* নড়াচড়া করা ব্যানার বা নোটিশের স্টাইল */
+        .moving-notice {
+            background-color: #ff9900;
+            color: #fff;
+            padding: 10px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .container {
+            padding: 15px;
+        }
+        .order-box {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+        .order-box input, .order-box textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .order-btn {
+            background-color: #25D366;
+            color: white;
+            padding: 12px;
+            border: none;
+            width: 100%;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo"><i class="fa-solid fa-store"></i> Sohoj Mart</div>
-        <div id="top-title" style="font-size: 14px; font-weight: bold;">হোম</div>
-    </header>
-
-    <div class="container">
-
-        <!-- ১. হোম পেজ (সামনে শুধু ব্যানার, ক্যাটাগরি ও পণ্য) -->
-        <div id="sec-home" class="page-section active">
-            
-            <!-- ক্যাটাগরি আইকন রো (জুতা, শাড়ি ইত্যাদি) -->
-            <div class="category-row">
-                <div class="cat-item" onclick="filterCategory('all')"><i class="fa-solid fa-border-all"></i> সব</div>
-                <div class="cat-item" onclick="filterCategory('شাড়ি')"><i class="fa-solid fa-shirt"></i> শাড়ি</div>
-                <div class="cat-item" onclick="filterCategory('জুতা')"><i class="fa-solid fa-shoe-prints"></i> জুতা</div>
-                <div class="cat-item" onclick="filterCategory('পোশাক')"><i class="fa-solid fa-vest"></i> পোশাক</div>
-                <div class="cat-item" onclick="filterCategory('ইলেকট্রনিক্স')"><i class="fa-solid fa-laptop"></i> ইলেকট্রনিক্স</div>
-            </div>
-
-            <!-- ব্যানার স্লাইডার -->
-            <div id="banners" class="banner-box">
-                <p style="text-align:center; padding:15px; color:#666; font-size:12px;">ব্যানার লোড হচ্ছে...</p>
-            </div>
-
-            <!-- পণ্যসমূহ -->
-            <div class="section-title">পণ্যসমূহ</div>
-            <div id="products" class="grid">
-                <p style="grid-column: span 2; text-align:center; color:#666; font-size:12px; padding:20px;">পণ্য লোড হচ্ছে...</p>
-            </div>
-        </div>
-
-        <!-- ২. ক্যাটাগরি পেজ -->
-        <div id="sec-cat" class="page-section">
-            <div class="section-title">সব ক্যাটাগরি</div>
-            <div style="background: white; padding: 15px; border-radius: 8px; text-align: center;">
-                <p style="font-size: 13px; color: #555; margin-bottom: 10px;">উপরের হোমপেজ থেকে সরাসরি ক্যাটাগরি সিলেক্ট করতে পারবেন।</p>
-            </div>
-        </div>
-
-        <!-- ৩. কার্ট পেজ -->
-        <div id="sec-cart" class="page-section">
-            <div class="section-title">আপনার শপিং কার্ট</div>
-            <div style="background: white; padding: 20px; border-radius: 8px; text-align: center; color: #666; font-size: 13px;">
-                আপনার কার্ট খালি আছে।
-            </div>
-        </div>
-
-        <!-- ৪. অ্যাডমিন প্যানেল পেজ (নিচে ক্লিক করলে আসবে) -->
-        <div id="sec-admin" class="page-section">
-            <div class="admin-card">
-                <h3>⚙️ নতুন পণ্য যোগ করুন</h3>
-                <input type="text" id="p-name" placeholder="পণ্যের নাম (যেমন: সুন্দর শাড়ি বা জুতা)">
-                <input type="text" id="p-category" placeholder="ক্যাটাগরি (শাড়ি / জুতা / পোশাক ইত্যাদি)">
-                <input type="text" id="p-price" placeholder="দাম (টাকা)">
-                <input type="file" id="p-img" accept="image/*">
-                <button onclick="saveProduct()">পণ্য সেভ করুন</button>
-            </div>
-
-            <div class="admin-card">
-                <h3>⚙️ নতুন ব্যানার যোগ করুন</h3>
-                <input type="text" id="b-title" placeholder="ব্যানার শিরোনাম">
-                <input type="file" id="b-img" accept="image/*">
-                <button onclick="saveBanner()">ব্যানার সেভ করুন</button>
-            </div>
-        </div>
-
+    <!-- ওপরের নড়াচড়া করা অংশ (Marquee) -->
+    <div class="moving-notice">
+        <marquee behavior="scroll" direction="left">
+            স্বাগতম Sohoj Mart-এ! যেকোনো পণ্য অর্ডার করতে নিচের ফরম পূরণ করুন অথবা সরাসরি আমাদের হোয়াটসঅ্যাপ নম্বরে যোগাযোগ করুন।
+        </marquee>
     </div>
 
-    <!-- একদম নিচে ফিক্সড নেভিগেশন বার -->
-    <div class="bottom-nav">
-        <div class="nav-item active" onclick="switchTab('home', this)"><i class="fa-solid fa-house"></i>হোম</div>
-        <div class="nav-item" onclick="switchTab('cat', this)"><i class="fa-solid fa-list"></i>ক্যাটাগরি</div>
-        <div class="nav-item" onclick="switchTab('cart', this)"><i class="fa-solid fa-cart-shopping"></i>কার্ট</div>
-        <div class="nav-item" onclick="switchTab('admin', this)"><i class="fa-solid fa-user-gear"></i>অ্যাডমিন</div>
+    <div class="container">
+        <h2>Sohoj Mart - অর্ডার পেজ</h2>
+        
+        <!-- কাস্টমার নাম-ঠিকানা এবং হোয়াটসঅ্যাপ অর্ডার ফর্ম -->
+        <div class="order-box">
+            <h3>হোয়াটসঅ্যাপে অর্ডার করুন</h3>
+            <label for="custName">আপনার নাম:</label>
+            <input type="text" id="custName" placeholder="আপনার নাম লিখুন">
+
+            <label for="custPhone">আপনার মোবাইল নম্বর:</label>
+            <input type="text" id="custPhone" placeholder="আপনার ফোন নম্বর লিখুন">
+
+            <label for="custAddress">আপনার সম্পূর্ণ ঠিকানা:</label>
+            <textarea id="custAddress" rows="3" placeholder="গ্রাম, থানা, জেলা লিখুন"></textarea>
+
+            <button class="order-btn" onclick="sendToWhatsApp()">হোয়াটসঅ্যাপে অর্ডার কনফার্ম করুন</button>
+        </div>
     </div>
 
     <script>
-        // ফায়ারবেজ কনফিগারেশন
-        const firebaseConfig = {
-            apiKey: "AIzaSyA9nOum8jHw3iztHF82KRyYpSRqhiFfwHg",
-            authDomain: "sohoj-mart.firebaseapp.com",
-            databaseURL: "https://sohoj-mart-default-rtdb.firebaseio.com",
-            projectId: "sohoj-mart",
-            storageBucket: "sohoj-mart.firebasestorage.app",
-            messagingSenderId: "1057254534445",
-            appId: "1:1057254534445:web:450ba46a33980fae1db7a4",
-            measurementId: "G-XBSCHB8MVW"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
+        function sendToWhatsApp() {
+            let name = document.getElementById('custName').value;
+            let phone = document.getElementById('custPhone').value;
+            let address = document.getElementById('custAddress').value;
 
-        // ট্যাব পরিবর্তনের ফাংশন
-        function switchTab(tabId, element) {
-            document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-
-            if(tabId === 'home') {
-                document.getElementById('sec-home').classList.add('active');
-                document.getElementById('top-title').innerText = "হোম";
-            } else if(tabId === 'cat') {
-                document.getElementById('sec-cat').classList.add('active');
-                document.getElementById('top-title').innerText = "ক্যাটাগরি";
-            } else if(tabId === 'cart') {
-                document.getElementById('sec-cart').classList.add('active');
-                document.getElementById('top-title').innerText = "কার্ট";
-            } else if(tabId === 'admin') {
-                document.getElementById('sec-admin').classList.add('active');
-                document.getElementById('top-title').innerText = "অ্যাডমিন প্যানেল";
-            }
-            element.classList.add('active');
-        }
-
-        // ছবি ছোট করার ফাংশন
-        function compressAndUpload(file, callback) {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = function (e) {
-                const img = new Image();
-                img.src = e.target.result;
-                img.onload = function () {
-                    const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 400;
-                    canvas.width = MAX_WIDTH;
-                    canvas.height = (img.height * MAX_WIDTH) / img.width;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    callback(canvas.toDataURL('image/jpeg', 0.6));
-                }
-            }
-        }
-
-        // পণ্য সেভ করা
-        window.saveProduct = function() {
-            const name = document.getElementById('p-name').value;
-            const category = document.getElementById('p-category').value || "General";
-            const price = document.getElementById('p-price').value;
-            const fileInput = document.getElementById('p-img');
-
-            if(!name || !price || fileInput.files.length === 0) {
-                alert("দয়া করে নাম, দাম এবং ছবি দিন!");
+            if(name === "" || phone === "" || address === "") {
+                alert("দয়া করে নাম, ফোন নম্বর এবং ঠিকানা সঠিকভাবে পূরণ করুন!");
                 return;
             }
 
-            compressAndUpload(fileInput.files[0], function(imgUrl) {
-                db.ref('products').push({ name, category, price, image: imgUrl }, (error) => {
-                    if (error) {
-                        alert("সেভ হয়নি: " + error.message);
-                    } else {
-                        alert("পণ্য সফলভাবে যোগ হয়েছে!");
-                        document.getElementById('p-name').value = '';
-                        document.getElementById('p-category').value = '';
-                        document.getElementById('p-price').value = '';
-                        fileInput.value = '';
-                        switchTab('home', document.querySelectorAll('.nav-item')[0]);
-                    }
-                });
-            });
-        }
+            // এখানে তোমার হোয়াটসঅ্যাপ নম্বরটি বসানো আছে (+880 দিয়ে শুরু করবে)
+            let adminPhone = "8801XXXXXXXXX"; // তোমার আসল হোয়াটসঅ্যাপ নম্বরটি এখানে বসিয়ে দিও
 
-        // ব্যানার সেভ করা
-        window.saveBanner = function() {
-            const title = document.getElementById('b-title').value;
-            const fileInput = document.getElementById('b-img');
+            let message = `*নতুন অর্ডার - Sohoj Mart*%0A` +
+                          `👤 নাম: ${name}%0A` +
+                          `📞 ফোন: ${phone}%0A` +
+                          `🏠 ঠিকানা: ${address}`;
 
-            if(!title || fileInput.files.length === 0) {
-                alert("শিরোনাম এবং ব্যানার ছবি দিন!");
-                return;
-            }
-
-            compressAndUpload(fileInput.files[0], function(imgUrl) {
-                db.ref('banners').push({ title, image: imgUrl }, (error) => {
-                    if (error) {
-                        alert("সেভ হয়নি: " + error.message);
-                    } else {
-                        alert("ব্যানার সফলভাবে যোগ হয়েছে!");
-                        document.getElementById('b-title').value = '';
-                        fileInput.value = '';
-                        switchTab('home', document.querySelectorAll('.nav-item')[0]);
-                    }
-                });
-            });
-        }
-
-        // ব্যানার স্লাইডার
-        let slideIndex = 0;
-        function showSlides() {
-            let slides = document.getElementsByClassName("banner-item");
-            if (slides.length > 0) {
-                for (let i = 0; i < slides.length; i++) {
-                    slides[i].classList.remove("active-slide");
-                }
-                slideIndex++;
-                if (slideIndex > slides.length) { slideIndex = 1; }
-                slides[slideIndex - 1].classList.add("active-slide");
-            }
-            setTimeout(showSlides, 3500);
-        }
-
-        // রিয়েল-টাইমে ব্যানার লোড
-        db.ref('banners').on('value', (snapshot) => {
-            const box = document.getElementById('banners');
-            box.innerHTML = '';
-            const data = snapshot.val();
-            if(data) {
-                Object.values(data).forEach(b => {
-                    box.innerHTML += `
-                        <div class="banner-item active-slide">
-                            <img src="${b.image}">
-                            <h4>${b.title}</h4>
-                        </div>
-                    `;
-                });
-                showSlides();
-            } else {
-                box.innerHTML = '<p style="font-size:12px; color:#666; text-align:center; padding:15px;">কোনো ব্যানার নেই</p>';
-            }
-        });
-
-        // পণ্য লোড ও ফিল্টার করার গ্লোবাল ভ্যারিয়েবল
-        let allProductsData = {};
-
-        db.ref('products').on('value', (snapshot) => {
-            allProductsData = snapshot.val() || {};
-            renderProducts(allProductsData);
-        });
-
-        function renderProducts(data) {
-            const grid = document.getElementById('products');
-            grid.innerHTML = '';
-            if(data && Object.keys(data).length > 0) {
-                Object.values(data).forEach(p => {
-                    grid.innerHTML += `
-                        <div class="card">
-                            <span class="discount-badge">${p.category}</span>
-                            <img src="${p.image}">
-                            <h4>${p.name}</h4>
-                            <p>৳${p.price}</p>
-                            <button class="buy-btn" onclick="alert('অর্ডার সম্পন্ন হয়েছে!')">অর্ডার করুন</button>
-                        </div>
-                    `;
-                });
-            } else {
-                grid.innerHTML = '<p style="grid-column: span 2; font-size:12px; color:#666; text-align:center; padding:15px;">কোনো পণ্য পাওয়া যায়নি</p>';
-            }
-        }
-
-        // ক্যাটাগরি ফিল্টার করা
-        window.filterCategory = function(catName) {
-            if(catName === 'all') {
-                renderProducts(allProductsData);
-                return;
-            }
-            let filtered = {};
-            if(allProductsData) {
-                Object.keys(allProductsData).forEach(key => {
-                    if(allProductsData[key].category && allProductsData[key].category.toLowerCase().includes(catName.toLowerCase())) {
-                        filtered[key] = allProductsData[key];
-                    }
-                });
-            }
-            renderProducts(filtered);
+            let whatsappUrl = `https://wa.me/${adminPhone}?text=${message}`;
+            window.open(whatsappUrl, '_blank');
         }
     </script>
+
 </body>
 </html>
