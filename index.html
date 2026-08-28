@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sohoj Mart</title>
-<meta name="google-site-verification" content="p09Mf295yXOXo9HKlPPdZKz9yyAjT7YjDgePXcZprTs" />
+    <meta name="google-site-verification" content="p09Mf295yXOXo9HKlPPdZKz9yyAjT7YjDgePXcZprTs" />
 
     <meta property="og:title" content="Sohoj Mart - অনলাইন শপ">
     <meta property="og:description" content="যেকোনো পণ্য পছন্দ করে সরাসরি হোয়াটসঅ্যাপে অর্ডার করুন।">
@@ -15,7 +15,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <style>
-        /* বক্স সাইজিং ফিক্সড রাখা হয়েছে যাতে কোনো মার্জিন বা প্যাডিংয়ের কারণে লেআউট বাইরে না যায় */
         * {
             box-sizing: border-box;
         }
@@ -26,7 +25,7 @@
             background-color: #f4f4f4;
             padding-top: 110px;
             padding-bottom: 70px;
-            overflow-x: hidden; /* ডানে-বামে অতিরিক্ত স্ক্রোল হওয়া রোধ করতে */
+            overflow-x: hidden;
         }
         .top-fixed-container {
             position: fixed;
@@ -101,13 +100,25 @@
             border: none;
             flex: 1;
         }
+        /* ওপরের শর্টকাট আইকনগুলোতে জীবন্ত নড়াচড়া (Bounce & Pulse) এফেক্ট */
         .shortcut-item div {
             background: #f8f9fa;
             border-radius: 8px;
             padding: 8px;
             margin-bottom: 4px;
-            font-size: 16px;
+            font-size: 18px;
+            animation: iconBounce 2s infinite ease-in-out;
         }
+        .shortcut-item:nth-child(2) div { animation-delay: 0.3s; }
+        .shortcut-item:nth-child(3) div { animation-delay: 0.6s; }
+        .shortcut-item:nth-child(4) div { animation-delay: 0.9s; }
+        .shortcut-item:nth-child(5) div { animation-delay: 1.2s; }
+
+        @keyframes iconBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+
         .banner-container {
             background: #e0e0e0;
             width: 100%;
@@ -135,7 +146,6 @@
             color: #222;
         }
         
-        /* পণ্যগুলোর গ্রিড লেআউট যা সবসময় সমান সাইজে থাকবে এবং লাইনের বাইরে যাবে না */
         .product-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -152,14 +162,14 @@
             flex-direction: column;
             justify-content: space-between;
             width: 100%;
-            min-width: 0; /* গ্রিড আইটেম ওভারফ্লো হওয়া রোধ করতে */
+            min-width: 0;
             overflow: hidden;
             position: relative;
             transition: transform 0.2s;
         }
         .product-card:active { transform: scale(0.98); }
 
-        /* জীবন্ত পালসিং ব্যাজ (Hot/New) */
+        /* জীবন্ত পালসিং ও ফায়ার লাইভ ব্যাজ (Hot/New) */
         .live-badge {
             position: absolute;
             top: 10px;
@@ -170,12 +180,11 @@
             padding: 3px 7px;
             border-radius: 4px;
             z-index: 10;
-            animation: pulseBadge 1.5s infinite;
+            animation: firePulse 1.2s infinite alternate;
         }
-        @keyframes pulseBadge { 
-            0% { opacity: 1; } 
-            50% { opacity: 0.5; } 
-            100% { opacity: 1; } 
+        @keyframes firePulse { 
+            0% { transform: scale(1); opacity: 0.9; box-shadow: 0 0 4px rgba(255,0,0,0.5); } 
+            100% { transform: scale(1.08); opacity: 1; box-shadow: 0 0 10px rgba(255,100,0,0.9); } 
         }
 
         .product-card img {
@@ -378,7 +387,17 @@
             flex: 1;
         }
         .nav-item.active { color: #f37a1f; font-weight: bold; }
-        .nav-item span { display: block; font-size: 16px; }
+        
+        /* নিচের নেভিগেশন বারের আইকনগুলোতেও হালকা জীবন্ত নড়াচড়া যোগ করা হলো */
+        .nav-item span { 
+            display: block; 
+            font-size: 18px; 
+            animation: navPulse 1.8s infinite ease-in-out;
+        }
+        @keyframes navPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
     </style>
 </head>
 <body>
@@ -759,7 +778,6 @@
             let pPrice = product.price || "0";
             let pImg = product.img1 || product.image || "https://via.placeholder.com/150";
 
-            // জীবন্ত পপুলার ট্যাগ বা ব্যাজ (Hot অথবা New) স্বয়ংক্রিয়ভাবে সেট করা
             let badgeText = (index % 2 === 0) ? "HOT 🔥" : "NEW ✨";
             let badgeColor = (index % 2 === 0) ? "#d32f2f" : "#ff9800";
 
