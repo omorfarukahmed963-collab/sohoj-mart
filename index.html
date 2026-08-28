@@ -57,6 +57,32 @@
             font-weight: bold;
             margin-bottom: 8px;
         }
+        
+        /* লেখা এবং তারা গোল করে ঘোরার অ্যানিমেশন (Rotation) */
+        .animated-header-text {
+            animation: rotateText 4s infinite linear;
+            display: inline-block;
+            transform-origin: center;
+        }
+        .animated-star {
+            animation: rotateIcon 3s infinite linear;
+            display: inline-block;
+            transform-origin: center;
+        }
+
+        @keyframes rotateText {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(3deg); }
+            50% { transform: rotate(0deg); }
+            75% { transform: rotate(-3deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        @keyframes rotateIcon {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         .search-box {
             display: flex;
             background: white;
@@ -100,25 +126,13 @@
             border: none;
             flex: 1;
         }
-        /* ওপরের শর্টকাট আইকনগুলোতে জীবন্ত নড়াচড়া (Bounce & Pulse) এফেক্ট */
         .shortcut-item div {
             background: #f8f9fa;
             border-radius: 8px;
             padding: 8px;
             margin-bottom: 4px;
             font-size: 18px;
-            animation: iconBounce 2s infinite ease-in-out;
         }
-        .shortcut-item:nth-child(2) div { animation-delay: 0.3s; }
-        .shortcut-item:nth-child(3) div { animation-delay: 0.6s; }
-        .shortcut-item:nth-child(4) div { animation-delay: 0.9s; }
-        .shortcut-item:nth-child(5) div { animation-delay: 1.2s; }
-
-        @keyframes iconBounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-4px); }
-        }
-
         .banner-container {
             background: #e0e0e0;
             width: 100%;
@@ -145,7 +159,6 @@
             font-weight: bold;
             color: #222;
         }
-        
         .product-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -162,14 +175,8 @@
             flex-direction: column;
             justify-content: space-between;
             width: 100%;
-            min-width: 0;
-            overflow: hidden;
             position: relative;
-            transition: transform 0.2s;
         }
-        .product-card:active { transform: scale(0.98); }
-
-        /* জীবন্ত পালসিং ও ফায়ার লাইভ ব্যাজ (Hot/New) */
         .live-badge {
             position: absolute;
             top: 10px;
@@ -180,25 +187,12 @@
             padding: 3px 7px;
             border-radius: 4px;
             z-index: 10;
-            animation: firePulse 1.2s infinite alternate;
         }
-        @keyframes firePulse { 
-            0% { transform: scale(1); opacity: 0.9; box-shadow: 0 0 4px rgba(255,0,0,0.5); } 
-            100% { transform: scale(1.08); opacity: 1; box-shadow: 0 0 10px rgba(255,100,0,0.9); } 
-        }
-
         .product-card img {
             width: 100%;
             height: 140px;
             object-fit: cover;
             border-radius: 6px;
-            background-color: #f9f9f9;
-        }
-        .product-info {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
         }
         .product-title {
             font-size: 13px;
@@ -208,20 +202,16 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            text-align: left;
-            width: 100%;
         }
         .product-price {
             color: #d32f2f;
             font-weight: bold;
             font-size: 14px;
             margin-bottom: 8px;
-            text-align: left;
         }
         .btn-group {
             display: flex;
             gap: 5px;
-            margin-top: auto;
         }
         .action-btn {
             background-color: #25D366;
@@ -233,17 +223,16 @@
             font-size: 11px;
             font-weight: bold;
             cursor: pointer;
-            text-decoration: none;
-            text-align: center;
         }
         .cart-btn {
             background-color: #ff9800;
         }
-        .details-container {
+        .details-container, .feature-card, .admin-form {
             background: white;
             padding: 15px;
             border-radius: 8px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 12px;
         }
         .main-preview-img {
             width: 100%;
@@ -281,13 +270,6 @@
             object-fit: cover;
             border-radius: 4px;
             margin-top: 5px;
-        }
-        .feature-card, .admin-form {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            margin-bottom: 12px;
         }
         .feature-btn, .submit-upload-btn {
             background: #f37a1f;
@@ -341,7 +323,6 @@
             width: 85%;
             max-width: 350px;
             border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
         .modal-content input, .modal-content textarea {
             width: 100%;
@@ -383,21 +364,10 @@
             cursor: pointer;
             background: none;
             border: none;
-            white-space: nowrap;
             flex: 1;
         }
         .nav-item.active { color: #f37a1f; font-weight: bold; }
-        
-        /* নিচের নেভিগেশন বারের আইকনগুলোতেও হালকা জীবন্ত নড়াচড়া যোগ করা হলো */
-        .nav-item span { 
-            display: block; 
-            font-size: 18px; 
-            animation: navPulse 1.8s infinite ease-in-out;
-        }
-        @keyframes navPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.15); }
-        }
+        .nav-item span { display: block; font-size: 18px; }
     </style>
 </head>
 <body>
@@ -412,8 +382,8 @@
 
         <div class="app-header">
             <div class="header-top">
-                <span>Sohoj Mart</span>
-                <div>🛒 ⭐</div>
+                <span class="animated-header-text">Sohoj Mart</span>
+                <div>🛒 <span class="animated-star">⭐</span></div>
             </div>
             <div class="search-box">
                 <span>🔍</span>
@@ -787,7 +757,7 @@
                     <div>
                         <img src="${pImg}" alt="${pName}">
                     </div>
-                    <div class="product-info">
+                    <div>
                         <div class="product-title" title="${pName}">${pName}</div>
                         <div class="product-price">৳${pPrice}</div>
                     </div>
