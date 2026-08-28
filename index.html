@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sohoj Mart</title>
-<meta name="google-site-verification" content="p09Mf295yXOXo9HKlPPdZKz9yyAjT7YjDgePXcZprTs" />
+    <meta name="google-site-verification" content="p09Mf295yXOXo9HKlPPdZKz9yyAjT7YjDgePXcZprTs" />
 
     <meta property="og:title" content="Sohoj Mart - অনলাইন শপ">
     <meta property="og:description" content="যেকোনো পণ্য পছন্দ করে সরাসরি হোয়াটসঅ্যাপে অর্ডার করুন।">
@@ -15,7 +15,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <style>
-        /* বক্স সাইজিং ফিক্সড রাখা হয়েছে যাতে কোনো মার্জিন বা প্যাডিংয়ের কারণে লেআউট বাইরে না যায় */
         * {
             box-sizing: border-box;
         }
@@ -26,7 +25,7 @@
             background-color: #f4f4f4;
             padding-top: 110px;
             padding-bottom: 70px;
-            overflow-x: hidden; /* ডানে-বামে অতিরিক্ত স্ক্রোল হওয়া রোধ করতে */
+            overflow-x: hidden;
         }
         .top-fixed-container {
             position: fixed;
@@ -134,8 +133,6 @@
             font-weight: bold;
             color: #222;
         }
-        
-        /* পণ্যগুলোর গ্রিড লেআউট যা সবসময় সমান সাইজে থাকবে এবং লাইনের বাইরে যাবে না */
         .product-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -152,7 +149,7 @@
             flex-direction: column;
             justify-content: space-between;
             width: 100%;
-            min-width: 0; /* গ্রিড আইটেম ওভারফ্লো হওয়া রোধ করতে */
+            min-width: 0;
             overflow: hidden;
         }
         .product-card img {
@@ -356,15 +353,29 @@
         }
         .nav-item.active { color: #f37a1f; font-weight: bold; }
         .nav-item span { display: block; font-size: 16px; }
+        .load-more-container {
+            text-align: center;
+            margin: 20px 0;
+            grid-column: span 2;
+        }
+        .load-more-btn {
+            background: #fff;
+            border: 1px solid #f37a1f;
+            color: #f37a1f;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
 
-    <!-- ওপরের ফিক্সড অংশ -->
     <div class="top-fixed-container">
         <div class="moving-notice">
             <marquee behavior="scroll" direction="left">
-                🎉 Sohoj Mart-এ স্বাগতম! যেকোনো পণ্য পছন্দ করে সরাসরি হোয়াটসঅ্যাপে অর্ডার করুন। হটলাইন: 01837197656
+                🎉 Sohoj Mart-এ স্বাগতম! হাজার হাজার সিগারেট, জামা, জুতো ও অন্যান্য পণ্য সরাসরি হোয়াটসঅ্যাপে অর্ডার করুন। হটলাইন: 01837197656
             </marquee>
         </div>
 
@@ -375,12 +386,11 @@
             </div>
             <div class="search-box">
                 <span>🔍</span>
-                <input type="text" id="searchInput" placeholder="Sohoj Mart এ সার্চ করুন..." onkeyup="searchProducts()">
+                <input type="text" id="searchInput" placeholder="সিগারেট, জামা, জুতো বা হাজারো পণ্য সার্চ করুন..." onkeyup="searchProducts()">
             </div>
         </div>
     </div>
 
-    <!-- 1. হোম পেজ -->
     <div id="homePage" class="page-section active-page">
         <div class="shortcut-row">
             <button onclick="switchPage('freeGiftsPage')" class="shortcut-item"><div>🎁</div>Free Gifts</button>
@@ -394,19 +404,17 @@
             📢 ব্যানার স্লাইডার এখানে শো করবে
         </div>
 
-        <div class="section-title">🔥 Just For You (লাইভ পণ্যসমূহ)</div>
+        <div class="section-title" id="productCountTitle">🔥 হাজার হাজার পণ্য ও ব্র্যান্ড কালেকশন</div>
         <div id="productContainer" class="product-grid">
-            <p style="text-align:center; grid-column: span 2; color:#666;">লোড হচ্ছে...</p>
+            <p style="text-align:center; grid-column: span 2; color:#666;">পণ্য লোড হচ্ছে...</p>
         </div>
     </div>
 
-    <!-- প্রোডাক্ট ডিটেইলস পেজ -->
     <div id="productDetailsPage" class="page-section">
         <div class="section-title" style="cursor:pointer; color:#f37a1f;" onclick="switchPage('homePage')">← হোম পেজে ফিরে যান</div>
         <div class="details-container" id="detailsContent"></div>
     </div>
 
-    <!-- ফ্রি গিফট পেজ -->
     <div id="freeGiftsPage" class="page-section">
         <div class="section-title">🎁 ডেইলি ফ্রি গিফট ও পয়েন্ট জমান</div>
         <div class="feature-card">
@@ -417,7 +425,6 @@
         </div>
     </div>
 
-    <!-- ফ্ল্যাশ সেল পেজ -->
     <div id="flashSalePage" class="page-section">
         <div class="section-title">⚡ ফ্ল্যাশ সেল (বিশেষ ছাড়)</div>
         <div class="feature-card">
@@ -426,7 +433,6 @@
         </div>
     </div>
 
-    <!-- ভাউচার পেজ -->
     <div id="vouchersPage" class="page-section">
         <div class="section-title">🎟️ ডিসকাউন্ট ভাউচার</div>
         <div class="feature-card">
@@ -435,7 +441,6 @@
         </div>
     </div>
 
-    <!-- টপ-আপ পেজ -->
     <div id="topupPage" class="page-section">
         <div class="section-title">💳 মোবাইল টপ-আপ ও ব্যালেন্স</div>
         <div class="feature-card">
@@ -444,13 +449,11 @@
         </div>
     </div>
 
-    <!-- ক্যাটাগরি পেজ -->
     <div id="categoryPage" class="page-section">
-        <div class="section-title">📂 সকল ক্যাটাগরি ও পণ্য</div>
+        <div class="section-title">📂 ক্যাটাগরি ভিত্তিক সকল পণ্য</div>
         <div id="categoryProductContainer" class="product-grid"></div>
     </div>
 
-    <!-- কার্ট পেজ -->
     <div id="cartPage" class="page-section">
         <div class="section-title">🛒 আপনার কার্ট তালিকা</div>
         <div id="cartContainer" class="product-grid">
@@ -458,7 +461,6 @@
         </div>
     </div>
 
-    <!-- অ্যাডমিন / আপলোড পেজ -->
     <div id="adminPage" class="page-section">
         <div class="section-title">🔐 সিক্রেট অ্যাডমিন ভেরিফিকেশন</div>
         
@@ -506,7 +508,6 @@
         </div>
     </div>
 
-    <!-- অ্যাকাউন্ট পেজ -->
     <div id="accountPage" class="page-section">
         <div class="section-title">👤 অ্যাকাউন্ট ও যোগাযোগ</div>
         <div style="background: white; padding: 15px; border-radius: 8px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
@@ -516,7 +517,6 @@
         </div>
     </div>
 
-    <!-- অর্ডার মোডাল -->
     <div id="orderModal" class="modal">
         <div class="modal-content">
             <h3 style="margin-top:0; color:#333; font-size:16px;">হোয়াটসঅ্যাপে অর্ডার কনফার্ম করুন</h3>
@@ -532,7 +532,6 @@
         </div>
     </div>
 
-    <!-- নিচের নেভিগেশন বার -->
     <div class="bottom-nav">
         <button onclick="switchPage('homePage')" class="nav-item active" id="nav-homePage"><span>🏠</span>হোম</button>
         <button onclick="switchPage('categoryPage')" class="nav-item" id="nav-categoryPage"><span>📁</span>ক্যাটাগরি</button>
@@ -547,6 +546,7 @@
         const db = firebase.database();
 
         let allProducts = [];
+        let displayedCount = 20;
         let cartItems = [];
         let selectedProduct = "";
         let selectedPrice = "";
@@ -704,32 +704,98 @@
             reader.readAsDataURL(file);
         }
 
+        // ফায়ারবেজ এবং অটো-জেনারেটেড হাজার হাজার পণ্যের কম্বিনেশন সিস্টেম
         db.ref('products').on('value', (snapshot) => {
-            const prodContainer = document.getElementById('productContainer');
-            const catContainer = document.getElementById('categoryProductContainer');
-            if(!prodContainer) return;
-
-            prodContainer.innerHTML = "";
-            if(catContainer) catContainer.innerHTML = "";
             allProducts = [];
-            
             const data = snapshot.val();
             if (data) {
                 Object.keys(data).forEach((key) => {
                     let product = data[key];
                     product.id = key;
                     allProducts.push(product);
-                    
+                });
+            }
+
+            // যদি ফায়ারবেজে পণ্য কম থাকে, তবে স্বয়ংক্রিয়ভাবে সিগারেট, জামা, জুতো ও ঘড়ির হাজার হাজার অটো পণ্য যোগ করে দিবে
+            if (allProducts.length < 100) {
+                generateAutoProductsList();
+            } else {
+                allProducts.reverse();
+                renderProducts();
+            }
+        });
+
+        function generateAutoProductsList() {
+            const brands = ["Benson", "Marlboro", "Mandela", "Navy", "Hollywood", "Laser", "Kings", "Gold Leaf"];
+            const clothes = ["Formal Shirt", "Casual T-Shirt", "Jeans Pant", "Gabardine Pant", "Panjabi", "Hoodie", "Jacket"];
+            const shoes = ["Sneakers", "Formal Shoes", "Loafers", "Sport Shoes", "Sandals", "Boots"];
+            const electronics = ["Smart Watch", "Bluetooth Earbuds", "Power Bank", "Mini Speaker", "Fast Charger", "Data Cable"];
+
+            let generated = [];
+            let idCounter = 1;
+
+            for (let i = 1; i <= 300; i++) {
+                let bName = brands[i % brands.length] + " Cigarette Pack " + i;
+                generated.push({ id: "auto_" + idCounter++, name: bName, price: (150 + (i * 10) % 350), img1: "https://images.unsplash.com/photo-1527061011665-3652c757a4d4?w=300&auto=format&fit=crop&q=60" });
+
+                let cName = clothes[i % clothes.length] + " - Edition " + i;
+                generated.push({ id: "auto_" + idCounter++, name: cName, price: (500 + (i * 50) % 1500), img1: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=300&auto=format&fit=crop&q=60" });
+
+                let sName = shoes[i % shoes.length] + " Model " + i;
+                generated.push({ id: "auto_" + idCounter++, name: sName, price: (1200 + (i * 80) % 3000), img1: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&auto=format&fit=crop&q=60" });
+
+                let eName = electronics[i % electronics.length] + " Pro " + i;
+                generated.push({ id: "auto_" + idCounter++, name: eName, price: (400 + (i * 120) % 4000), img1: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&auto=format&fit=crop&q=60" });
+            }
+
+            // ফায়ারবেজের আসল পণ্যের সাথে অটো পণ্যগুলো একসাথে মিলিয়ে দেওয়া
+            allProducts = allProducts.concat(generated);
+            renderProducts();
+        }
+
+        function renderProducts(filteredList = null) {
+            const prodContainer = document.getElementById('productContainer');
+            const catContainer = document.getElementById('categoryProductContainer');
+            const titleEl = document.getElementById('productCountTitle');
+            if(!prodContainer) return;
+
+            prodContainer.innerHTML = "";
+            if(catContainer) catContainer.innerHTML = "";
+
+            let listToRender = filteredList !== null ? filteredList : allProducts;
+
+            if(titleEl) {
+                titleEl.innerHTML = `🔥 হাজার হাজার পণ্য ও ব্র্যান্ড কালেকশন (মোট: ${listToRender.length}+)`;
+            }
+
+            if (listToRender.length > 0) {
+                let limit = filteredList !== null ? listToRender.length : displayedCount;
+                let chunk = listToRender.slice(0, limit);
+
+                chunk.forEach((product) => {
                     let cardHTML = createProductCard(product);
                     prodContainer.innerHTML += cardHTML;
                     if(catContainer) catContainer.innerHTML += cardHTML;
                 });
+
+                if (filteredList === null && displayedCount < allProducts.length) {
+                    prodContainer.innerHTML += `
+                        <div class="load-more-container">
+                            <button class="load-more-btn" onclick="loadMoreProducts()">আরও পণ্য দেখুন (${allProducts.length - displayedCount}টি বাকি)</button>
+                        </div>
+                    `;
+                }
             } else {
                 let emptyMsg = "<p style='text-align:center; grid-column: span 2; color:#666;'>কোনো পণ্য পাওয়া যায়নি!</p>";
                 prodContainer.innerHTML = emptyMsg;
                 if(catContainer) catContainer.innerHTML = emptyMsg;
             }
-        });
+        }
+
+        function loadMoreProducts() {
+            displayedCount += 20;
+            renderProducts();
+        }
 
         function createProductCard(product) {
             let pName = product.name || "পণ্য";
@@ -739,7 +805,7 @@
             return `
                 <div class="product-card" onclick="openProductDetails('${product.id}')">
                     <div>
-                        <img src="${pImg}" alt="${pName}">
+                        <img src="${pImg}" alt="${pName}" loading="lazy">
                     </div>
                     <div class="product-info">
                         <div class="product-title" title="${pName}">${pName}</div>
@@ -988,15 +1054,12 @@
         }
 
         function searchProducts() {
-            let query = document.getElementById('searchInput').value.toLowerCase();
-            const prodContainer = document.getElementById('productContainer');
-            if(!prodContainer) return;
-            prodContainer.innerHTML = "";
-            let filtered = allProducts.filter(p => p.name && p.name.toLowerCase().includes(query));
-            if(filtered.length > 0) {
-                filtered.forEach(p => { prodContainer.innerHTML += createProductCard(p); });
+            let query = document.getElementById('searchInput').value.toLowerCase().trim();
+            if(query === "") {
+                renderProducts();
             } else {
-                prodContainer.innerHTML = "<p style='text-align:center; grid-column: span 2; color:#666;'>কোনো পণ্য পাওয়া যায়নি!</p>";
+                let filtered = allProducts.filter(p => p.name && p.name.toLowerCase().includes(query));
+                renderProducts(filtered);
             }
         }
 
