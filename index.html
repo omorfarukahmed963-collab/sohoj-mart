@@ -154,7 +154,30 @@
             width: 100%;
             min-width: 0; /* গ্রিড আইটেম ওভারফ্লো হওয়া রোধ করতে */
             overflow: hidden;
+            position: relative;
+            transition: transform 0.2s;
         }
+        .product-card:active { transform: scale(0.98); }
+
+        /* জীবন্ত পালসিং ব্যাজ (Hot/New) */
+        .live-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 3px 7px;
+            border-radius: 4px;
+            z-index: 10;
+            animation: pulseBadge 1.5s infinite;
+        }
+        @keyframes pulseBadge { 
+            0% { opacity: 1; } 
+            50% { opacity: 0.5; } 
+            100% { opacity: 1; } 
+        }
+
         .product-card img {
             width: 100%;
             height: 140px;
@@ -715,12 +738,12 @@
             
             const data = snapshot.val();
             if (data) {
-                Object.keys(data).forEach((key) => {
+                Object.keys(data).forEach((key, index) => {
                     let product = data[key];
                     product.id = key;
                     allProducts.push(product);
                     
-                    let cardHTML = createProductCard(product);
+                    let cardHTML = createProductCard(product, index);
                     prodContainer.innerHTML += cardHTML;
                     if(catContainer) catContainer.innerHTML += cardHTML;
                 });
@@ -731,13 +754,18 @@
             }
         });
 
-        function createProductCard(product) {
+        function createProductCard(product, index) {
             let pName = product.name || "পণ্য";
             let pPrice = product.price || "0";
             let pImg = product.img1 || product.image || "https://via.placeholder.com/150";
 
+            // জীবন্ত পপুলার ট্যাগ বা ব্যাজ (Hot অথবা New) স্বয়ংক্রিয়ভাবে সেট করা
+            let badgeText = (index % 2 === 0) ? "HOT 🔥" : "NEW ✨";
+            let badgeColor = (index % 2 === 0) ? "#d32f2f" : "#ff9800";
+
             return `
                 <div class="product-card" onclick="openProductDetails('${product.id}')">
+                    <div class="live-badge" style="background-color: ${badgeColor};">${badgeText}</div>
                     <div>
                         <img src="${pImg}" alt="${pName}">
                     </div>
@@ -994,7 +1022,7 @@
             prodContainer.innerHTML = "";
             let filtered = allProducts.filter(p => p.name && p.name.toLowerCase().includes(query));
             if(filtered.length > 0) {
-                filtered.forEach(p => { prodContainer.innerHTML += createProductCard(p); });
+                filtered.forEach((p, index) => { prodContainer.innerHTML += createProductCard(p, index); });
             } else {
                 prodContainer.innerHTML = "<p style='text-align:center; grid-column: span 2; color:#666;'>কোনো পণ্য পাওয়া যায়নি!</p>";
             }
@@ -1002,4 +1030,5 @@
 
         window.onload = function() { updatePointsDisplay(); };
     </script>
-</bod
+</body>
+</html>
