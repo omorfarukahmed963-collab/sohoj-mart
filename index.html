@@ -4,465 +4,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sohoj Mart</title>
-    <meta name="google-site-verification" content="p09Mf295yXOXo9HKlPPdZKz9yyAjT7YjDgePXcZprTs" />
-
-    <meta property="og:title" content="Sohoj Mart - অনলাইন শপ">
-    <meta property="og:description" content="যেকোনো পণ্য পছন্দ করে সরাসরি হোয়াটসঅ্যাপে অর্ডার করুন।">
-    <meta property="og:image" content="https://omorfarukahmed963-collab.github.io/sohoj-mart/favicon.ico">
-    <meta property="og:url" content="https://omorfarukahmed963-collab.github.io/sohoj-mart/">
-    <meta property="og:type" content="website">
-
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <style>
-        * {
-            box-sizing: border-box;
-        }
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            padding-top: 110px;
-            padding-bottom: 70px;
-            overflow-x: hidden;
-        }
-        .top-fixed-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000;
-            background-color: #f4f4f4;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .moving-notice {
-            background-color: #ff9800;
-            color: white;
-            padding: 6px 10px;
-            font-size: 13px;
-            font-weight: bold;
-            white-space: nowrap;
-        }
-        .app-header {
-            background-color: #f37a1f;
-            padding: 10px 15px;
-            color: white;
-        }
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
+        * { box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; padding-top: 115px; padding-bottom: 70px; }
+        .top-fixed-container { position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; background-color: #f4f4f4; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .moving-notice { background-color: #ff9800; color: white; padding: 6px 10px; font-size: 13px; font-weight: bold; white-space: nowrap; }
+        .app-header { background-color: #f37a1f; padding: 10px 15px; color: white; }
+        .header-top { display: flex; justify-content: space-between; align-items: center; font-size: 18px; font-weight: bold; margin-bottom: 8px; }
+        .search-box { display: flex; background: white; border-radius: 4px; padding: 6px 10px; align-items: center; }
+        .search-box input { border: none; outline: none; width: 100%; font-size: 14px; margin-left: 5px; }
+        .page-section { display: none; padding: 10px; }
+        .page-section.active-page { display: block; }
         
-        /* লেখা এবং তারা গোল করে ঘোরার অ্যানিমেশন (Rotation) */
-        .animated-header-text {
-            animation: rotateText 4s infinite linear;
-            display: inline-block;
-            transform-origin: center;
-        }
-        .animated-star {
-            animation: rotateIcon 3s infinite linear;
-            display: inline-block;
-            transform-origin: center;
-        }
+        /* জীবন্ত স্লাইডার ব্যানার স্টাইল */
+        .banner-container { background: #ff5722; width: 100%; height: 140px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 16px; margin-bottom: 15px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.15); transition: background 0.5s ease; padding: 10px; }
+        
+        .section-title { margin: 10px 0; font-size: 15px; font-weight: bold; color: #222; display: flex; justify-content: space-between; align-items: center; }
+        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 100%; }
+        
+        /* প্রফেশনাল ও জীবন্ত প্রোডাক্ট কার্ড */
+        .product-card { background: #fff; padding: 10px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden; transition: transform 0.2s; }
+        .product-card:active { transform: scale(0.98); }
+        
+        /* জীবন্ত পালসিং ব্যাজ (Hot/New) */
+        .live-badge { position: absolute; top: 10px; left: 10px; background: #d32f2f; color: white; font-size: 10px; font-weight: bold; padding: 3px 7px; border-radius: 4px; z-index: 10; animation: pulseBadge 1.5s infinite; }
+        @keyframes pulseBadge { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
-        @keyframes rotateText {
-            0% { transform: rotate(0deg); }
-            25% { transform: rotate(3deg); }
-            50% { transform: rotate(0deg); }
-            75% { transform: rotate(-3deg); }
-            100% { transform: rotate(0deg); }
-        }
-
-        @keyframes rotateIcon {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .search-box {
-            display: flex;
-            background: white;
-            border-radius: 4px;
-            padding: 6px 10px;
-            align-items: center;
-        }
-        .search-box input {
-            border: none;
-            outline: none;
-            width: 100%;
-            font-size: 14px;
-            margin-left: 5px;
-        }
-        .page-section {
-            display: none;
-            padding: 10px;
-            max-width: 100%;
-        }
-        .page-section.active-page {
-            display: block;
-        }
-        .shortcut-row {
-            display: flex;
-            justify-content: space-between;
-            background: white;
-            padding: 10px 5px;
-            margin: 10px 0;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            overflow-x: auto;
-        }
-        .shortcut-item {
-            text-align: center;
-            font-size: 11px;
-            color: #333;
-            min-width: 60px;
-            cursor: pointer;
-            text-decoration: none;
-            background: none;
-            border: none;
-            flex: 1;
-        }
-        .shortcut-item div {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 8px;
-            margin-bottom: 4px;
-            font-size: 18px;
-        }
-        .banner-container {
-            background: #e0e0e0;
-            width: 100%;
-            height: 160px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #666;
-            font-weight: bold;
-            margin-bottom: 15px;
-            overflow: hidden;
-            position: relative;
-        }
-        .banner-container img, .banner-container video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-        .section-title {
-            margin: 10px 0;
-            font-size: 15px;
-            font-weight: bold;
-            color: #222;
-        }
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            width: 100%;
-        }
-        .product-card {
-            background: #fff;
-            padding: 10px;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            width: 100%;
-            position: relative;
-        }
-        .live-badge {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            color: white;
-            font-size: 10px;
-            font-weight: bold;
-            padding: 3px 7px;
-            border-radius: 4px;
-            z-index: 10;
-        }
-        .product-card img {
-            width: 100%;
-            height: 140px;
-            object-fit: cover;
-            border-radius: 6px;
-        }
-        .product-title {
-            font-size: 13px;
-            font-weight: bold;
-            margin: 6px 0 3px 0;
-            color: #333;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .product-price {
-            color: #d32f2f;
-            font-weight: bold;
-            font-size: 14px;
-            margin-bottom: 8px;
-        }
-        .btn-group {
-            display: flex;
-            gap: 5px;
-        }
-        .action-btn {
-            background-color: #25D366;
-            color: white;
-            border: none;
-            padding: 6px 4px;
-            width: 100%;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .cart-btn {
-            background-color: #ff9800;
-        }
-        .details-container, .feature-card, .admin-form {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            margin-bottom: 12px;
-        }
-        .main-preview-img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            border-radius: 6px;
-            margin-bottom: 10px;
-        }
-        .thumb-row {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 15px;
-        }
-        .thumb-img {
-            width: 60px;
-            height: 60px;
-            object-fit: cover;
-            border-radius: 4px;
-            border: 2px solid #ddd;
-            cursor: pointer;
-        }
-        .thumb-img.active-thumb {
-            border-color: #f37a1f;
-        }
-        .review-box {
-            background: #fff;
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid #eee;
-            margin-bottom: 8px;
-        }
-        .review-img {
-            width: 70px;
-            height: 70px;
-            object-fit: cover;
-            border-radius: 4px;
-            margin-top: 5px;
-        }
-        .feature-btn, .submit-upload-btn {
-            background: #f37a1f;
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 4px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 8px;
-        }
-        .admin-form input, .admin-form textarea {
-            width: 100%;
-            padding: 8px;
-            margin: 6px 0 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .banner-list-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #f9f9f9;
-            padding: 8px;
-            margin-bottom: 6px;
-            border-radius: 4px;
-            font-size: 13px;
-        }
-        .delete-btn {
-            background: #d32f2f;
-            color: white;
-            border: none;
-            padding: 4px 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 11px;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-content {
-            background: white;
-            padding: 20px;
-            width: 85%;
-            max-width: 350px;
-            border-radius: 8px;
-        }
-        .modal-content input, .modal-content textarea {
-            width: 100%;
-            padding: 8px;
-            margin: 6px 0 12px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .modal-btn {
-            background: #25D366;
-            color: white;
-            border: none;
-            padding: 10px;
-            width: 100%;
-            border-radius: 4px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .close-modal {
-            background: #ccc;
-            color: #333;
-            margin-top: 5px;
-        }
-        .bottom-nav {
-            position: fixed;
-            bottom: 0; left: 0; width: 100%;
-            background: white;
-            display: flex;
-            justify-content: space-around;
-            padding: 8px 2px;
-            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
-            z-index: 1000;
-        }
-        .nav-item {
-            text-align: center;
-            font-size: 10px;
-            color: #666;
-            text-decoration: none;
-            cursor: pointer;
-            background: none;
-            border: none;
-            flex: 1;
-        }
+        .product-card img { width: 100%; height: 140px; object-fit: cover; border-radius: 6px; background-color: #f9f9f9; }
+        .product-title { font-size: 13px; font-weight: bold; margin: 6px 0 3px 0; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .product-price { color: #d32f2f; font-weight: bold; font-size: 14px; margin-bottom: 8px; }
+        .btn-group { display: flex; gap: 5px; }
+        .action-btn { background-color: #25D366; color: white; border: none; padding: 6px 4px; width: 100%; border-radius: 4px; font-size: 11px; font-weight: bold; cursor: pointer; text-align: center; }
+        .cart-btn { background-color: #ff9800; }
+        .admin-form { background: white; padding: 15px; border-radius: 8px; margin-bottom: 12px; }
+        .admin-form input { width: 100%; padding: 8px; margin: 6px 0 10px 0; border: 1px solid #ccc; border-radius: 4px; }
+        .submit-upload-btn, .feature-btn { background: #f37a1f; color: white; border: none; padding: 10px; border-radius: 4px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 8px; }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 8px 2px; box-shadow: 0 -2px 5px rgba(0,0,0,0.1); z-index: 1000; }
+        .nav-item { text-align: center; font-size: 10px; color: #666; text-decoration: none; cursor: pointer; background: none; border: none; flex: 1; }
         .nav-item.active { color: #f37a1f; font-weight: bold; }
-        .nav-item span { display: block; font-size: 18px; }
+        .nav-item span { display: block; font-size: 16px; }
     </style>
 </head>
 <body>
 
-    <!-- ওপরের ফিক্সড অংশ -->
     <div class="top-fixed-container">
         <div class="moving-notice">
-            <marquee behavior="scroll" direction="left">
-                🎉 Sohoj Mart-এ স্বাগতম! যেকোনো পণ্য পছন্দ করে সরাসরি হোয়াটসঅ্যাপে অর্ডার করুন। হটলাইন: 01837197656
-            </marquee>
+            <marquee behavior="scroll" direction="left">🎉 Sohoj Mart-এ স্বাগতম! বন্ধুদের সাথে নিয়ে নিজে পণ্য আপলোড করুন এবং হোয়াটসঅ্যাপে অর্ডার নিন। হটলাইন: 01837197656</marquee>
         </div>
-
         <div class="app-header">
-            <div class="header-top">
-                <span class="animated-header-text">Sohoj Mart</span>
-                <div>🛒 <span class="animated-star">⭐</span></div>
-            </div>
+            <div class="header-top"><span>Sohoj Mart</span><div>🛒 ⭐</div></div>
             <div class="search-box">
                 <span>🔍</span>
-                <input type="text" id="searchInput" placeholder="Sohoj Mart এ সার্চ করুন..." onkeyup="searchProducts()">
+                <input type="text" id="searchInput" placeholder="পণ্য সার্চ করুন..." onkeyup="searchProducts()">
             </div>
         </div>
     </div>
 
-    <!-- 1. হোম পেজ -->
     <div id="homePage" class="page-section active-page">
-        <div class="shortcut-row">
-            <button onclick="switchPage('freeGiftsPage')" class="shortcut-item"><div>🎁</div>Free Gifts</button>
-            <button onclick="switchPage('flashSalePage')" class="shortcut-item"><div>⚡</div>Flash Sale</button>
-            <button onclick="switchPage('vouchersPage')" class="shortcut-item"><div>🎟️</div>Vouchers</button>
-            <button onclick="switchPage('topupPage')" class="shortcut-item"><div>💳</div>Top-Up</button>
-            <button onclick="switchPage('adminPage')" class="shortcut-item"><div>⚙️</div>Admin Add</button>
-        </div>
-
-        <div class="banner-container" id="homeBannerDisplay">
-            📢 ব্যানার স্লাইডার এখানে শো করবে
-        </div>
-
-        <div class="section-title">🔥 Just For You (লাইভ পণ্যসমূহ)</div>
+        <!-- জীবন্ত পরিবর্তনশীল ব্যানার -->
+        <div class="banner-container" id="dynamicBanner">🔥 মেগা ফ্ল্যাশ সেল - ডিসকাউন্ট অফার চলছে!</div>
+        <div class="section-title"><span>🔥 লেটেস্ট ও ট্রেন্ডিং পণ্য</span></div>
         <div id="productContainer" class="product-grid">
-            <p style="text-align:center; grid-column: span 2; color:#666;">লোড হচ্ছে...</p>
+            <p style="text-align:center; grid-column: span 2; color:#666;">পণ্য লোড হচ্ছে...</p>
         </div>
     </div>
 
-    <!-- প্রোডাক্ট ডিটেইলস পেজ -->
-    <div id="productDetailsPage" class="page-section">
-        <div class="section-title" style="cursor:pointer; color:#f37a1f;" onclick="switchPage('homePage')">← হোম পেজে ফিরে যান</div>
-        <div class="details-container" id="detailsContent"></div>
-    </div>
-
-    <!-- ফ্রি গিফট পেজ -->
-    <div id="freeGiftsPage" class="page-section">
-        <div class="section-title">🎁 ডেইলি ফ্রি গিফট ও পয়েন্ট জমান</div>
-        <div class="feature-card">
-            <h3>ডেইলি পয়েন্ট ক্লেইম</h3>
-            <p>প্রতিদিন অ্যাপে এসে পয়েন্ট ক্লেইম করুন!</p>
-            <p style="font-size: 16px; font-weight: bold; color: #25D366;">আপনার মোট পয়েন্ট: <span id="user-points-count">0</span></p>
-            <button class="feature-btn" onclick="claimDailyPoint()">পয়েন্ট ক্লেইম করুন (+১০)</button>
-        </div>
-    </div>
-
-    <!-- ফ্ল্যাশ সেল পেজ -->
-    <div id="flashSalePage" class="page-section">
-        <div class="section-title">⚡ ফ্ল্যাশ সেল (বিশেষ ছাড়)</div>
-        <div class="feature-card">
-            <h3>সীমিত সময়ের অফার!</h3>
-            <p>খুব শীঘ্রই নতুন ফ্ল্যাশ সেল পণ্য যুক্ত হচ্ছে।</p>
-        </div>
-    </div>
-
-    <!-- ভাউচার পেজ -->
-    <div id="vouchersPage" class="page-section">
-        <div class="section-title">🎟️ ডিসকাউন্ট ভাউচার</div>
-        <div class="feature-card">
-            <h3>উপলব্ধ কুপন কোড</h3>
-            <p style="background: #fff3cd; padding: 8px; font-weight: bold; border-radius: 4px; color: #856404;">কোড: SOHOJ100 (১০০ টাকা ছাড়)</p>
-        </div>
-    </div>
-
-    <!-- টপ-আপ পেজ -->
-    <div id="topupPage" class="page-section">
-        <div class="section-title">💳 মোবাইল টপ-আপ ও ব্যালেন্স</div>
-        <div class="feature-card">
-            <h3>রিচার্জ বা সার্ভিস</h3>
-            <p>খুব শীঘ্রই মোবাইল রিচার্জ ও টপ-আপ সুবিধা চালু হতে যাচ্ছে।</p>
-        </div>
-    </div>
-
-    <!-- ক্যাটাগরি পেজ -->
     <div id="categoryPage" class="page-section">
-        <div class="section-title">📂 সকল ক্যাটাগরি ও পণ্য</div>
+        <div class="section-title">📂 ক্যাটাগরি ভিত্তিক সকল পণ্য</div>
         <div id="categoryProductContainer" class="product-grid"></div>
     </div>
 
-    <!-- কার্ট পেজ -->
     <div id="cartPage" class="page-section">
         <div class="section-title">🛒 আপনার কার্ট তালিকা</div>
         <div id="cartContainer" class="product-grid">
@@ -470,86 +83,38 @@
         </div>
     </div>
 
-    <!-- অ্যাডমিন / আপলোড পেজ -->
     <div id="adminPage" class="page-section">
-        <div class="section-title">🔐 সিক্রেট অ্যাডমিন ভেরিফিকেশন</div>
-        
+        <div class="section-title">🔐 অ্যাডমিন প্যানেল</div>
         <div id="adminLockBox" class="admin-form" style="text-align: center;">
-            <p style="font-size: 13px; color: #666;">পণ্য আপলোড করতে সিক্রেট পিন নম্বরটি দিন:</p>
-            <input type="password" id="adminPinInput" placeholder="পিন দিন" style="text-align: center; font-size: 18px; letter-spacing: 5px;">
-            <button class="submit-upload-btn" onclick="verifyAdminPin()">লগইন করুন</button>
+            <p style="font-size: 13px; color: #666;">পিন নম্বর দিন (1234):</p>
+            <input type="password" id="adminPinInput" placeholder="পিন" style="text-align: center; font-size: 18px; letter-spacing: 5px;">
+            <button class="submit-upload-btn" onclick="verifyAdminPin()">লগইন</button>
         </div>
-
         <div id="adminPanelContent" style="display: none;">
-            <div style="background: #e8f5e9; padding: 10px; border-radius: 6px; margin-bottom: 10px; text-align: center; color: #2e7d32; font-weight: bold;">
-                ✔ অ্যাডমিন মোড সচল আছে
-            </div>
-
-            <div class="section-title">🖼️ একাধিক ব্যানার বা ভিডিও যোগ করুন</div>
             <div class="admin-form">
-                <input type="file" id="bannerFile" accept="image/*,video/mp4,video/webm">
-                <button class="submit-upload-btn" onclick="uploadMultipleBannerMedia()">নতুন ব্যানার যোগ করুন</button>
-                
-                <div style="margin-top: 12px; font-weight: bold; font-size: 13px; color: #444;">বর্তমান ব্যানারসমূহ:</div>
-                <div id="adminBannerList" style="margin-top: 6px;"></div>
-            </div>
-
-            <div class="section-title">➕ পণ্য আপলোড (৩টি ছবি দিন)</div>
-            <div class="admin-form">
-                <label>পণ্যের নাম:</label>
-                <input type="text" id="prodName" placeholder="নাম লিখুন">
-                
-                <label>পণ্যের দাম (টাকা):</label>
-                <input type="number" id="prodPrice" placeholder="দাম লিখুন">
-                
-                <label>১ম ছবি (মেইন):</label>
+                <h4>➕ নতুন পণ্য আপলোড (বন্ধুদের জন্য সহজ মাধ্যম)</h4>
+                <input type="text" id="prodName" placeholder="পণ্যের নাম (যেমন: শাড়ি, জুতো ইত্যাদি)">
+                <input type="number" id="prodPrice" placeholder="দাম (টাকা)">
                 <input type="file" id="prodImg1" accept="image/*">
-                
-                <label>২য় ছবি:</label>
-                <input type="file" id="prodImg2" accept="image/*">
-                
-                <label>৩য় ছবি:</label>
-                <input type="file" id="prodImg3" accept="image/*">
-                
-                <button class="submit-upload-btn" onclick="uploadProductWithThreeImages()">পণ্য আপলোড করুন</button>
+                <button class="submit-upload-btn" onclick="uploadProduct()">আপলোড করুন</button>
             </div>
-            
-            <button class="feature-btn" style="background: #d32f2f; margin-top: 20px;" onclick="lockAdminPanel()">লগআউট / বন্ধ করুন</button>
+            <button class="feature-btn" style="background: #d32f2f;" onclick="lockAdminPanel()">লগআউট</button>
         </div>
     </div>
 
-    <!-- অ্যাকাউন্ট পেজ -->
     <div id="accountPage" class="page-section">
-        <div class="section-title">👤 অ্যাকাউন্ট ও যোগাযোগ</div>
-        <div style="background: white; padding: 15px; border-radius: 8px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-            <h3 style="color: #f37a1f; margin-top:0;">Sohoj Mart Admin</h3>
-            <p style="font-size: 14px; color: #333;">হটলাইন ও হোয়াটসঅ্যাপ নম্বর:</p>
+        <div class="section-title">👤 যোগাযোগ ও হটলাইন</div>
+        <div style="background: white; padding: 15px; border-radius: 8px; text-align: center;">
+            <h3 style="color: #f37a1f; margin-top:0;">Sohoj Mart</h3>
             <p style="font-size: 18px; font-weight: bold; color: #25D366;">01837197656</p>
         </div>
     </div>
 
-    <!-- অর্ডার মোডাল -->
-    <div id="orderModal" class="modal">
-        <div class="modal-content">
-            <h3 style="margin-top:0; color:#333; font-size:16px;">হোয়াটসঅ্যাপে অর্ডার কনফার্ম করুন</h3>
-            <p id="modalProductName" style="font-size: 13px; color: #d32f2f; font-weight: bold;"></p>
-            <label>আপনার নাম:</label>
-            <input type="text" id="customerName" placeholder="নাম লিখুন">
-            <label>মোবাইল নম্বর:</label>
-            <input type="text" id="customerPhone" placeholder="ফোন নম্বর">
-            <label>ঠিকানা:</label>
-            <textarea id="customerAddress" rows="2" placeholder="গ্রাম, থানা, জেলা"></textarea>
-            <button class="modal-btn" onclick="submitOrder()">অর্ডার পাঠান (WhatsApp)</button>
-            <button class="modal-btn close-modal" onclick="closeModal()">বাতিল</button>
-        </div>
-    </div>
-
-    <!-- নিচের নেভিগেশন বার -->
     <div class="bottom-nav">
         <button onclick="switchPage('homePage')" class="nav-item active" id="nav-homePage"><span>🏠</span>হোম</button>
         <button onclick="switchPage('categoryPage')" class="nav-item" id="nav-categoryPage"><span>📁</span>ক্যাটাগরি</button>
         <button onclick="switchPage('cartPage')" class="nav-item" id="nav-cartPage"><span>🛒</span>কার্ট (<span id="cartCount">0</span>)</button>
-        <button onclick="switchPage('adminPage')" class="nav-item" id="nav-adminPage"><span>➕</span>আপলোড</button>
+        <button onclick="switchPage('adminPage')" class="nav-item" id="nav-adminPage"><span>➕</span>অ্যাডমিন</button>
         <button onclick="switchPage('accountPage')" class="nav-item" id="nav-accountPage"><span>👤</span>অ্যাকাউন্ট</button>
     </div>
 
@@ -560,394 +125,106 @@
 
         let allProducts = [];
         let cartItems = [];
-        let selectedProduct = "";
-        let selectedPrice = "";
-        let currentProductId = "";
-        let bannerList = [];
-        let currentBannerIndex = 0;
-        let bannerInterval = null;
 
-        const MY_SECRET_PIN = "1234";
+        // জীবন্ত ব্যানার স্লাইডার ইফেক্ট
+        const banners = [
+            "🔥 মেগা ফ্ল্যাশ সেল - বিশাল ডিসকাউন্ট অফার!",
+            "⚡ হট ডিলস: সেরা মূল্যে প্রিমিয়াম কালেকশন!",
+            "🛍️ নতুন পণ্যের সমাহার - আজই অর্ডার করুন!"
+        ];
+        let bannerIndex = 0;
+        setInterval(() => {
+            bannerIndex = (bannerIndex + 1) % banners.length;
+            let bannerEl = document.getElementById('dynamicBanner');
+            if(bannerEl) bannerEl.innerText = banners[bannerIndex];
+        }, 3000);
 
         function verifyAdminPin() {
-            let enteredPin = document.getElementById('adminPinInput').value;
-            if(enteredPin === MY_SECRET_PIN) {
+            if(document.getElementById('adminPinInput').value === "1234") {
                 document.getElementById('adminLockBox').style.display = 'none';
                 document.getElementById('adminPanelContent').style.display = 'block';
-                document.getElementById('adminPinInput').value = "";
-            } else {
-                alert("ভুল পিন দিয়েছেন!");
-            }
+            } else { alert("ভুল পিন!"); }
         }
-
         function lockAdminPanel() {
             document.getElementById('adminLockBox').style.display = 'block';
             document.getElementById('adminPanelContent').style.display = 'none';
         }
-
         function switchPage(pageId) {
             document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active-page'));
             document.querySelectorAll('.bottom-nav .nav-item').forEach(nav => nav.classList.remove('active'));
-            
-            let targetPage = document.getElementById(pageId);
-            if(targetPage) targetPage.classList.add('active-page');
-            
-            let navBtn = document.getElementById('nav-' + pageId);
-            if(navBtn) navBtn.classList.add('active');
+            document.getElementById(pageId).classList.add('active-page');
+            document.getElementById('nav-' + pageId).classList.add('active');
             window.scrollTo(0, 0);
-
-            if(pageId === 'freeGiftsPage') updatePointsDisplay();
-            if(pageId === 'adminPage') lockAdminPanel();
         }
 
-        db.ref('banners').on('value', (snapshot) => {
-            let data = snapshot.val();
-            bannerList = [];
-            let adminListHTML = "";
-
+        // ফায়ারবেজ থেকে পণ্য লোড করা
+        db.ref('products').on('value', (snapshot) => {
+            let firebaseProducts = [];
+            const data = snapshot.val();
             if (data) {
-                Object.keys(data).forEach(key => {
-                    bannerList.push({ id: key, content: data[key].content, type: data[key].type });
-                    let titleText = data[key].type === 'video' ? 'ভিডিও ব্যানার' : 'ছবি ব্যানার';
-                    adminListHTML += `
-                        <div class="banner-list-item">
-                            <span>${titleText}</span>
-                            <button class="delete-btn" onclick="deleteBanner('${key}')">ডিলিট</button>
-                        </div>
-                    `;
+                Object.keys(data).forEach((key) => {
+                    let product = data[key];
+                    product.id = key;
+                    firebaseProducts.push(product);
                 });
-            } else {
-                adminListHTML = "<p style='font-size:12px; color:#666;'>কোনো ব্যানার নেই</p>";
             }
-
-            let adminListEl = document.getElementById('adminBannerList');
-            if(adminListEl) adminListEl.innerHTML = adminListHTML;
-
-            startBannerSlider();
+            allProducts = firebaseProducts.reverse();
+            renderProducts();
         });
 
-        function startBannerSlider() {
-            if(bannerInterval) clearInterval(bannerInterval);
-            renderCurrentBanner();
-
-            if(bannerList.length > 1) {
-                bannerInterval = setInterval(() => {
-                    currentBannerIndex = (currentBannerIndex + 1) % bannerList.length;
-                    renderCurrentBanner();
-                }, 4000);
-            }
-        }
-
-        function renderCurrentBanner() {
-            let bannerDisplay = document.getElementById('homeBannerDisplay');
-            if(!bannerDisplay) return;
-
-            if(bannerList.length > 0) {
-                if(currentBannerIndex >= bannerList.length) currentBannerIndex = 0;
-                let currentItem = bannerList[currentBannerIndex];
-
-                if(currentItem.type === 'video') {
-                    bannerDisplay.innerHTML = `<video src="${currentItem.content}" autoplay loop muted playsinline style="width:100%; height:100%; object-fit:cover; border-radius:8px;"></video>`;
-                } else {
-                    bannerDisplay.innerHTML = `<img src="${currentItem.content}" alt="Banner" style="width:100%; height:100%; object-fit:cover; border-radius:8px;">`;
-                }
-            } else {
-                bannerDisplay.innerHTML = `📢 ব্যানার স্লাইডার এখানে শো করবে`;
-            }
-        }
-
-        function uploadMultipleBannerMedia() {
-            const fileInput = document.getElementById('bannerFile');
-            if (fileInput.files.length === 0) { alert("ছবি বা ভিডিও সিলেক্ট করুন!"); return; }
-            
-            const file = fileInput.files[0];
-            const isVideo = file.type.startsWith('video/');
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                let base64Data = e.target.result;
-                if (!isVideo) {
-                    resizeImageForBanner(file, 800, 400, function(resizedImg) {
-                        saveBannerToDatabase(resizedImg, 'image');
-                    });
-                } else {
-                    saveBannerToDatabase(base64Data, 'video');
-                }
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function saveBannerToDatabase(contentData, type) {
-            db.ref('banners').push({ content: contentData, type: type }, () => {
-                alert("ব্যানার সফলভাবে যুক্ত হয়েছে!");
-                document.getElementById('bannerFile').value = "";
-            });
-        }
-
-        function deleteBanner(bannerId) {
-            if(confirm("ব্যানারটি ডিলিট করতে চান?")) {
-                db.ref(`banners/${bannerId}`).remove().then(() => {
-                    alert("ব্যানার মুছে ফেলা হয়েছে!");
-                });
-            }
-        }
-
-        function resizeImageForBanner(file, maxWidth, maxHeight, callback) {
-            const reader = new FileReader();
-            reader.onload = function (event) {
-                const img = new Image();
-                img.onload = function () {
-                    const canvas = document.createElement('canvas');
-                    let width = img.width;
-                    let height = img.height;
-                    if (width > height) {
-                        if (width > maxWidth) { height *= maxWidth / width; width = maxWidth; }
-                    } else {
-                        if (height > maxHeight) { width *= maxHeight / height; height = maxHeight; }
-                    }
-                    canvas.width = width;
-                    canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-                    callback(canvas.toDataURL('image/jpeg', 0.8));
-                };
-                img.src = event.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        db.ref('products').on('value', (snapshot) => {
+        function renderProducts(filteredList = null) {
             const prodContainer = document.getElementById('productContainer');
             const catContainer = document.getElementById('categoryProductContainer');
             if(!prodContainer) return;
-
             prodContainer.innerHTML = "";
             if(catContainer) catContainer.innerHTML = "";
-            allProducts = [];
-            
-            const data = snapshot.val();
-            if (data) {
-                Object.keys(data).forEach((key, index) => {
-                    let product = data[key];
-                    product.id = key;
-                    allProducts.push(product);
-                    
-                    let cardHTML = createProductCard(product, index);
-                    prodContainer.innerHTML += cardHTML;
-                    if(catContainer) catContainer.innerHTML += cardHTML;
-                });
-            } else {
-                let emptyMsg = "<p style='text-align:center; grid-column: span 2; color:#666;'>কোনো পণ্য পাওয়া যায়নি!</p>";
-                prodContainer.innerHTML = emptyMsg;
-                if(catContainer) catContainer.innerHTML = emptyMsg;
-            }
-        });
 
-        function createProductCard(product, index) {
-            let pName = product.name || "পণ্য";
-            let pPrice = product.price || "0";
-            let pImg = product.img1 || product.image || "https://via.placeholder.com/150";
+            let listToRender = filteredList !== null ? filteredList : allProducts;
 
-            let badgeText = (index % 2 === 0) ? "HOT 🔥" : "NEW ✨";
-            let badgeColor = (index % 2 === 0) ? "#d32f2f" : "#ff9800";
-
-            return `
-                <div class="product-card" onclick="openProductDetails('${product.id}')">
-                    <div class="live-badge" style="background-color: ${badgeColor};">${badgeText}</div>
-                    <div>
-                        <img src="${pImg}" alt="${pName}">
-                    </div>
-                    <div>
-                        <div class="product-title" title="${pName}">${pName}</div>
-                        <div class="product-price">৳${pPrice}</div>
-                    </div>
-                    <div class="btn-group" onclick="event.stopPropagation()">
-                        <button class="action-btn cart-btn" onclick="addToCart('${pName}', '${pPrice}')">কার্ট</button>
-                        <button class="action-btn" onclick="openOrderModal('${pName}', '${pPrice}')">অর্ডার</button>
-                    </div>
-                </div>
-            `;
-        }
-
-        function openProductDetails(prodId) {
-            let product = allProducts.find(p => p.id === prodId);
-            if(!product) { alert("পণ্যটি পাওয়া যায়নি!"); return; }
-
-            currentProductId = prodId;
-            let img1 = product.img1 || product.image || "https://via.placeholder.com/150";
-            let img2 = product.img2 || img1;
-            let img3 = product.img3 || img1;
-
-            let detailsHTML = `
-                <img src="${img1}" class="main-preview-img" id="mainImageDisplay">
-                <div class="thumb-row">
-                    <img src="${img1}" class="thumb-img active-thumb" onclick="changeMainImage('${img1}', this)">
-                    <img src="${img2}" class="thumb-img" onclick="changeMainImage('${img2}', this)">
-                    <img src="${img3}" class="thumb-img" onclick="changeMainImage('${img3}', this)">
-                </div>
-                <h2>${product.name || "পণ্য"}</h2>
-                <div class="product-price" style="font-size:18px;">৳${product.price || "0"}</div>
-                <button class="feature-btn" style="background:#25D366;" onclick="openOrderModal('${product.name}', '${product.price}')">হোয়াটসঅ্যাপে অর্ডার করুন</button>
-                
-                <hr style="margin:20px 0; border:0; border-top:1px solid #ddd;">
-                
-                <h3>কাস্টমার রিভিউ ও ছবি</h3>
-                <div id="reviewsContainer"><p style="color:#666; font-size:13px;">লোড হচ্ছে...</p></div>
-
-                <div class="admin-form" style="margin-top:15px; background:#f9f9f9;">
-                    <h4>আপনার রিভিউ লিখুন ও ছবি দিন</h4>
-                    <input type="text" id="reviewName" placeholder="আপনার নাম">
-                    <textarea id="reviewText" rows="2" placeholder="মতামত লিখুন..."></textarea>
-                    <label>ছবির রিভিউ (ঐচ্ছিক):</label>
-                    <input type="file" id="reviewImgFile" accept="image/*">
-                    <button class="submit-upload-btn" onclick="submitReview()">রিভিউ জমা দিন</button>
-                </div>
-            `;
-
-            document.getElementById('detailsContent').innerHTML = detailsHTML;
-            loadReviews(prodId);
-            switchPage('productDetailsPage');
-        }
-
-        function changeMainImage(imgSrc, thumbElement) {
-            document.getElementById('mainImageDisplay').src = imgSrc;
-            document.querySelectorAll('.thumb-img').forEach(t => t.classList.remove('active-thumb'));
-            thumbElement.classList.add('active-thumb');
-        }
-
-        function resizeImage(file, maxWidth, maxHeight, callback) {
-            const reader = new FileReader();
-            reader.onload = function (event) {
-                const img = new Image();
-                img.onload = function () {
-                    const canvas = document.createElement('canvas');
-                    let width = img.width;
-                    let height = img.height;
-                    if (width > height) {
-                        if (width > maxWidth) { height *= maxWidth / width; width = maxWidth; }
-                    } else {
-                        if (height > maxHeight) { width *= maxHeight / height; height = maxHeight; }
-                    }
-                    canvas.width = width;
-                    canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-                    callback(canvas.toDataURL('image/jpeg', 0.8));
-                };
-                img.src = event.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function uploadProductWithThreeImages() {
-            let name = document.getElementById('prodName').value;
-            let price = document.getElementById('prodPrice').value;
-            let f1 = document.getElementById('prodImg1').files[0];
-            let f2 = document.getElementById('prodImg2').files[0];
-            let f3 = document.getElementById('prodImg3').files[0];
-
-            if (name === "" || price === "" || !f1) {
-                alert("নাম, দাম এবং প্রথম ছবি দিন!");
+            if(listToRender.length === 0) {
+                prodContainer.innerHTML = `<p style="text-align:center; grid-column: span 2; color:#666;">কোনো পণ্য নেই। অ্যাডমিন প্যানেল থেকে পণ্য যোগ করুন!</p>`;
                 return;
             }
 
-            resizeImage(f1, 500, 500, function(img1Data) {
-                let img2Data = "";
-                let img3Data = "";
+            listToRender.forEach((product, index) => {
+                // জীবন্ত ট্যাগ বা ব্যাজ নির্ধারণ (Hot অথবা New)
+                let badgeText = (index % 2 === 0) ? "HOT 🔥" : "NEW ✨";
+                let badgeColor = (index % 2 === 0) ? "#d32f2f" : "#ff9800";
 
-                let saveToDb = () => {
-                    db.ref('products').push({
-                        name: name, price: price, img1: img1Data, img2: img2Data, img3: img3Data
-                    }, () => {
-                        alert("পণ্য সফলভাবে আপলোড হয়েছে!");
-                        document.getElementById('prodName').value = "";
-                        document.getElementById('prodPrice').value = "";
-                        document.getElementById('prodImg1').value = "";
-                        document.getElementById('prodImg2').value = "";
-                        document.getElementById('prodImg3').value = "";
-                        switchPage('homePage');
-                    });
-                };
-
-                if (f2) {
-                    resizeImage(f2, 500, 500, function(i2) {
-                        img2Data = i2;
-                        if (f3) {
-                            resizeImage(f3, 500, 500, function(i3) { img3Data = i3; saveToDb(); });
-                        } else { saveToDb(); }
-                    });
-                } else if (f3) {
-                    resizeImage(f3, 500, 500, function(i3) { img3Data = i3; saveToDb(); });
-                } else { saveToDb(); }
+                let cardHTML = `
+                    <div class="product-card">
+                        <div class="live-badge" style="background-color: ${badgeColor};">${badgeText}</div>
+                        <div><img src="${product.img1 || 'https://via.placeholder.com/150'}" alt="${product.name}" loading="lazy"></div>
+                        <div class="product-title">${product.name}</div>
+                        <div class="product-price">৳${product.price}</div>
+                        <div class="btn-group">
+                            <button class="action-btn cart-btn" onclick="addToCart('${product.name}', '${product.price}')">কার্ট</button>
+                            <button class="action-btn" onclick="openOrderWhatsApp('${product.name}', '${product.price}')">অর্ডার</button>
+                        </div>
+                    </div>
+                `;
+                prodContainer.innerHTML += cardHTML;
+                if(catContainer) catContainer.innerHTML += cardHTML;
             });
         }
 
-        function submitReview() {
-            let rName = document.getElementById('reviewName').value;
-            let rText = document.getElementById('reviewText').value;
-            let rFile = document.getElementById('reviewImgFile').files[0];
+        function uploadProduct() {
+            let name = document.getElementById('prodName').value;
+            let price = document.getElementById('prodPrice').value;
+            let f1 = document.getElementById('prodImg1').files[0];
+            if(!name || !price || !f1) { alert("সব তথ্য দিন!"); return; }
 
-            if (rName === "" || rText === "") { alert("নাম ও মতামত লিখুন!"); return; }
-
-            let saveReviewData = (imgData = "") => {
-                db.ref(`reviews/${currentProductId}`).push({
-                    name: rName, text: rText, image: imgData, date: new Date().toLocaleDateString()
-                }, () => {
-                    alert("রিভিউ যোগ হয়েছে!");
-                    document.getElementById('reviewName').value = "";
-                    document.getElementById('reviewText').value = "";
-                    document.getElementById('reviewImgFile').value = "";
-                    loadReviews(currentProductId);
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                db.ref('products').push({ name: name, price: price, img1: e.target.result }, () => {
+                    alert("আপলোড সফল!");
+                    document.getElementById('prodName').value = "";
+                    document.getElementById('prodPrice').value = "";
+                    document.getElementById('prodImg1').value = "";
+                    switchPage('homePage');
                 });
             };
-
-            if (rFile) { resizeImage(rFile, 300, 300, function(enc) { saveReviewData(enc); }); }
-            else { saveReviewData(""); }
-        }
-
-        function loadReviews(prodId) {
-            db.ref(`reviews/${prodId}`).on('value', (snapshot) => {
-                let revContainer = document.getElementById('reviewsContainer');
-                if(!revContainer) return;
-                revContainer.innerHTML = "";
-                let data = snapshot.val();
-                if(data) {
-                    Object.keys(data).forEach(key => {
-                        let rev = data[key];
-                        let imgTag = rev.image ? `<img src="${rev.image}" class="review-img">` : "";
-                        revContainer.innerHTML += `
-                            <div class="review-box">
-                                <strong>${rev.name}</strong> <span style="font-size:11px; color:#888; float:right;">${rev.date}</span>
-                                <p style="margin:5px 0; font-size:13px; color:#333;">${rev.text}</p>
-                                ${imgTag}
-                            </div>
-                        `;
-                    });
-                } else {
-                    revContainer.innerHTML = "<p style='color:#666; font-size:13px;'>এখনো কোনো রিভিউ নেই।</p>";
-                }
-            });
-        }
-
-        function getUserPoints() {
-            let points = localStorage.getItem('sohoj_mart_points');
-            return points ? parseInt(points) : 0;
-        }
-
-        function claimDailyPoint() {
-            let lastClaimDate = localStorage.getItem('last_claim_date');
-            let today = new Date().toDateString();
-            if (lastClaimDate === today) { alert("আজকের পয়েন্ট আগেই ক্লেইম করা হয়েছে!"); return; }
-            let newPoints = getUserPoints() + 10;
-            localStorage.setItem('sohoj_mart_points', newPoints);
-            localStorage.setItem('last_claim_date', today);
-            alert("১০ পয়েন্ট যোগ হয়েছে।");
-            updatePointsDisplay();
-        }
-
-        function updatePointsDisplay() {
-            let el = document.getElementById('user-points-count');
-            if(el) el.innerText = getUserPoints();
+            reader.readAsDataURL(f1);
         }
 
         function addToCart(name, price) {
@@ -959,64 +236,31 @@
 
         function updateCartDisplay() {
             let cartContainer = document.getElementById('cartContainer');
-            if(!cartContainer) return;
+            if(cartItems.length === 0) { cartContainer.innerHTML = "<p style='text-align:center; color:#666;'>কার্ট খালি!</p>"; return; }
             cartContainer.innerHTML = "";
-            if(cartItems.length === 0) {
-                cartContainer.innerHTML = "<p style='text-align:center; grid-column: span 2; color:#666;'>কার্ট খালি রয়েছে!</p>";
-                return;
-            }
-            cartItems.forEach((item) => {
+            cartItems.forEach(item => {
                 cartContainer.innerHTML += `
                     <div class="product-card">
-                        <div>
-                            <div class="product-title">${item.name}</div>
-                            <div class="product-price">৳${item.price}</div>
-                        </div>
-                        <button class="action-btn" onclick="openOrderModal('${item.name}', '${item.price}')">অর্ডার করুন</button>
+                        <div class="product-title">${item.name}</div>
+                        <div class="product-price">৳${item.price}</div>
+                        <button class="action-btn" onclick="openOrderWhatsApp('${item.name}', '${item.price}')">অর্ডার করুন</button>
                     </div>
                 `;
             });
         }
 
-        function openOrderModal(name, price) {
-            selectedProduct = name;
-            selectedPrice = price;
-            document.getElementById('modalProductName').innerText = `পণ্য: ${name} (৳${price})`;
-            document.getElementById('orderModal').style.display = 'flex';
-        }
-
-        function closeModal() {
-            document.getElementById('orderModal').style.display = 'none';
-        }
-
-        function submitOrder() {
-            let cName = document.getElementById('customerName').value;
-            let phone = document.getElementById('customerPhone').value;
-            let address = document.getElementById('customerAddress').value;
-
-            if(cName === "" || phone === "" || address === "") { alert("সব তথ্য পূরণ করুন!"); return; }
-
-            let adminPhone = "8801837197656";
-            let text = `*নতুন অর্ডার - Sohoj Mart*%0A📦 পণ্য: ${selectedProduct}%0A💰 দাম: ৳${selectedPrice}%0A%0A👤 ক্রেতা: ${cName}%0A📞 ফোন: ${phone}%0A🏠 ঠিকানা: ${address}`;
-
-            window.open(`https://wa.me/${adminPhone}?text=${text}`, '_blank');
-            closeModal();
+        function openOrderWhatsApp(name, price) {
+            window.open(`https://wa.me/8801837197656?text=*অর্ডার*%0Aপণ্য: ${name}%0Aদাম: ৳${price}`, '_blank');
         }
 
         function searchProducts() {
-            let query = document.getElementById('searchInput').value.toLowerCase();
-            const prodContainer = document.getElementById('productContainer');
-            if(!prodContainer) return;
-            prodContainer.innerHTML = "";
-            let filtered = allProducts.filter(p => p.name && p.name.toLowerCase().includes(query));
-            if(filtered.length > 0) {
-                filtered.forEach((p, index) => { prodContainer.innerHTML += createProductCard(p, index); });
-            } else {
-                prodContainer.innerHTML = "<p style='text-align:center; grid-column: span 2; color:#666;'>কোনো পণ্য পাওয়া যায়নি!</p>";
+            let query = document.getElementById('searchInput').value.toLowerCase().trim();
+            if(query === "") { 
+                renderProducts(); 
+            } else { 
+                renderProducts(allProducts.filter(p => p.name && p.name.toLowerCase().includes(query))); 
             }
         }
-
-        window.onload = function() { updatePointsDisplay(); };
     </script>
 </body>
 </html>
